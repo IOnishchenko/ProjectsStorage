@@ -1,0 +1,12 @@
+datasheets
+DebugConfig
+*/MDK-ARM/stm32f103c8/
+.RTX_Conf_CM.c@*
+.startup_stm32f10x_md.s@*
+.system_stm32f10x.c@*
+.RTE_Device.h@*
+License.md
+LICENSE.txt
+*Iurii*
+startup_stm32f103xb.lst
+EventRecorderStub.scvd
