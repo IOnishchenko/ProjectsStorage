@@ -1275,19 +1275,29 @@
           <GroupName>lcd-drivers</GroupName>
           <Files>
             <File>
-              <FileName>ssd1306.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\lcd-drivers\ssd1306.c</FilePath>
-            </File>
-            <File>
               <FileName>lcd-driver.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\lcd-drivers\lcd-driver.h</FilePath>
             </File>
             <File>
+              <FileName>ssd1306.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lcd-drivers\ssd1306.c</FilePath>
+            </File>
+            <File>
               <FileName>ssd1306.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\lcd-drivers\ssd1306.h</FilePath>
+            </File>
+            <File>
+              <FileName>ssd1306-i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lcd-drivers\ssd1306-i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>ssd1306-i2c.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\lcd-drivers\ssd1306-i2c.h</FilePath>
             </File>
           </Files>
         </Group>
