@@ -1,7 +1,8 @@
-#ifndef LCD_DRIVER__LCD_DRIVER_H
-#define LCD_DRIVER__LCD_DRIVER_H
+#ifndef TLV320AIC3204_INTERFACE_N
+#define TLV320AIC3204_INTERFACE_N
 
 #include "stdint.h"
+#include "types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,15 +10,16 @@ extern "C" {
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-extern void lcd_initialize();
-extern void lcd_deinitialize();
-extern void lcd_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
-extern void lcd_write_gdata(const uint8_t * data, uint16_t size);
+#define TLV320AIC3204_I2C_ADDRESS	0x18U
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
+extern void tlv320aic3204_set_interface(i2c_device port);
+extern void tlv320aic3204_write_buffer(const uint8_t * pSrc, uint16_t size);
+extern void tlv320aic3204_read_buffer(uint8_t * pDst, uint16_t size);
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif // LCD_DRIVER__LCD_DRIVER_H
+#endif // TLV320AIC3204_INTERFACE_N

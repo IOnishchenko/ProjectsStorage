@@ -1,5 +1,5 @@
-#ifndef LCD_DRIVER__LCD_DRIVER_H
-#define LCD_DRIVER__LCD_DRIVER_H
+#ifndef GUI_128x64_THREAD_H
+#define GUI_128x64_THREAD_H
 
 #include "stdint.h"
 
@@ -9,15 +9,13 @@ extern "C" {
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-extern void lcd_initialize();
-extern void lcd_deinitialize();
-extern void lcd_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
-extern void lcd_write_gdata(const uint8_t * data, uint16_t size);
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif // LCD_DRIVER__LCD_DRIVER_H
+#endif // GUI_128x64_THREAD_H

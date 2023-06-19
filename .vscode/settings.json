@@ -16,7 +16,5 @@
 	"idf.toolsPathWin": "C:\\Users\\Iurii\\.espressif",
 	"files.associations": {
 		"test.h": "c"
-	},
-	"idf.flashType": "UART",
-	"idf.portWin": "COM4"
+	}
 }

@@ -9,7 +9,7 @@
                 "${config:idf.espAdfPath}/components/**",
                 "${config:idf.espAdfPathWin}/components/**",
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/../**"
+				"${workspaceFolder}/../**"
             ],
             "browse": {
                 "path": [
@@ -18,16 +18,12 @@
                     "${config:idf.espAdfPath}/components/**",
                     "${config:idf.espAdfPathWin}/components/**",
                     "${workspaceFolder}",
-                    "${workspaceFolder}/../**"
+					"${workspaceFolder}/../**"
                 ],
                 "limitSymbolsToIncludedHeaders": false
             },
             "cStandard": "c17",
-            "cppStandard": "c++20",
-            "configurationProvider": "ms-vscode.cmake-tools"
-        },
-        {
-            "name": "MDK-STM32F1xxx"
+            "cppStandard": "c++20"
         }
     ],
     "version": 4

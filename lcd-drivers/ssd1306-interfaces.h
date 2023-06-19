@@ -1,6 +1,7 @@
-#ifndef LCD_DRIVER__LCD_DRIVER_H
-#define LCD_DRIVER__LCD_DRIVER_H
+#ifndef SSD1306_INTERFACEC_H
+#define SSD1306_INTERFACEC_H
 
+#include "types.h"
 #include "stdint.h"
 
 #ifdef __cplusplus
@@ -9,10 +10,9 @@ extern "C" {
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-extern void lcd_initialize();
-extern void lcd_deinitialize();
-extern void lcd_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
-extern void lcd_write_gdata(const uint8_t * data, uint16_t size);
+extern void ssd1306_set_interface(i2c_device port);
+extern void ssd1306_write_commands(const uint8_t * cmds, uint16_t size);
+extern void ssd1306_write_gdata(const uint8_t * data, uint16_t size);
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -20,4 +20,4 @@ extern void lcd_write_gdata(const uint8_t * data, uint16_t size);
 }
 #endif
 
-#endif // LCD_DRIVER__LCD_DRIVER_H
+#endif // SSD1306_INTERFACEC_H
