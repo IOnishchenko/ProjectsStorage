@@ -1,0 +1,10 @@
+#ifndef TLV320AIC3204_IONPUT_CONFIGS_H
+#define TLV320AIC3204_IONPUT_CONFIGS_H
+
+#include "tlv320aic3204-driver.h"
+
+namespace tlv320aic3204
+{
+}
+
+#endif // TLV320AIC3204_IONPUT_CONFIGS_H
