@@ -1,20 +1,20 @@
 #ifndef VALUE_PROVIDER_H
 #define VALUE_PROVIDER_H
 
-#include "IValueProvider.h"
+#include "IValue.h"
 
 template<typename VType>
-class ValueProvider : public IValueProvider<VType>
+class Value : public IValue<VType>
 {
 public:
-	// ValueProvider
-	ValueProvider(VType max, VType min, VType step, uint32_t currentIndex)
+	// constructor
+	Value(VType max, VType min, VType step, uint32_t currentIndex)
 		:stepIndex_{currentIndex}, max_{max}, min_{min}, step_{step}
 	{		
 	}
 
 	// destructor
-	~ValueProvider() override = default;
+	~Value() override = default;
 
 	// methods
 	VType GetMaxValue() const override
@@ -34,7 +34,7 @@ public:
 
 	VType GetValue() const override
 	{
-		return reinterpret_cast<VType>(stepIndex_) * step_ + min_;
+		return stepIndex_ * step_ + min_;
 	}
 
 	void SetCurrentIndex(uint32_t index) override
@@ -49,7 +49,7 @@ public:
 
 	VType GetValueAt(uint32_t index) const override
 	{
-		return reinterpret_cast<VType>(index) * step_ + min_;
+		return index * step_ + min_;
 	}
 
 private:

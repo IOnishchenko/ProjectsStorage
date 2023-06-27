@@ -1,14 +1,14 @@
-#ifndef VALUE_COLLECTION_H
-#define VALUE_COLLECTION_H
+#ifndef VALUE_TABLE_H
+#define VALUE_TABLE_H
 
 #include <initializer_list>
-#include "IValueProvider.h"
+#include "IValue.h"
 
 template<typename VType, uint32_t ItemNum>
-class ValueCollection : public IValueProvider<VType>
+class ValueTable : public IValue<VType>
 {
-// constructor
-	ValueCollection(uint32_t valueIndex, std::initializer_list<VType> values)
+	// constructor
+	ValueTable(uint32_t valueIndex, std::initializer_list<VType> values)
 		:valueIndex_{valueIndex}
 	{
 		int i = 0;
@@ -19,7 +19,7 @@ class ValueCollection : public IValueProvider<VType>
 	}
 
 	// destructor
-	~ValueCollection() override = default;
+	~ValueTable() override = default;
 
 	// methods
 	VType GetMaxValue() const override
@@ -62,4 +62,4 @@ private:
 	const VType items_[ItemNum];
 };
 
-#endif // VALUE_COLLECTION_H
+#endif // VALUE_TABLE_H

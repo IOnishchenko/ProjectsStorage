@@ -3,8 +3,8 @@
 
 #include "stdint.h"
 #include <memory>
-#include "ValueProvider.h"
-#include "ValueCollection.h"
+#include "Value.h"
+#include "ValueTable.h"
 
 namespace tlv320aic3204
 {
@@ -51,6 +51,10 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
 	class AudioCodecDriver
 	{
 	public:
@@ -88,8 +92,8 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		
 		// data
 		uint8_t currentPage_ = 0;
-		std::unique_ptr<AudioOutput> output_;
-		std::unique_ptr<AudioInput> input_;
+		std::unique_ptr<IAudioOutput> output_;
+		std::unique_ptr<IAudioInput> input_;
 	};
 
 /*-----------------------------------------------------------------//
@@ -113,22 +117,23 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 	{
 	public:
 		// constructor
-		AudioOutput(const ValueProvider & analogGain, const ValueProvider & digitalGain);
+		IAudioOutput(const Value<float> & analogGain, const Value<float> & digitalGain);
+		
 		// destructor
-		virtual ~AudioOutput() = default;
+		virtual ~IAudioOutput() = default;
 
 		// methods
 		virtual void InitOutput() const = 0;
 		virtual void DeinitOutput() const = 0;
-		virtual const ValueProvider & GetAnalogGain() const = 0;
+		virtual const Value<float> & GetAnalogGain() const {return analogGain_;};
 		virtual void SetAnalogGain(uint32_t index) = 0;
-		virtual const ValueProvider & GetDititalGain() const = 0;
+		virtual const Value<float> & GetDititalGain() const {return digitalGain_;};
 		virtual void SetDititalGain(uint32_t index) = 0;
 
 	private:
 		// data
-		ValueProvider analogGain_;
-		ValueProvider digitalGain_;
+		Value<float> analogGain_;
+		Value<float> digitalGain_;
 	};
 	
 /*-----------------------------------------------------------------//
@@ -138,34 +143,36 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 	{
 	public:
 		// constructor
-		AudioInput(const ValueProvider & analogGain, const ValueProvider & digitalGain,
-			const ValueProvider & gainAdjLeft, const ValueProvider & gainAdjRight_);
-		AudioInput(const ValueProvider & analogGain, const ValueProvider & digitalGain);
+		IAudioInput(const Value<float> & analogGain, const Value<float> & digitalGain,
+			const Value<float> & gainAdjLeft, const Value<float> & gainAdjRight_);
+
+		IAudioInput(const Value<float> & analogGain, const Value<float> & digitalGain);
+		
 		// destructor
-		virtual ~AudioInput() = default;
+		virtual ~IAudioInput() = default;
 
 		// method
 		virtual void InitInput() const = 0;
 		virtual void DeinitInput() const = 0;
 
-		virtual const ValueProvider & GetAnalogGain() const = 0;
+		virtual const Value<float> & GetAnalogGain() const {return analogGain_;};
 		virtual void SetAnalogGain(uint32_t index) = 0;
 
-		virtual const ValueProvider & GetAdjLeftGain() const = 0;
+		virtual const Value<float> & GetAdjLeftGain() const {return gainAdjLeft_;};
 		virtual void SetAdjLeftGain(uint32_t index) = 0;
 		
-		virtual const ValueProvider & GetAdjRightGain() const = 0;
+		virtual const Value<float> & GetAdjRightGain() const {return gainAdjRight_;};
 		virtual void SetAdjRightGain(uint32_t index) = 0;
 		
-		virtual const ValueProvider & GetDigitalGain() const = 0;
+		virtual const Value<float> & GetDigitalGain() const {return digitalGain_;};
 		virtual void SetDititalGain(uint32_t index) = 0;
 
 	private:
 		// data
-		ValueProvider analogGain_;
-		ValueProvider gainAdjLeft_;
-		ValueProvider gainAdjRight_;
-		ValueProvider digitalGain_;
+		Value<float> analogGain_;
+		Value<float> gainAdjLeft_;
+		Value<float> gainAdjRight_;
+		Value<float> digitalGain_;
 	};
 
 } // namespace audio

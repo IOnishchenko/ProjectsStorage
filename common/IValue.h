@@ -2,11 +2,11 @@
 #define IVALUE_PROVIDER_H
 
 template<typename VType>
-class IValueProvider
+class IValue
 {
 public:
 	// destructor
-	virtual ~IValueProvider() = default;
+	virtual ~IValue() = default;
 
 	// methods
 	virtual VType GetMaxValue() const = 0;
