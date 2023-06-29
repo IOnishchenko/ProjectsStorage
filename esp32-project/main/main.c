@@ -62,7 +62,7 @@ static int hw_initialize()
 //-----------------------------------------------------------------*/
 void app_main(void)
 {
-	printf("ESP32 Project started!!!");
+	printf("ESP32 Project started!!!\n");
 	if(hw_initialize())
 	{
 		//xTaskCreate(gui_128x64_thread, "gui 128x64", 1024 * 2, (void *)0, 10, NULL);

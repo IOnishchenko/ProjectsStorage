@@ -2,117 +2,92 @@
 #define TLV320AIC3204_IONPUT_CONFIGS_H
 
 #include "tlv320aic3204-driver.h"
+#include "Value.h"
+#include "ValueTable.h"
 
 namespace tlv320aic3204
 {
 	/*-----------------------------------------------------------------//
 	// Abstract classes
 	//-----------------------------------------------------------------*/
-	// class ILeftSinglEndedInput : public AudioCodecDriver::IAudioInput
-	// {
-	// public:
-	// 	void SetAnalogGain(uint32_t index) override;
-	// 	void SetAdjLeftGain(uint32_t index) override;
-	// 	void SetAdjRightGain(uint32_t index) override;
-	// 	void SetDititalGain(uint32_t index) override;
-	// };
-
-	// class ILeftDifferentialInput : public AudioCodecDriver::IAudioInput
-	// {
-	// public:
-	// 	void SetAnalogGain(uint32_t index) override;
-	// 	void SetAdjLeftGain(uint32_t index) override;
-	// 	void SetAdjRightGain(uint32_t index) override;
-	// 	void SetDititalGain(uint32_t index) override
-	// };
-
 	class IRightSinglEndedInput : public AudioCodecDriver::IAudioInput
 	{
 	public:
+		// constructor
+		IRightSinglEndedInput();
+
+		// destructot
+		~IRightSinglEndedInput() override = default;
+
+		// methods
 		void SetAnalogGain(uint32_t index) override;
-		void SetAdjLeftGain(uint32_t index) override;
-		void SetAdjRightGain(uint32_t index) override;
-		void SetDititalGain(uint32_t index) override;
+		const IValue<float> & GetAnalogGain() const override
+		{
+			return analogGain_;
+		}
+
+	private:
+		Value<float> analogGain_;
 	};
 
-	// class IRightDifferentialInput : public AudioCodecDriver::IAudioInput
-	// {
-	// public:
-	// 	void SetAnalogGain(uint32_t index) override;
-	// 	void SetAdjLeftGain(uint32_t index) override;
-	// 	void SetAdjRightGain(uint32_t index) override;
-	// 	void SetDititalGain(uint32_t index) override
-	// };
+	//-----------------------------------------------------------------//
+	class IRightADCSinglEndedInput : public IRightSinglEndedInput
+	{
+	public:
+		// constructor
+		IRightADCSinglEndedInput();
 
-	/*-----------------------------------------------------------------//
-	// Left ADC Single Ended Inputs
-	//-----------------------------------------------------------------*/
-	// class LeftADCSingleEnded_IN1_L : public AudioCodecDriver::IAudioInput
-	// {
-	// };
+		// destructot
+		~IRightADCSinglEndedInput() override = default;
 
-	// class LeftADCSingleEnded_IN2_L : public AudioCodecDriver::IAudioInput
-	// {
-	// };
+		// methods
+		void SetVolumeComtrolValue(uint32_t index) override;
+		const IValue<float> & GetVolumeComtrolValue() const override
+		{
+			return digitalGain_;
+		}
 
-	// class LeftADCSingleEnded_IN3_L : public AudioCodecDriver::IAudioInput
-	// {
-	// };
+	private:
+		Value<float> digitalGain_;
+	};
 
-	// class LeftADCSingleEnded_IN1_R : public AudioCodecDriver::IAudioInput
-	// {
-	// };
+	//-----------------------------------------------------------------//
+	class IRightMixerAmpSinglEndedInput : public IRightSinglEndedInput
+	{
+	public:
+		// constructor
+		IRightMixerAmpSinglEndedInput();
 
-	/*-----------------------------------------------------------------//
-	// Left ADC Differential Inputs
-	//-----------------------------------------------------------------*/
-	// class LeftADCDifferential_IN2_L_R : public AudioCodecDriver::IAudioInput
-	// {
-	// };
+		// destructot
+		~IRightMixerAmpSinglEndedInput() override = default;
 
-	// class LeftADCDifferential_IN3_L_R : public AudioCodecDriver::IAudioInput
-	// {
-	// };
+		// methods
+		void SetVolumeComtrolValue(uint32_t index) override;
+		const IValue<float> & GetVolumeComtrolValue() const override
+		{
+			return mixerAmpGain_;
+		}
+
+	private:
+		ValueTable<float, 40> mixerAmpGain_;
+	};
 
 	/*-----------------------------------------------------------------//
 	// Right ADC Single Ended Inputs
 	//-----------------------------------------------------------------*/
-	// class RightADCSingleEnded_IN1_R : public AudioCodecDriver::IAudioInput
-	// {
-	// };
-
-	// class RightADCSingleEnded_IN2_R : public AudioCodecDriver::IAudioInput
-	// {
-	// };
-
-	class RightADCSingleEnded_IN3_R : public IRightSinglEndedInput
+	class RightADCSingleEnded_IN3_R : public IRightADCSinglEndedInput
 	{
 	public:
 		void InitInput() const override;
 		void DeinitInput() const override;
 	};
 
-	class RightMixAmpSingleEnded_IN3_R : public IRightSinglEndedInput
+	class RightMixAmpSingleEnded_IN3_R : public IRightMixerAmpSinglEndedInput
 	{
 	public:
 		void InitInput() const override;
 		void DeinitInput() const override;
 	};
-
-	// class RightADCSingleEnded_IN2_L : public AudioCodecDriver::IAudioInput
-	// {
-	// };
-
-	/*-----------------------------------------------------------------//
-	// Right ADC Differential Inputs
-	//-----------------------------------------------------------------*/
-	// class RightADCDifferential_IN1_R_L : public AudioCodecDriver::IAudioInput
-	// {
-	// };
-
-	// class RightADCDifferential_IN3_R_L : public AudioCodecDriver::IAudioInput
-	// {
-	// };
 }
 
 #endif // TLV320AIC3204_IONPUT_CONFIGS_H

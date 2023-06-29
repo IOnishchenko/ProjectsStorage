@@ -25,9 +25,12 @@ namespace tlv320aic3204
 	extern "C" void tlv320aic3204_codec_thread(void * args)
 	{
 		printf("--== tlv320aic3204_codec_thread has started ==--\n");
-		AudioDevice.Initialize();
+		//AudioDevice.Initialize();
+		int i = 0;
 		for(;;)
 		{
+			printf("--== tlv320aic3204_codec_thread running ==-- %d\n", i);
+			i++;
 			vTaskDelay(100);
 		}
 	}

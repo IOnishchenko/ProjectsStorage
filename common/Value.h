@@ -8,7 +8,7 @@ class Value : public IValue<VType>
 {
 public:
 	// constructor
-	Value(VType max, VType min, VType step, uint32_t currentIndex)
+	Value(VType min, VType max, VType step, uint32_t currentIndex)
 		:stepIndex_{currentIndex}, max_{max}, min_{min}, step_{step}
 	{		
 	}

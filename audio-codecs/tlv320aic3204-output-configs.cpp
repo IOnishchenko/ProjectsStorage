@@ -11,7 +11,7 @@ namespace tlv320aic3204
 
 	}
 
-	void IStereoHPOutput::SetDititalGain(uint32_t index)
+	void IStereoHPOutput::SetVolumeComtrolValue(uint32_t index)
 	{
 
 	}
@@ -22,7 +22,7 @@ namespace tlv320aic3204
 
 	}
 
-	void IDifferntialLineOutput::SetDititalGain(uint32_t index)
+	void IDifferntialLineOutput::SetVolumeComtrolValue(uint32_t index)
 	{
 
 	}

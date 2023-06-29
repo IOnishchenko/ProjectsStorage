@@ -12,14 +12,14 @@ namespace tlv320aic3204
 	{
 	public:
 		void SetAnalogGain(uint32_t index) override;
-		void SetDititalGain(uint32_t index) override;
+		void SetVolumeComtrolValue(uint32_t index) override;
 	};
 
 	class IDifferntialLineOutput : public AudioCodecDriver::IAudioOutput
 	{
 	public:
 		void SetAnalogGain(uint32_t index) override;
-		void SetDititalGain(uint32_t index) override;
+		void SetVolumeComtrolValue(uint32_t index) override;
 	};
 
 	/*-----------------------------------------------------------------//

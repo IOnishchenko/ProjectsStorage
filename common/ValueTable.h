@@ -2,20 +2,17 @@
 #define VALUE_TABLE_H
 
 #include <initializer_list>
+#include <array>
 #include "IValue.h"
 
 template<typename VType, uint32_t ItemNum>
 class ValueTable : public IValue<VType>
 {
+public:
 	// constructor
-	ValueTable(uint32_t valueIndex, std::initializer_list<VType> values)
-		:valueIndex_{valueIndex}
+	ValueTable(uint32_t valueIndex, const std::array<VType, ItemNum> & values)
+		:valueIndex_{valueIndex}, items_{values}
 	{
-		int i = 0;
-		for(auto itm : values)
-		{
-			items_[i++] = itm;
-		}
 	}
 
 	// destructor
@@ -59,7 +56,7 @@ class ValueTable : public IValue<VType>
 
 private:
 	uint32_t valueIndex_;
-	const VType items_[ItemNum];
+	const std::array<VType, ItemNum> items_;
 };
 
 #endif // VALUE_TABLE_H

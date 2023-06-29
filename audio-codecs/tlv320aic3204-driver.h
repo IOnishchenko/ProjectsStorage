@@ -3,8 +3,7 @@
 
 #include "stdint.h"
 #include <memory>
-#include "Value.h"
-#include "ValueTable.h"
+#include "IValue.h"
 
 namespace tlv320aic3204
 {
@@ -40,11 +39,19 @@ constexpr uint8_t P0_LOOPBACK_CONTROL_REG = 29;
 constexpr uint8_t P0_DAC_PROCESSING_BLOCK_REG = 60;
 constexpr uint8_t P0_ADC_PROCESSING_BLOCK_REG = 61;
 
+constexpr uint8_t P0_ADC_ADJ_GAIN_REG = 82;
+constexpr uint8_t P0_LEFT_ADC_DIGITAL_GAIN_REG = 83;
+constexpr uint8_t P0_RIGHT_ADC_DIGITAL_GAIN_REG = 84;
+
 // page 1
 constexpr uint8_t P1_POWER_CONF_REG = 1;
 constexpr uint8_t P1_LDO_CONTROL_REG = 2;
+constexpr uint8_t P1_OUTPUT_DRIVER_POWER_REG = 9;
 constexpr uint8_t P1_COMMON_MODE_REG = 10;
 constexpr uint8_t P1_MICBIAS_CONFIG_REG = 51;
+constexpr uint8_t P1_LEFT_MICPGA_VOL_CONTROL_REG = 59;
+constexpr uint8_t P1_RIGHT_MICPGA_VOL_CONTROL_REG = 60;
+
 constexpr uint8_t P1_ADC_INPUT_POWER_UP_TIME_REG = 71;
 constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 
@@ -94,6 +101,10 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		uint8_t currentPage_ = 0;
 		std::unique_ptr<IAudioOutput> output_;
 		std::unique_ptr<IAudioInput> input_;
+
+		friend class IRightSinglEndedInput;
+		friend class IRightADCSinglEndedInput;
+		friend class IRightMixerAmpSinglEndedInput;
 	};
 
 /*-----------------------------------------------------------------//
@@ -116,24 +127,16 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 	class AudioCodecDriver::IAudioOutput
 	{
 	public:
-		// constructor
-		IAudioOutput(const Value<float> & analogGain, const Value<float> & digitalGain);
-		
 		// destructor
 		virtual ~IAudioOutput() = default;
 
 		// methods
 		virtual void InitOutput() const = 0;
 		virtual void DeinitOutput() const = 0;
-		virtual const Value<float> & GetAnalogGain() const {return analogGain_;};
+		virtual const IValue<float> & GetAnalogGain() const = 0;
 		virtual void SetAnalogGain(uint32_t index) = 0;
-		virtual const Value<float> & GetDititalGain() const {return digitalGain_;};
-		virtual void SetDititalGain(uint32_t index) = 0;
-
-	private:
-		// data
-		Value<float> analogGain_;
-		Value<float> digitalGain_;
+		virtual const IValue<float> & GetVolumeComtrolValue() const = 0;
+		virtual void SetVolumeComtrolValue(uint32_t index) = 0;
 	};
 	
 /*-----------------------------------------------------------------//
@@ -142,12 +145,6 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 	class AudioCodecDriver::IAudioInput
 	{
 	public:
-		// constructor
-		IAudioInput(const Value<float> & analogGain, const Value<float> & digitalGain,
-			const Value<float> & gainAdjLeft, const Value<float> & gainAdjRight_);
-
-		IAudioInput(const Value<float> & analogGain, const Value<float> & digitalGain);
-		
 		// destructor
 		virtual ~IAudioInput() = default;
 
@@ -155,24 +152,17 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		virtual void InitInput() const = 0;
 		virtual void DeinitInput() const = 0;
 
-		virtual const Value<float> & GetAnalogGain() const {return analogGain_;};
+		virtual const IValue<float> & GetAnalogGain() const = 0;
 		virtual void SetAnalogGain(uint32_t index) = 0;
+		virtual const IValue<float> & GetVolumeComtrolValue() const = 0;
+		virtual void SetVolumeComtrolValue(uint32_t index) = 0;
 
-		virtual const Value<float> & GetAdjLeftGain() const {return gainAdjLeft_;};
-		virtual void SetAdjLeftGain(uint32_t index) = 0;
-		
-		virtual const Value<float> & GetAdjRightGain() const {return gainAdjRight_;};
-		virtual void SetAdjRightGain(uint32_t index) = 0;
-		
-		virtual const Value<float> & GetDigitalGain() const {return digitalGain_;};
-		virtual void SetDititalGain(uint32_t index) = 0;
-
-	private:
-		// data
-		Value<float> analogGain_;
-		Value<float> gainAdjLeft_;
-		Value<float> gainAdjRight_;
-		Value<float> digitalGain_;
+		// TODO
+		// Gain correction can be added to left and right channel
+		//virtual const Value<float> & GetAdjLeftGain() const {return gainAdjLeft_;};
+		//virtual void SetAdjLeftGain(uint32_t index) {};
+		//virtual const Value<float> & GetAdjRightGain() const {return gainAdjRight_;};
+		//virtual void SetAdjRightGain(uint32_t index) {};
 	};
 
 } // namespace audio
