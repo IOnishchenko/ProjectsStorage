@@ -37,12 +37,12 @@ public:
 		return stepIndex_ * step_ + min_;
 	}
 
-	void SetCurrentIndex(uint32_t index) override
+	void SetValueByIndex(uint32_t index) override
 	{
 		stepIndex_ = index;
 	}
 
-	uint32_t GetCurrentIndex() const override
+	uint32_t GetCurrentValueIndex() const override
 	{
 		return stepIndex_;
 	}

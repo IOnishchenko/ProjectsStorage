@@ -13,9 +13,9 @@ public:
 	virtual VType GetMinValue() const = 0;
 	virtual uint32_t GetNumberOfSteps() const = 0;
 	virtual VType GetValue() const = 0;
-	virtual void SetCurrentIndex(uint32_t index) = 0;
-	virtual uint32_t GetCurrentIndex() const = 0;
 	virtual VType GetValueAt(uint32_t index) const = 0;
+	virtual void SetValueByIndex(uint32_t index) = 0;
+	virtual uint32_t GetCurrentValueIndex() const = 0;
 };
 
 #endif // VALUE_PROVIDER_H

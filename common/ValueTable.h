@@ -39,12 +39,12 @@ public:
 		return items_[valueIndex_];
 	}
 
-	void SetCurrentIndex(uint32_t index) override
+	void SetValueByIndex(uint32_t index) override
 	{
 		valueIndex_ = index;
 	}
 
-	uint32_t GetCurrentIndex() const override
+	uint32_t GetCurrentValueIndex() const override
 	{
 		return valueIndex_;
 	}

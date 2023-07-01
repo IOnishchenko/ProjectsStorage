@@ -39,6 +39,12 @@ constexpr uint8_t P0_LOOPBACK_CONTROL_REG = 29;
 constexpr uint8_t P0_DAC_PROCESSING_BLOCK_REG = 60;
 constexpr uint8_t P0_ADC_PROCESSING_BLOCK_REG = 61;
 
+constexpr uint8_t P0_DAC_CHANNEL_SETUP_REG1 = 63;
+constexpr uint8_t P0_DAC_CHANNEL_SETUP_REG2 = 64;
+constexpr uint8_t P0_LEFT_DAC_DIGITAL_GAIN_REG = 65;
+constexpr uint8_t P0_RIGHT_DAC_DIGITAL_GAIN_REG = 66;
+
+constexpr uint8_t P0_ADC_CHANNEL_SETUP_REG = 81;
 constexpr uint8_t P0_ADC_ADJ_GAIN_REG = 82;
 constexpr uint8_t P0_LEFT_ADC_DIGITAL_GAIN_REG = 83;
 constexpr uint8_t P0_RIGHT_ADC_DIGITAL_GAIN_REG = 84;
@@ -48,7 +54,26 @@ constexpr uint8_t P1_POWER_CONF_REG = 1;
 constexpr uint8_t P1_LDO_CONTROL_REG = 2;
 constexpr uint8_t P1_OUTPUT_DRIVER_POWER_REG = 9;
 constexpr uint8_t P1_COMMON_MODE_REG = 10;
+
+constexpr uint8_t P1_HPL_ROUTING_SELECTION_REG = 12;
+constexpr uint8_t P1_HPR_ROUTING_SELECTION_REG = 13;
+constexpr uint8_t P1_LOL_ROUTING_SELECTION_REG = 14;
+constexpr uint8_t P1_LOR_ROUTING_SELECTION_REG = 15;
+
+constexpr uint8_t P1_HPL_GAIN_SETTING_REG = 16;
+constexpr uint8_t P1_HPR_GAIN_SETTING_REG = 17;
+constexpr uint8_t P1_LOL_GAIN_SETTING_REG = 18;
+constexpr uint8_t P1_LOR_GAIN_SETTING_REG = 19;
+
+constexpr uint8_t P1_LEFT_MIXER_AMP_VOLUME_CONTROL_REG = 24;
+constexpr uint8_t P1_RIGHT_MIXER_AMP_VOLUME_CONTROL_REG = 25;
+
 constexpr uint8_t P1_MICBIAS_CONFIG_REG = 51;
+constexpr uint8_t P1_LEFT_MIC_PGA_POSITIVE_INPUT_REG = 52;
+constexpr uint8_t P1_LEFT_MIC_PGA_NEGATIVE_INPUT_REG = 54;
+constexpr uint8_t P1_RIGHT_MIC_PGA_POSITIVE_INPUT_REG = 55;
+constexpr uint8_t P1_RIGHT_MIC_PGA_NEGATIVE_INPUT_REG = 57;
+constexpr uint8_t P1_FLOATING_INPUT_CONF_REG = 58;
 constexpr uint8_t P1_LEFT_MICPGA_VOL_CONTROL_REG = 59;
 constexpr uint8_t P1_RIGHT_MICPGA_VOL_CONTROL_REG = 60;
 
@@ -67,8 +92,13 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 	public:
 		// nested types
 		enum class MicBias;
-		class IAudioOutput;
+		class IAudioInputPGA;
+		class IAudioInputVolumeControl;
+		class IAudioOutputPGA;
+		class IAudioOutputVolumeControl;
 		class IAudioInput;
+		class IAudioOutput;
+		
 		// conatructor
 		AudioCodecDriver();
 
@@ -82,9 +112,12 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 			return I2C_CODEC_ADDRES;
 		}
 
-	private:
+	protected:
 		// methods
 		void SetRegisterPage(uint8_t page);
+
+	private:
+		// methods
 		void PowerUp();
 		void ResetSampleRateSettings();
 		void SetSampleRateTo12KHz();
@@ -102,9 +135,12 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		std::unique_ptr<IAudioOutput> output_;
 		std::unique_ptr<IAudioInput> input_;
 
-		friend class IRightSinglEndedInput;
-		friend class IRightADCSinglEndedInput;
-		friend class IRightMixerAmpSinglEndedInput;
+		friend class IAudioInputPGA;
+		friend class IAudioInputVolumeControl;
+		friend class IAudioOutputPGA;
+		friend class IAudioOutputVolumeControl;
+		friend class IAudioInput;
+		friend class IAudioOutput;
 	};
 
 /*-----------------------------------------------------------------//
@@ -121,39 +157,31 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		LDOIN,  
 	};
 
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-	class AudioCodecDriver::IAudioOutput
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	class AudioCodecDriver::IAudioInputPGA
 	{
 	public:
 		// destructor
-		virtual ~IAudioOutput() = default;
-
+		virtual ~IAudioInputPGA() = default;
 		// methods
-		virtual void InitOutput() const = 0;
-		virtual void DeinitOutput() const = 0;
 		virtual const IValue<float> & GetAnalogGain() const = 0;
 		virtual void SetAnalogGain(uint32_t index) = 0;
-		virtual const IValue<float> & GetVolumeComtrolValue() const = 0;
-		virtual void SetVolumeComtrolValue(uint32_t index) = 0;
+
+	protected:
+		void SetRegisterPage(uint8_t page);
 	};
-	
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-	class AudioCodecDriver::IAudioInput
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	class AudioCodecDriver::IAudioInputVolumeControl
 	{
 	public:
 		// destructor
-		virtual ~IAudioInput() = default;
-
-		// method
-		virtual void InitInput() const = 0;
-		virtual void DeinitInput() const = 0;
-
-		virtual const IValue<float> & GetAnalogGain() const = 0;
-		virtual void SetAnalogGain(uint32_t index) = 0;
+		virtual ~IAudioInputVolumeControl() = default;
+		// methods
 		virtual const IValue<float> & GetVolumeComtrolValue() const = 0;
 		virtual void SetVolumeComtrolValue(uint32_t index) = 0;
 
@@ -163,7 +191,126 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		//virtual void SetAdjLeftGain(uint32_t index) {};
 		//virtual const Value<float> & GetAdjRightGain() const {return gainAdjRight_;};
 		//virtual void SetAdjRightGain(uint32_t index) {};
+	protected:
+		void SetRegisterPage(uint8_t page);
 	};
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	class AudioCodecDriver::IAudioOutputPGA
+	{
+	public:
+		// destructor
+		virtual ~IAudioOutputPGA() = default;
+		// methods
+		virtual const IValue<float> & GetAnalogGain() const = 0;
+		virtual void SetAnalogGain(uint32_t index) = 0;
+
+	protected:
+		void SetRegisterPage(uint8_t page);
+	};
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	class AudioCodecDriver::IAudioOutputVolumeControl
+	{
+	public:
+		// destructor
+		virtual ~IAudioOutputVolumeControl() = default;
+		// methods
+		virtual const IValue<float> & GetVolumeComtrolValue() const = 0;
+		virtual void SetVolumeComtrolValue(uint32_t index) = 0;
+
+	protected:
+		void SetRegisterPage(uint8_t page);
+	};
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	class AudioCodecDriver::IAudioInput
+		:public virtual AudioCodecDriver::IAudioInputPGA,
+		 public virtual AudioCodecDriver::IAudioInputVolumeControl
+	{
+	public:
+		// destructor
+		virtual ~IAudioInput() = default;
+		// methods
+		virtual void Initialize() = 0;
+		virtual void Deinitialize() = 0;
+	
+	protected:
+		void SetRegisterPage(uint8_t page);
+	};
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	class AudioCodecDriver::IAudioOutput
+		:public virtual AudioCodecDriver::IAudioOutputPGA,
+		 public virtual AudioCodecDriver::IAudioOutputVolumeControl
+	{
+	public:
+		// destructor
+		virtual ~IAudioOutput() = default;
+		// methods
+		virtual void Initialize() = 0;
+		virtual void Deinitialize() = 0;
+
+	protected:
+		void SetRegisterPage(uint8_t page);
+	};
+	
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+
+
+// /*-----------------------------------------------------------------//
+// //
+// //-----------------------------------------------------------------*/
+// 	class AudioCodecDriver::IAudioOutput
+// 	{
+// 	public:
+// 		// destructor
+// 		virtual ~IAudioOutput() = default;
+
+// 		// methods
+// 		virtual void InitOutput() const = 0;
+// 		virtual void DeinitOutput() const = 0;
+// 		virtual const IValue<float> & GetAnalogGain() const = 0;
+// 		virtual void SetAnalogGain(uint32_t index) = 0;
+// 		virtual const IValue<float> & GetVolumeComtrolValue() const = 0;
+// 		virtual void SetVolumeComtrolValue(uint32_t index) = 0;
+// 	};
+	
+// /*-----------------------------------------------------------------//
+// //
+// //-----------------------------------------------------------------*/
+// 	class AudioCodecDriver::IAudioInput
+// 	{
+// 	public:
+// 		// destructor
+// 		virtual ~IAudioInput() = default;
+
+// 		// method
+// 		virtual void InitInput() const = 0;
+// 		virtual void DeinitInput() const = 0;
+
+// 		virtual const IValue<float> & GetAnalogGain() const = 0;
+// 		virtual void SetAnalogGain(uint32_t index) = 0;
+// 		virtual const IValue<float> & GetVolumeComtrolValue() const = 0;
+// 		virtual void SetVolumeComtrolValue(uint32_t index) = 0;
+
+// 		// TODO
+// 		// Gain correction can be added to left and right channel
+// 		//virtual const Value<float> & GetAdjLeftGain() const {return gainAdjLeft_;};
+// 		//virtual void SetAdjLeftGain(uint32_t index) {};
+// 		//virtual const Value<float> & GetAdjRightGain() const {return gainAdjRight_;};
+// 		//virtual void SetAdjRightGain(uint32_t index) {};
+// 	};
 
 } // namespace audio
 

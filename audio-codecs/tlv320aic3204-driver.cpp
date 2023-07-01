@@ -505,4 +505,48 @@ namespace tlv320aic3204
 	/*-----------------------------------------------------------------//
 	//
 	//-----------------------------------------------------------------*/
+	void AudioCodecDriver::IAudioInputPGA::SetRegisterPage(uint8_t page) 
+	{
+		AudioDevice.SetRegisterPage(page);
+	}
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	void AudioCodecDriver::IAudioInputVolumeControl::SetRegisterPage(uint8_t page) 
+	{
+		AudioDevice.SetRegisterPage(page);
+	}
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	void AudioCodecDriver::IAudioOutputPGA::SetRegisterPage(uint8_t page) 
+	{
+		AudioDevice.SetRegisterPage(page);
+	}
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	void AudioCodecDriver::IAudioOutputVolumeControl::SetRegisterPage(uint8_t page) 
+	{
+		AudioDevice.SetRegisterPage(page);
+	}
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	void AudioCodecDriver::IAudioInput::SetRegisterPage(uint8_t page) 
+	{
+		AudioDevice.SetRegisterPage(page);
+	}
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	void AudioCodecDriver::IAudioOutput::SetRegisterPage(uint8_t page) 
+	{
+		AudioDevice.SetRegisterPage(page);
+	}
 }

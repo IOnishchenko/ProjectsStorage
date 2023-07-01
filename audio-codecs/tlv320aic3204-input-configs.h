@@ -2,6 +2,7 @@
 #define TLV320AIC3204_IONPUT_CONFIGS_H
 
 #include "tlv320aic3204-driver.h"
+#include "tlv320aic3204-output-configs.h"
 #include "Value.h"
 #include "ValueTable.h"
 
@@ -10,14 +11,14 @@ namespace tlv320aic3204
 	/*-----------------------------------------------------------------//
 	// Abstract classes
 	//-----------------------------------------------------------------*/
-	class IRightSinglEndedInput : public AudioCodecDriver::IAudioInput
+	class RightPGASinglEndedInput : public virtual AudioCodecDriver::IAudioInputPGA
 	{
 	public:
 		// constructor
-		IRightSinglEndedInput();
+		RightPGASinglEndedInput();
 
 		// destructot
-		~IRightSinglEndedInput() override = default;
+		~RightPGASinglEndedInput() override = default;
 
 		// methods
 		void SetAnalogGain(uint32_t index) override;
@@ -31,14 +32,14 @@ namespace tlv320aic3204
 	};
 
 	//-----------------------------------------------------------------//
-	class IRightADCSinglEndedInput : public IRightSinglEndedInput
+	class RightADCVolumeConntrol : public virtual AudioCodecDriver::IAudioInputVolumeControl
 	{
 	public:
 		// constructor
-		IRightADCSinglEndedInput();
+		RightADCVolumeConntrol();
 
 		// destructot
-		~IRightADCSinglEndedInput() override = default;
+		~RightADCVolumeConntrol() override = default;
 
 		// methods
 		void SetVolumeComtrolValue(uint32_t index) override;
@@ -52,42 +53,54 @@ namespace tlv320aic3204
 	};
 
 	//-----------------------------------------------------------------//
-	class IRightMixerAmpSinglEndedInput : public IRightSinglEndedInput
+	class RightMixerAmpVolumeControlStub : public virtual AudioCodecDriver::IAudioInputVolumeControl
 	{
 	public:
 		// constructor
-		IRightMixerAmpSinglEndedInput();
+		RightMixerAmpVolumeControlStub(RightMixerAmpVolumeControl & rightOutpur);
 
 		// destructot
-		~IRightMixerAmpSinglEndedInput() override = default;
+		~RightMixerAmpVolumeControlStub() override = default;
 
 		// methods
 		void SetVolumeComtrolValue(uint32_t index) override;
 		const IValue<float> & GetVolumeComtrolValue() const override
 		{
-			return mixerAmpGain_;
+			return rightOutpur_.GetVolumeComtrolValue();
 		}
 
 	private:
-		ValueTable<float, 40> mixerAmpGain_;
+		RightMixerAmpVolumeControl & rightOutpur_;
 	};
 
 	/*-----------------------------------------------------------------//
 	// Right ADC Single Ended Inputs
 	//-----------------------------------------------------------------*/
-	class RightADCSingleEnded_IN3_R : public IRightADCSinglEndedInput
+	class RightADCSingleEnded_IN3R
+		:public RightPGASinglEndedInput, public RightADCVolumeConntrol,
+		 public AudioCodecDriver::IAudioInput
 	{
 	public:
-		void InitInput() const override;
-		void DeinitInput() const override;
+		// destructor
+		~RightADCSingleEnded_IN3R() override = default;
+
+		void Initialize() override;
+		void Deinitialize() override;
 	};
 
-	class RightMixAmpSingleEnded_IN3_R : public IRightMixerAmpSinglEndedInput
+	class RightMixAmpSingleEnded_IN3R
+		:public RightPGASinglEndedInput, public RightMixerAmpVolumeControlStub,
+		 public AudioCodecDriver::IAudioInput
 	{
 	public:
-		void InitInput() const override;
-		void DeinitInput() const override;
+		// constructor
+		RightMixAmpSingleEnded_IN3R(RightMixerAmpVolumeControl & rightOutpur);
+
+		// destructor
+		~RightMixAmpSingleEnded_IN3R() override = default;
+
+		void Initialize() override;
+		void Deinitialize() override;
 	};
 }
-
 #endif // TLV320AIC3204_IONPUT_CONFIGS_H

@@ -4,7 +4,7 @@
 /*-----------------------------------------------------------------//
 // Dependencies
 //-----------------------------------------------------------------*/
-extern tlv320aic3204::AudioCodecDriver AudioDevice;
+//extern tlv320aic3204::AudioCodecDriver AudioDevice;
 
 namespace tlv320aic3204
 {
@@ -14,6 +14,7 @@ namespace tlv320aic3204
 	constexpr float APGA_RIN_10K_LOST = 0.f; // dB
 	constexpr float APGA_RIN_20K_LOST = -6.f; // dB
 	constexpr float APGA_RIN_40K_LOST = -12.f; // dB
+
 	constexpr float APGA_GAIN_STEP = 0.5f;
 	constexpr float APGA_SINGLE_ENDED_MIN_GAIN = 0.f;
 	constexpr float APGA_SINGLE_ENDED_MAX_GAIN = 47.5f;
@@ -24,23 +25,19 @@ namespace tlv320aic3204
 	constexpr float DIGITAL_GAIN_MIN_GAIN = -12.f;
 	constexpr float DIGITAL_GAIN_MAX_GAIN = 20.f;
 
-	constexpr float MIXER_AMP_GAIN_STEP = 0.5f;
-	constexpr float MIXER_AMP_GAIN_MIN_GAIN = -12.f;
-	constexpr float MIXER_AMP_GAIN_MAX_GAIN = 20.f;
-
 	/*-----------------------------------------------------------------//
 	// Abstract classes
 	//-----------------------------------------------------------------*/
 	
 	//-----------------------------------------------------------------//
-	// IRightSinglEndedInput class
-	IRightSinglEndedInput::IRightSinglEndedInput()
+	// RightPGASinglEndedInput class
+	RightPGASinglEndedInput::RightPGASinglEndedInput()
 		:analogGain_(APGA_SINGLE_ENDED_MIN_GAIN, APGA_SINGLE_ENDED_MAX_GAIN, APGA_GAIN_STEP, 50) // PGA
 	{}
 
-	void IRightSinglEndedInput::SetAnalogGain(uint32_t index)
+	void RightPGASinglEndedInput::SetAnalogGain(uint32_t index)
 	{
-		AudioDevice.SetRegisterPage(1);
+		SetRegisterPage(1);
 		uint8_t buff[] =
 		{
 			P1_RIGHT_MICPGA_VOL_CONTROL_REG,
@@ -48,43 +45,37 @@ namespace tlv320aic3204
 			static_cast<uint8_t>(index)
 		};
 		tlv320aic3204_write_buffer(buff, sizeof(buff));
-		analogGain_.SetCurrentIndex(index);
+		analogGain_.SetValueByIndex(index);
 	}
 
 	//-----------------------------------------------------------------//
-	// IRightADCSinglEndedInput class
-	IRightADCSinglEndedInput::IRightADCSinglEndedInput()
+	// RightADCVolumeConntrol class
+	RightADCVolumeConntrol::RightADCVolumeConntrol()
 		:digitalGain_(DIGITAL_GAIN_MIN_GAIN, DIGITAL_GAIN_MAX_GAIN, DIGITAL_GAIN_STEP, 24) // Digital Volume Control
 	{}
 	
-	void IRightADCSinglEndedInput::SetVolumeComtrolValue(uint32_t index)
+	void RightADCVolumeConntrol::SetVolumeComtrolValue(uint32_t index)
 	{
 		constexpr int32_t offset = DIGITAL_GAIN_MIN_GAIN/DIGITAL_GAIN_STEP;
-		AudioDevice.SetRegisterPage(0);
+		SetRegisterPage(0);
 		uint8_t buff[] =
 		{
 			P0_RIGHT_ADC_DIGITAL_GAIN_REG,
 			static_cast<uint8_t>((index + offset) & 0x7f)
 		};
 		tlv320aic3204_write_buffer(buff, sizeof(buff));
-		digitalGain_.SetCurrentIndex(index);
+		digitalGain_.SetValueByIndex(index);
 	}
 
 	//-----------------------------------------------------------------//
-	// IRightMixerAmpSinglEndedInput class
-	IRightMixerAmpSinglEndedInput::IRightMixerAmpSinglEndedInput()
-		:mixerAmpGain_(0, 
-			{
-				0.f, -0.4f, -0.9f, -1.3f, -1.8f, -2.3f, -2.9f, -3.3f, -3.9f, -4.3f, -4.8f,
-				-5.2f, -5.8f, -6.3f, -6.6f, -7.2f, -7.8f, -8.2f, -8.5f, -9.3f, -9.7f, -10.1f,
-				-10.6f, -11.0f, -11.5f, -12.0f, -12.6f, -13.2f, -13.8f, -14.5f, -15.3f,
-				-16.1f, -17.0f, -18.1f, -19.2f, -20.6f, -22.1f, -24.1f, -26.6f, -30.1f
-			}) // Mixer Amplifier gain
+	// RightMixerAmpVolumeControlStub class
+	RightMixerAmpVolumeControlStub::RightMixerAmpVolumeControlStub(RightMixerAmpVolumeControl & rightOutpur)
+		:rightOutpur_{rightOutpur}
  	{}
 
-	void IRightMixerAmpSinglEndedInput::SetVolumeComtrolValue(uint32_t index)
+	void RightMixerAmpVolumeControlStub::SetVolumeComtrolValue(uint32_t index)
 	{
-		mixerAmpGain_.SetCurrentIndex(index);
+		rightOutpur_.SetVolumeComtrolValue(index);
 	}
 
 	/*-----------------------------------------------------------------//
@@ -92,26 +83,138 @@ namespace tlv320aic3204
 	//-----------------------------------------------------------------*/
 	
 	//-----------------------------------------------------------------//
-	// RightADCSingleEnded_IN3_R class methods
-	void RightADCSingleEnded_IN3_R::InitInput() const
+	// RightADCSingleEnded_IN3R class methods
+	void RightADCSingleEnded_IN3R::Initialize()
 	{
+		// input config
+		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_MICBIAS_CONFIG_REG,
+			// MICBIAS powered up
+			// MICBIAS = 2.075V
+			// MICBIAS from AVDD
+			(1 << 6)|(0b10 << 4)|(0 << 3),
+			// LEFT MICPGA Positive input by default
+			0x00,
+			// Reserved. Write only default values
+			0x00,
+			// LEFT MICPGA Negative input by default
+			0x00,
+			// RIGHT MICPGA Positive input to IN3R with 10k
+			(0b01 << 2),
+			// Reserved. Write only default values
+			0x00,
+			// RIGHT MICPGA Negative input to CM2R with 10k
+			(0b00 << 0)
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
+		uint8_t cmd1[] =
+		{
+			P1_RIGHT_MICPGA_VOL_CONTROL_REG,
+			// Enable Right MICPGA
+			// Set test gain 
+			// TODO after testing take the gain value from analogGain_
+			(0 << 7)|(16 << 0)
+		};
+		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
+
+		// Right ADC config
+		AudioCodecDriver::IAudioInput::SetRegisterPage(0);
+		uint8_t cmd2[] =
+		{
+			P0_ADC_CHANNEL_SETUP_REG,
+			// Right ADC Power up
+			(1 << 6),
+			// Right ADC Unmited Left ADC Muted
+			(1 << 7)
+		};
+		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
 	}
 
-	void RightADCSingleEnded_IN3_R::DeinitInput() const
+	void RightADCSingleEnded_IN3R::Deinitialize()
 	{
+		// input reset
+		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_MICBIAS_CONFIG_REG, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
+		uint8_t cmd1[] =
+		{
+			P1_RIGHT_MICPGA_VOL_CONTROL_REG, (1 << 7)
+		};
+		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
+
+		// Right ADC reset
+		AudioCodecDriver::IAudioInput::SetRegisterPage(0);
+		uint8_t cmd2[] =
+		{
+			P0_ADC_CHANNEL_SETUP_REG, 0x00, (1 << 7)|(1 << 3)
+		};
+		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
 	}
 
 	//-----------------------------------------------------------------//
-	// RightMixAmpSingleEnded_IN3_R class methods
-	void RightMixAmpSingleEnded_IN3_R::InitInput() const
-	{
+	// RightMixAmpSingleEnded_IN3R class methods
+	RightMixAmpSingleEnded_IN3R::RightMixAmpSingleEnded_IN3R(RightMixerAmpVolumeControl & rightOutpur)
+		:RightMixerAmpVolumeControlStub(rightOutpur)
+	{}
 
+	void RightMixAmpSingleEnded_IN3R::Initialize()
+	{
+		// input config
+		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_MICBIAS_CONFIG_REG,
+			// MICBIAS powered up
+			// MICBIAS = 2.075V
+			// MICBIAS from AVDD
+			(1 << 6)|(0b10 << 4)|(0 << 3),
+			// LEFT MICPGA Positive input by default
+			0x00,
+			// Reserved. Write only default values
+			0x00,
+			// LEFT MICPGA Negative input by default
+			0x00,
+			// RIGHT MICPGA Positive input to IN3R with 10k
+			(0b01 << 2),
+			// Reserved. Write only default values
+			0x00,
+			// RIGHT MICPGA Negative input to CM2R with 10k
+			(0b00 << 0)
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
+
+		uint8_t cmd1[] =
+		{
+			P1_RIGHT_MICPGA_VOL_CONTROL_REG,
+			// Enable Right MICPGA
+			// Set test gain 
+			// TODO after testing take the gain value from analogGain_
+			(0 << 7)|(16 << 0)
+		};
+		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
 	}
 
-	void RightMixAmpSingleEnded_IN3_R::DeinitInput() const
+	void RightMixAmpSingleEnded_IN3R::Deinitialize()
 	{
+		// input reset
+		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_MICBIAS_CONFIG_REG, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
+		uint8_t cmd1[] =
+		{
+			P1_RIGHT_MICPGA_VOL_CONTROL_REG, (1 << 7)
+		};
+		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
 	}
 }
