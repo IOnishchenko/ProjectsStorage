@@ -65,6 +65,8 @@ constexpr uint8_t P1_HPR_GAIN_SETTING_REG = 17;
 constexpr uint8_t P1_LOL_GAIN_SETTING_REG = 18;
 constexpr uint8_t P1_LOR_GAIN_SETTING_REG = 19;
 
+constexpr uint8_t P1_HP_DRIVER_SETUP_REG = 20;
+
 constexpr uint8_t P1_LEFT_MIXER_AMP_VOLUME_CONTROL_REG = 24;
 constexpr uint8_t P1_RIGHT_MIXER_AMP_VOLUME_CONTROL_REG = 25;
 
@@ -100,7 +102,7 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		class IAudioOutput;
 		
 		// conatructor
-		AudioCodecDriver();
+		AudioCodecDriver(IAudioInput * audioInput, IAudioOutput * audioOutput);
 
 		// destructor
 		virtual ~AudioCodecDriver() = default;
@@ -119,6 +121,8 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 	private:
 		// methods
 		void PowerUp();
+		void HeadphoneDriverSetup();
+		
 		void ResetSampleRateSettings();
 		void SetSampleRateTo12KHz();
 		void SetSampleRateTo24KHz();
@@ -131,9 +135,9 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		void SwitchOutputToMonoDifferLineOut();
 		
 		// data
-		uint8_t currentPage_ = 0;
-		std::unique_ptr<IAudioOutput> output_;
-		std::unique_ptr<IAudioInput> input_;
+		uint8_t currentPage_ = 0xff;
+		IAudioOutput * output_ = nullptr;
+		IAudioInput * input_ = nullptr;
 
 		friend class IAudioInputPGA;
 		friend class IAudioInputVolumeControl;
@@ -170,6 +174,7 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		virtual void SetAnalogGain(uint32_t index) = 0;
 
 	protected:
+		virtual void WriteAnalogGainToCodec(uint8_t gain) = 0;
 		void SetRegisterPage(uint8_t page);
 	};
 
@@ -192,6 +197,7 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		//virtual const Value<float> & GetAdjRightGain() const {return gainAdjRight_;};
 		//virtual void SetAdjRightGain(uint32_t index) {};
 	protected:
+		virtual void WriteVolumeControlToCodec(uint8_t gain) = 0;
 		void SetRegisterPage(uint8_t page);
 	};
 
@@ -208,6 +214,7 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		virtual void SetAnalogGain(uint32_t index) = 0;
 
 	protected:
+		virtual void WriteAnalogGainToCodec(uint8_t gain) = 0;
 		void SetRegisterPage(uint8_t page);
 	};
 
@@ -224,6 +231,7 @@ constexpr uint8_t P1_REF_POWER_UP_TIME_REG = 123;
 		virtual void SetVolumeComtrolValue(uint32_t index) = 0;
 
 	protected:
+		virtual void WriteVolumeControlToCodec(uint8_t gain) = 0;
 		void SetRegisterPage(uint8_t page);
 	};
 

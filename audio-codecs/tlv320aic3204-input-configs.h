@@ -27,6 +27,9 @@ namespace tlv320aic3204
 			return analogGain_;
 		}
 
+	protected:
+		void WriteAnalogGainToCodec(uint8_t gain) override;
+
 	private:
 		Value<float> analogGain_;
 	};
@@ -47,6 +50,9 @@ namespace tlv320aic3204
 		{
 			return digitalGain_;
 		}
+
+	protected:
+		void WriteVolumeControlToCodec(uint8_t gain) override;
 
 	private:
 		Value<float> digitalGain_;
@@ -69,6 +75,9 @@ namespace tlv320aic3204
 			return rightOutpur_.GetVolumeComtrolValue();
 		}
 
+	protected:
+		void WriteVolumeControlToCodec(uint8_t gain) override;
+
 	private:
 		RightMixerAmpVolumeControl & rightOutpur_;
 	};
@@ -76,28 +85,31 @@ namespace tlv320aic3204
 	/*-----------------------------------------------------------------//
 	// Right ADC Single Ended Inputs
 	//-----------------------------------------------------------------*/
-	class RightADCSingleEnded_IN3R
+	class RightADCSingleEndedInput_IN3R
 		:public RightPGASinglEndedInput, public RightADCVolumeConntrol,
 		 public AudioCodecDriver::IAudioInput
 	{
 	public:
 		// destructor
-		~RightADCSingleEnded_IN3R() override = default;
+		~RightADCSingleEndedInput_IN3R() override = default;
 
 		void Initialize() override;
 		void Deinitialize() override;
 	};
 
-	class RightMixAmpSingleEnded_IN3R
+	/*-----------------------------------------------------------------//
+	// Mixer Amp Single Ended Inputs
+	//-----------------------------------------------------------------*/
+	class RightMixAmpSingleEndedInput_IN3R
 		:public RightPGASinglEndedInput, public RightMixerAmpVolumeControlStub,
 		 public AudioCodecDriver::IAudioInput
 	{
 	public:
 		// constructor
-		RightMixAmpSingleEnded_IN3R(RightMixerAmpVolumeControl & rightOutpur);
+		RightMixAmpSingleEndedInput_IN3R(RightMixerAmpVolumeControl & rightOutpur);
 
 		// destructor
-		~RightMixAmpSingleEnded_IN3R() override = default;
+		~RightMixAmpSingleEndedInput_IN3R() override = default;
 
 		void Initialize() override;
 		void Deinitialize() override;

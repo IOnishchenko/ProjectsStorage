@@ -19,13 +19,18 @@ void tlv320aic3204_set_interface(i2c_port_t port)
 //-----------------------------------------------------------------*/
 void tlv320aic3204_write_buffer(const uint8_t * pSrc, uint16_t size)
 {
-	esp_err_t err = i2c_master_write_to_device(codec_port,
-		TLV320AIC3204_I2C_ADDRESS, pSrc, size, 1000);
+	esp_err_t err;
+	do
+	{
+		err = i2c_master_write_to_device(codec_port,
+			TLV320AIC3204_I2C_ADDRESS, pSrc, size, 1000);
 
-	if(err != ESP_OK)
-		printf("tlv320aic3204_write_buffer. Cannot write data: 0x%X\n", err);
-	else
-		printf("tlv320aic3204_write_buffer. OK\n");
+		if(err != ESP_OK)
+			printf("tlv320aic3204_write_buffer. Cannot write data: 0x%X\n", err);
+		else
+			printf("tlv320aic3204_write_buffer. OK\n");
+	}
+	while(err != ESP_OK);
 
 	// i2c_cmd_handle_t link =  i2c_cmd_link_create();
 	// i2c_master_start(link);

@@ -19,27 +19,12 @@ extern tlv320aic3204::AudioCodecDriver AudioDevice;
 //-----------------------------------------------------------------*/
 namespace tlv320aic3204
 {
-	/*-----------------------------------------------------------------//
-	//
-	//-----------------------------------------------------------------*/
-	extern "C" void tlv320aic3204_codec_thread(void * args)
-	{
-		printf("--== tlv320aic3204_codec_thread has started ==--\n");
-		//AudioDevice.Initialize();
-		int i = 0;
-		for(;;)
-		{
-			printf("--== tlv320aic3204_codec_thread running ==-- %d\n", i);
-			i++;
-			vTaskDelay(100);
-		}
-	}
-
 	// public methods
 	/*-----------------------------------------------------------------//
 	//
 	//-----------------------------------------------------------------*/
-	AudioCodecDriver::AudioCodecDriver()
+	AudioCodecDriver::AudioCodecDriver(IAudioInput * audioInput, IAudioOutput * audioOutput)
+		:output_{audioOutput}, input_{audioInput}
 	{
 	}
 
@@ -48,7 +33,24 @@ namespace tlv320aic3204
 	//-----------------------------------------------------------------*/
 	void AudioCodecDriver::Initialize()
 	{
+		vTaskDelay(10);
+		// set page 0
+		SetRegisterPage(0);
+		// reset
+		uint8_t cmd0[] =
+		{
+			P0_SOFT_RESET_REG,
+			0x01
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
+		vTaskDelay(10);
+
 		PowerUp();
+		vTaskDelay(10);
+		HeadphoneDriverSetup();
+		vTaskDelay(10);
+		output_->Initialize();
+		input_->Initialize();
 	}
 
 	// private methods
@@ -76,16 +78,21 @@ namespace tlv320aic3204
 		uint8_t buff[] = 
 		{
 			P1_LDO_CONTROL_REG,
-			0x09
+			// Analog block disabled - by default D3 = 1
+			// AVDD LDO Powered up
+			(1 << 3)|(1 << 0)
 		};
 		tlv320aic3204_write_buffer(buff, sizeof(buff));
 		// Disable weak AVDD for external
 		buff[0] = P1_POWER_CONF_REG;
-		buff[1] = 0x08;
+		// Disabled weak connection of AVDD with DVDD
+		buff[1] = (1 << 3);
 		tlv320aic3204_write_buffer(buff, 2);
 		// Enable Analog Block Power control
 		buff[0] = P1_LDO_CONTROL_REG;
-		buff[1] = 0x01;
+		// Analog block enabled D3 = 0
+		// AVDD LDO Powered up
+		buff[1] = (0 << 3)|(1 << 0);
 		tlv320aic3204_write_buffer(buff, 2);
 		// Set full chip common mode (CM) to 0.9V
 		// Set HPL and HPR CM to 1.65V
@@ -94,7 +101,7 @@ namespace tlv320aic3204
 		// LOL and LOR is powered by LDOIN
 		// LDOIN input range is 1.8V - 3.6V
 		buff[0] = P1_COMMON_MODE_REG;
-		buff[1] = 0x3b;
+		buff[1] = (0 << 6)|(0b11 << 4)|(1 << 3)|(1 << 1)|(1 << 0);
 		tlv320aic3204_write_buffer(buff, 2);
 		// Set analog input power up time to 6.4ms
 		buff[0] = P1_ADC_INPUT_POWER_UP_TIME_REG;
@@ -104,6 +111,23 @@ namespace tlv320aic3204
 		buff[0] = P1_REF_POWER_UP_TIME_REG;
 		buff[1] = 0x01;
 		tlv320aic3204_write_buffer(buff, 2);
+	}
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	void AudioCodecDriver::HeadphoneDriverSetup()
+	{
+		// set page 1
+		SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_HP_DRIVER_SETUP_REG,
+			// Headphone ramps power up slowly in 5.0 time constants
+			// Headphone ramps power up time is determined with 6k resistance
+			(0b1001 << 2)|(0b01 << 0)
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 	}
 
 	/*-----------------------------------------------------------------//

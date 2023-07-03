@@ -9,6 +9,7 @@ include("${project_dir}/command/command.cmake")
 set(PROJET_SRCS
 	"main.c"
 	"instances.cpp"
+	"audio-codec-thread.cpp"
 	"${ESP32_COMMON_SRCS}"
 	"${LCD_DRIVER_SRCS}"
 	"${GUI_128x64_SRCS}"

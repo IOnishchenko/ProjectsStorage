@@ -31,7 +31,24 @@ namespace tlv320aic3204
 
 	void StereoPGAForHPOutput::SetAnalogGain(uint32_t index)
 	{
-		SetRegisterPage(0);
+		
+	}
+
+	void StereoPGAForHPOutput::WriteAnalogGainToCodec(uint8_t gain)
+	{
+		// register page is 1
+		SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_HPL_GAIN_SETTING_REG,
+			// HPL unmute
+			// Set gain
+			gain,
+			// HPR unmute
+			// Set gain
+			gain
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 	}
 
 	//-----------------------------------------------------------------//
@@ -43,6 +60,23 @@ namespace tlv320aic3204
 	void DifferntialPGAForLineOutput::SetAnalogGain(uint32_t index)
 	{
 		SetRegisterPage(0);
+	}
+
+	void DifferntialPGAForLineOutput::WriteAnalogGainToCodec(uint8_t gain)
+	{
+		// register page is 1
+		SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_LOL_GAIN_SETTING_REG,
+			// LOL unmute
+			// Set gain
+			gain,
+			// LOR unmute
+			// Set gain
+			gain
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 	}
 
 	//-----------------------------------------------------------------//
@@ -62,6 +96,11 @@ namespace tlv320aic3204
 		SetRegisterPage(0);
 	}
 
+	void RightMixerAmpVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
+	{
+
+	}
+
 	//-----------------------------------------------------------------//
 	// StereoDACVolumeControl class
 	StereoDACVolumeControl::StereoDACVolumeControl()
@@ -73,6 +112,11 @@ namespace tlv320aic3204
 		SetRegisterPage(0);
 	}
 
+	void StereoDACVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
+	{
+
+	}
+
 	//-----------------------------------------------------------------//
 	// RighDACVolumeControl class
 	RighDACVolumeControl::RighDACVolumeControl()
@@ -82,6 +126,11 @@ namespace tlv320aic3204
 	void RighDACVolumeControl::SetVolumeComtrolValue(uint32_t index)
 	{
 		SetRegisterPage(0);
+	}
+
+	void RighDACVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
+	{
+
 	}
 
 	/*-----------------------------------------------------------------//
@@ -199,19 +248,8 @@ namespace tlv320aic3204
 	void RightMixAmpSingleEnded_HPLR::Initialize()
 	{
 		AudioCodecDriver::IAudioOutput::SetRegisterPage(1);
-		// output config
-		uint8_t cmd2[] =
-		{
-			P1_OUTPUT_DRIVER_POWER_REG,
-			// power on HPL
-			// power on HPR
-			// power on Right Mixer Amp
-			(1 << 5)|(1 << 4)|(1 << 0)
-		};
-		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
-
 		// connect MAR (mixer amp right) to HPL and HPR
-		uint8_t cmd3[] =
+		uint8_t cmd0[] =
 		{
 			P1_HPL_ROUTING_SELECTION_REG,
 			// MAR to HPL
@@ -219,7 +257,20 @@ namespace tlv320aic3204
 			// MAR to HPR
 			(1 << 1)
 		};
-		tlv320aic3204_write_buffer(cmd3, sizeof(cmd3));
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
+		// output config
+		uint8_t cmd1[] =
+		{
+			P1_OUTPUT_DRIVER_POWER_REG,
+			// power on HPL
+			// power on HPR
+			// power on Right Mixer Amp
+			(1 << 5)|(1 << 4)|(1 << 0)
+		};
+		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
+
+		WriteAnalogGainToCodec(5);
+		WriteVolumeControlToCodec(0);
 	}
 
 	void RightMixAmpSingleEnded_HPLR::Deinitialize()
@@ -266,6 +317,9 @@ namespace tlv320aic3204
 			(1 << 1)
 		};
 		tlv320aic3204_write_buffer(cmd3, sizeof(cmd3));
+
+		WriteAnalogGainToCodec(5);
+		WriteVolumeControlToCodec(0);
 	}
 
 	void RightMixAmpDifferntial_LO::Deinitialize()

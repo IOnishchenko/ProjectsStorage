@@ -36,7 +36,7 @@ static int hw_initialize()
 		.scl_io_num = I2C0_MASTER_SCL_IO,
 		.scl_pullup_en = GPIO_PULLUP_ENABLE,
 		.master.clk_speed = I2C0_MASTER_FREQ_HZ,
-		// .clk_flags = 0,          /*!< Optional, you can use I2C_SCLK_SRC_FLAG_* flags to choose i2c source clock here. */
+		.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL,          /*!< Optional, you can use I2C_SCLK_SRC_FLAG_* flags to choose i2c source clock here. */
 	};
 	esp_err_t err = i2c_param_config(I2C0_DEVICE_PORT, &conf);
 	if(err != ESP_OK)
@@ -44,7 +44,7 @@ static int hw_initialize()
 		printf("I2C0 cannot be initialized!!! Error code: 0x%x\n", err);
 		return 0; 
 	}
-	err = i2c_driver_install(I2C0_DEVICE_PORT, I2C_MODE_MASTER, 0, 0, 0);
+	err = i2c_driver_install(I2C0_DEVICE_PORT, conf.mode, 0, 0, 0);
 
 	if(err != ESP_OK)
 	{

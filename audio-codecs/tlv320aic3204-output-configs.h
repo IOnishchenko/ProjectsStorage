@@ -25,6 +25,9 @@ namespace tlv320aic3204
 		{
 			return analogGain_;
 		}
+	
+	protected:
+		void WriteAnalogGainToCodec(uint8_t gain) override;
 
 	private:
 		Value<float> analogGain_;
@@ -46,6 +49,9 @@ namespace tlv320aic3204
 			return analogGain_;
 		}
 
+	protected:
+		void WriteAnalogGainToCodec(uint8_t gain) override;
+
 	private:
 		Value<float> analogGain_;
 	};
@@ -56,8 +62,8 @@ namespace tlv320aic3204
 		// constructor
 		RightMixerAmpVolumeControl();
 
-		// destructor`
-		~RightMixerAmpVolumeControl();
+		// destructor
+		~RightMixerAmpVolumeControl() override = default;
 
 		// methods
 		void SetVolumeComtrolValue(uint32_t index) override;
@@ -65,6 +71,9 @@ namespace tlv320aic3204
 		{
 			return mixerAmpGain_;
 		}
+
+	protected:
+		void WriteVolumeControlToCodec(uint8_t gain) override;
 	
 	private:
 		ValueTable<float, 40> mixerAmpGain_;
@@ -77,7 +86,7 @@ namespace tlv320aic3204
 		StereoDACVolumeControl();
 
 		// destructor
-		~StereoDACVolumeControl();
+		~StereoDACVolumeControl() override = default;
 
 		// methods
 		void SetVolumeComtrolValue(uint32_t index) override;
@@ -85,6 +94,9 @@ namespace tlv320aic3204
 		{
 			return digitalGain_;
 		}
+
+	protected:
+		void WriteVolumeControlToCodec(uint8_t gain) override;
 	
 	private:
 		Value<float> digitalGain_;
@@ -97,7 +109,7 @@ namespace tlv320aic3204
 		RighDACVolumeControl();
 
 		// destructor
-		~RighDACVolumeControl();
+		~RighDACVolumeControl() override = default;
 
 		// methods
 		void SetVolumeComtrolValue(uint32_t index) override;
@@ -105,6 +117,9 @@ namespace tlv320aic3204
 		{
 			return digitalGain_;
 		}
+
+	protected:
+		void WriteVolumeControlToCodec(uint8_t gain) override;
 	
 	private:
 		Value<float> digitalGain_;

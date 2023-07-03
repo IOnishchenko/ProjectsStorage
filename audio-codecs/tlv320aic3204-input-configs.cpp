@@ -48,6 +48,11 @@ namespace tlv320aic3204
 		analogGain_.SetValueByIndex(index);
 	}
 
+	void RightPGASinglEndedInput::WriteAnalogGainToCodec(uint8_t gain)
+	{
+
+	}
+
 	//-----------------------------------------------------------------//
 	// RightADCVolumeConntrol class
 	RightADCVolumeConntrol::RightADCVolumeConntrol()
@@ -67,6 +72,11 @@ namespace tlv320aic3204
 		digitalGain_.SetValueByIndex(index);
 	}
 
+	void RightADCVolumeConntrol::WriteVolumeControlToCodec(uint8_t gain)
+	{
+
+	}
+
 	//-----------------------------------------------------------------//
 	// RightMixerAmpVolumeControlStub class
 	RightMixerAmpVolumeControlStub::RightMixerAmpVolumeControlStub(RightMixerAmpVolumeControl & rightOutpur)
@@ -78,13 +88,17 @@ namespace tlv320aic3204
 		rightOutpur_.SetVolumeComtrolValue(index);
 	}
 
+	void RightMixerAmpVolumeControlStub::WriteVolumeControlToCodec(uint8_t gain)
+	{
+	}
+
 	/*-----------------------------------------------------------------//
 	// Right ADC Single Ended Inputs
 	//-----------------------------------------------------------------*/
 	
 	//-----------------------------------------------------------------//
-	// RightADCSingleEnded_IN3R class methods
-	void RightADCSingleEnded_IN3R::Initialize()
+	// RightADCSingleEndedInput_IN3R class methods
+	void RightADCSingleEndedInput_IN3R::Initialize()
 	{
 		// input config
 		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
@@ -94,7 +108,7 @@ namespace tlv320aic3204
 			// MICBIAS powered up
 			// MICBIAS = 2.075V
 			// MICBIAS from AVDD
-			(1 << 6)|(0b10 << 4)|(0 << 3),
+			(1 << 6)|(0b11 << 4)|(1 << 3),
 			// LEFT MICPGA Positive input by default
 			0x00,
 			// Reserved. Write only default values
@@ -106,7 +120,9 @@ namespace tlv320aic3204
 			// Reserved. Write only default values
 			0x00,
 			// RIGHT MICPGA Negative input to CM2R with 10k
-			(0b00 << 0)
+			(0b01 << 0),
+			// IN1L, IN1R, IN2L, IN2R, IN3L inputs are weakly driven to common mode
+			(1 << 7)|(1 << 6)|(1 << 5)|(1 << 4)|(1 << 3)
 		};
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
@@ -133,7 +149,7 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
 	}
 
-	void RightADCSingleEnded_IN3R::Deinitialize()
+	void RightADCSingleEndedInput_IN3R::Deinitialize()
 	{
 		// input reset
 		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
@@ -159,12 +175,12 @@ namespace tlv320aic3204
 	}
 
 	//-----------------------------------------------------------------//
-	// RightMixAmpSingleEnded_IN3R class methods
-	RightMixAmpSingleEnded_IN3R::RightMixAmpSingleEnded_IN3R(RightMixerAmpVolumeControl & rightOutpur)
+	// RightMixAmpSingleEndedInput_IN3R class methods
+	RightMixAmpSingleEndedInput_IN3R::RightMixAmpSingleEndedInput_IN3R(RightMixerAmpVolumeControl & rightOutpur)
 		:RightMixerAmpVolumeControlStub(rightOutpur)
 	{}
 
-	void RightMixAmpSingleEnded_IN3R::Initialize()
+	void RightMixAmpSingleEndedInput_IN3R::Initialize()
 	{
 		// input config
 		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
@@ -174,7 +190,7 @@ namespace tlv320aic3204
 			// MICBIAS powered up
 			// MICBIAS = 2.075V
 			// MICBIAS from AVDD
-			(1 << 6)|(0b10 << 4)|(0 << 3),
+			(1 << 6)|(0b10 << 4)|(1 << 3),
 			// LEFT MICPGA Positive input by default
 			0x00,
 			// Reserved. Write only default values
@@ -186,7 +202,9 @@ namespace tlv320aic3204
 			// Reserved. Write only default values
 			0x00,
 			// RIGHT MICPGA Negative input to CM2R with 10k
-			(0b00 << 0)
+			(0b01 << 0),
+			// IN1L, IN1R, IN2L, IN2R, IN3L inputs are weakly driven to common mode
+			(1 << 7)|(1 << 6)|(1 << 5)|(1 << 4)|(1 << 3)
 		};
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
@@ -196,12 +214,12 @@ namespace tlv320aic3204
 			// Enable Right MICPGA
 			// Set test gain 
 			// TODO after testing take the gain value from analogGain_
-			(0 << 7)|(16 << 0)
+			(0 << 7)|(20)
 		};
 		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
 	}
 
-	void RightMixAmpSingleEnded_IN3R::Deinitialize()
+	void RightMixAmpSingleEndedInput_IN3R::Deinitialize()
 	{
 		// input reset
 		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
