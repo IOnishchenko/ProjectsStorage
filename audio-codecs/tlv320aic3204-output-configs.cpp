@@ -31,10 +31,11 @@ namespace tlv320aic3204
 
 	void StereoPGAForHPOutput::SetAnalogGain(uint32_t index)
 	{
-		
+		WriteAnalogGainToCodec(index);
+		analogGain_.SetValueByIndex(index);
 	}
 
-	void StereoPGAForHPOutput::WriteAnalogGainToCodec(uint8_t gain)
+	inline void StereoPGAForHPOutput::WriteAnalogGainToCodec(uint8_t gain)
 	{
 		// register page is 1
 		SetRegisterPage(1);
@@ -59,10 +60,11 @@ namespace tlv320aic3204
 
 	void DifferntialPGAForLineOutput::SetAnalogGain(uint32_t index)
 	{
-		SetRegisterPage(0);
+		WriteAnalogGainToCodec(index);
+		analogGain_.SetValueByIndex(index);
 	}
 
-	void DifferntialPGAForLineOutput::WriteAnalogGainToCodec(uint8_t gain)
+	inline void DifferntialPGAForLineOutput::WriteAnalogGainToCodec(uint8_t gain)
 	{
 		// register page is 1
 		SetRegisterPage(1);
@@ -93,10 +95,11 @@ namespace tlv320aic3204
 
 	void RightMixerAmpVolumeControl::SetVolumeComtrolValue(uint32_t index)
 	{
-		SetRegisterPage(0);
+		WriteVolumeControlToCodec(index);
+		mixerAmpGain_.SetValueByIndex(index);
 	}
 
-	void RightMixerAmpVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
+	inline void RightMixerAmpVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
 	{
 
 	}
@@ -109,10 +112,11 @@ namespace tlv320aic3204
 
 	void StereoDACVolumeControl::SetVolumeComtrolValue(uint32_t index)
 	{
-		SetRegisterPage(0);
+		WriteVolumeControlToCodec(index);
+		digitalGain_.SetValueByIndex(index);
 	}
 
-	void StereoDACVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
+	inline void StereoDACVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
 	{
 
 	}
@@ -125,10 +129,11 @@ namespace tlv320aic3204
 
 	void RighDACVolumeControl::SetVolumeComtrolValue(uint32_t index)
 	{
-		SetRegisterPage(0);
+		WriteVolumeControlToCodec(index);
+		digitalGain_.SetValueByIndex(index);
 	}
 
-	void RighDACVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
+	inline void RighDACVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
 	{
 
 	}
@@ -164,6 +169,10 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd3, sizeof(cmd3));
 
 		// Left and Right DAC config
+
+		// TODO
+		WriteAnalogGainToCodec(5);
+		WriteVolumeControlToCodec(0);
 	}
 
 	void StereoDACSingleEnded_HPLR::Deinitialize()
@@ -217,6 +226,10 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd3, sizeof(cmd3));
 
 		// Right DAC config
+
+		// TODO
+		WriteAnalogGainToCodec(5);
+		WriteVolumeControlToCodec(0);
 	}
 
 	void RightDACDifferntial_LO::Deinitialize()
@@ -237,6 +250,10 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd3, sizeof(cmd3));
 
 		// Right DAC reset
+
+		// TODO
+		WriteAnalogGainToCodec(5);
+		WriteVolumeControlToCodec(0);
 	}
 
 	/*-----------------------------------------------------------------//
@@ -269,6 +286,7 @@ namespace tlv320aic3204
 		};
 		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
 
+		// TODO
 		WriteAnalogGainToCodec(5);
 		WriteVolumeControlToCodec(0);
 	}
@@ -318,6 +336,7 @@ namespace tlv320aic3204
 		};
 		tlv320aic3204_write_buffer(cmd3, sizeof(cmd3));
 
+		// TODO
 		WriteAnalogGainToCodec(5);
 		WriteVolumeControlToCodec(0);
 	}

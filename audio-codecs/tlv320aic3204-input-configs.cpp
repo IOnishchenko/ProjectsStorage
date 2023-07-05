@@ -37,20 +37,20 @@ namespace tlv320aic3204
 
 	void RightPGASinglEndedInput::SetAnalogGain(uint32_t index)
 	{
+		WriteAnalogGainToCodec(index);
+	}
+
+	inline void RightPGASinglEndedInput::WriteAnalogGainToCodec(uint8_t gain)
+	{
 		SetRegisterPage(1);
 		uint8_t buff[] =
 		{
 			P1_RIGHT_MICPGA_VOL_CONTROL_REG,
 			// Right MICPGA Gain Enable D7 = 0
-			static_cast<uint8_t>(index)
+			static_cast<uint8_t>(gain)
 		};
 		tlv320aic3204_write_buffer(buff, sizeof(buff));
-		analogGain_.SetValueByIndex(index);
-	}
-
-	void RightPGASinglEndedInput::WriteAnalogGainToCodec(uint8_t gain)
-	{
-
+		analogGain_.SetValueByIndex(gain);
 	}
 
 	//-----------------------------------------------------------------//
@@ -61,20 +61,20 @@ namespace tlv320aic3204
 	
 	void RightADCVolumeConntrol::SetVolumeComtrolValue(uint32_t index)
 	{
+		WriteVolumeControlToCodec(index);
+		digitalGain_.SetValueByIndex(index);
+	}
+
+	inline void RightADCVolumeConntrol::WriteVolumeControlToCodec(uint8_t gain)
+	{
 		constexpr int32_t offset = DIGITAL_GAIN_MIN_GAIN/DIGITAL_GAIN_STEP;
 		SetRegisterPage(0);
 		uint8_t buff[] =
 		{
 			P0_RIGHT_ADC_DIGITAL_GAIN_REG,
-			static_cast<uint8_t>((index + offset) & 0x7f)
+			static_cast<uint8_t>((gain + offset) & 0x7f)
 		};
 		tlv320aic3204_write_buffer(buff, sizeof(buff));
-		digitalGain_.SetValueByIndex(index);
-	}
-
-	void RightADCVolumeConntrol::WriteVolumeControlToCodec(uint8_t gain)
-	{
-
 	}
 
 	//-----------------------------------------------------------------//
@@ -88,8 +88,9 @@ namespace tlv320aic3204
 		rightOutpur_.SetVolumeComtrolValue(index);
 	}
 
-	void RightMixerAmpVolumeControlStub::WriteVolumeControlToCodec(uint8_t gain)
+	inline void RightMixerAmpVolumeControlStub::WriteVolumeControlToCodec(uint8_t gain)
 	{
+		
 	}
 
 	/*-----------------------------------------------------------------//
@@ -126,16 +127,6 @@ namespace tlv320aic3204
 		};
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
-		uint8_t cmd1[] =
-		{
-			P1_RIGHT_MICPGA_VOL_CONTROL_REG,
-			// Enable Right MICPGA
-			// Set test gain 
-			// TODO after testing take the gain value from analogGain_
-			(0 << 7)|(16 << 0)
-		};
-		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
-
 		// Right ADC config
 		AudioCodecDriver::IAudioInput::SetRegisterPage(0);
 		uint8_t cmd2[] =
@@ -147,6 +138,10 @@ namespace tlv320aic3204
 			(1 << 7)
 		};
 		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
+		
+		// TODO after testing take the gain value from analogGain_
+		WriteAnalogGainToCodec(16);
+		WriteVolumeControlToCodec(0);
 	}
 
 	void RightADCSingleEndedInput_IN3R::Deinitialize()
@@ -172,6 +167,9 @@ namespace tlv320aic3204
 			P0_ADC_CHANNEL_SETUP_REG, 0x00, (1 << 7)|(1 << 3)
 		};
 		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
+		
+		// reset ADC volume control
+		WriteVolumeControlToCodec(0);
 	}
 
 	//-----------------------------------------------------------------//
@@ -208,15 +206,9 @@ namespace tlv320aic3204
 		};
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
-		uint8_t cmd1[] =
-		{
-			P1_RIGHT_MICPGA_VOL_CONTROL_REG,
-			// Enable Right MICPGA
-			// Set test gain 
-			// TODO after testing take the gain value from analogGain_
-			(0 << 7)|(20)
-		};
-		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
+		// TODO after testing take the gain value from analogGain_
+		WriteAnalogGainToCodec(16);
+		// WriteVolumeControlToCodec(0); - useless in case of mixer amp.
 	}
 
 	void RightMixAmpSingleEndedInput_IN3R::Deinitialize()

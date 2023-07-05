@@ -10,6 +10,7 @@ set(PROJET_SRCS
 	"main.c"
 	"instances.cpp"
 	"audio-codec-thread.cpp"
+	"audio-data-flow-thread.cpp"
 	"${ESP32_COMMON_SRCS}"
 	"${LCD_DRIVER_SRCS}"
 	"${GUI_128x64_SRCS}"
