@@ -9,6 +9,11 @@
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
+extern void audio_data_flow_thread(void * args);
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
 tlv320aic3204::RightMixAmpDifferntial_LO AudioOutputMixerAmpToLO;
 tlv320aic3204::RightMixAmpSingleEnded_HPLR AudioOutputMixerAmpToHP;
 tlv320aic3204::RightDACDifferntial_LO AudioOutputRDACToLO;
@@ -18,7 +23,7 @@ tlv320aic3204::RightMixAmpSingleEndedInput_IN3R AudioInputIN3RToMixerAmpLO(Audio
 tlv320aic3204::RightMixAmpSingleEndedInput_IN3R AudioInputIN3RToMixerAmpHP(AudioOutputMixerAmpToHP); 
 tlv320aic3204::RightADCSingleEndedInput_IN3R AudioInputIN3RToRADC;
 
-tlv320aic3204::AudioCodecDriver AudioDevice(&AudioInputIN3RToMixerAmpLO, &AudioOutputMixerAmpToLO);
+tlv320aic3204::AudioCodecDriver AudioDevice(&AudioInputIN3RToRADC, &AudioOutputRDACToLO);
 
 /*-----------------------------------------------------------------//
 //
@@ -27,6 +32,9 @@ extern "C" void tlv320aic3204_codec_thread(void * args)
 {
 	printf("--== tlv320aic3204_codec_thread has started ==--\n");
 	AudioDevice.Initialize();
+
+	xTaskCreate(audio_data_flow_thread, "audio-data-flow", 1024 * 2, (void *)0, 10, NULL);
+
 	int i = 0;
 	for(;;)
 	{

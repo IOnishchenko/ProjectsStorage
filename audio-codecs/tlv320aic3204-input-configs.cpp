@@ -38,6 +38,7 @@ namespace tlv320aic3204
 	void RightPGASinglEndedInput::SetAnalogGain(uint32_t index)
 	{
 		WriteAnalogGainToCodec(index);
+		analogGain_.SetValueByIndex(index);
 	}
 
 	inline void RightPGASinglEndedInput::WriteAnalogGainToCodec(uint8_t gain)
@@ -47,10 +48,9 @@ namespace tlv320aic3204
 		{
 			P1_RIGHT_MICPGA_VOL_CONTROL_REG,
 			// Right MICPGA Gain Enable D7 = 0
-			static_cast<uint8_t>(gain)
+			gain
 		};
 		tlv320aic3204_write_buffer(buff, sizeof(buff));
-		analogGain_.SetValueByIndex(gain);
 	}
 
 	//-----------------------------------------------------------------//
@@ -109,7 +109,7 @@ namespace tlv320aic3204
 			// MICBIAS powered up
 			// MICBIAS = 2.075V
 			// MICBIAS from AVDD
-			(1 << 6)|(0b11 << 4)|(1 << 3),
+			(1 << 6)|(0b10 << 4)|(1 << 3),
 			// LEFT MICPGA Positive input by default
 			0x00,
 			// Reserved. Write only default values
@@ -127,6 +127,9 @@ namespace tlv320aic3204
 		};
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
+		// TODO after testing take the gain value from analogGain_
+		WriteAnalogGainToCodec(32);
+
 		// Right ADC config
 		AudioCodecDriver::IAudioInput::SetRegisterPage(0);
 		uint8_t cmd2[] =
@@ -135,12 +138,11 @@ namespace tlv320aic3204
 			// Right ADC Power up
 			(1 << 6),
 			// Right ADC Unmited Left ADC Muted
-			(1 << 7)
+			(1 << 7)|(0 << 3)
 		};
 		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
 		
-		// TODO after testing take the gain value from analogGain_
-		WriteAnalogGainToCodec(16);
+		// TODO
 		WriteVolumeControlToCodec(0);
 	}
 
@@ -167,9 +169,6 @@ namespace tlv320aic3204
 			P0_ADC_CHANNEL_SETUP_REG, 0x00, (1 << 7)|(1 << 3)
 		};
 		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
-		
-		// reset ADC volume control
-		WriteVolumeControlToCodec(0);
 	}
 
 	//-----------------------------------------------------------------//

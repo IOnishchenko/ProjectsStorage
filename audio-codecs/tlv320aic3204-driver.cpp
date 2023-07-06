@@ -33,7 +33,6 @@ namespace tlv320aic3204
 	//-----------------------------------------------------------------*/
 	void AudioCodecDriver::Initialize()
 	{
-		vTaskDelay(10);
 		// set page 0
 		SetRegisterPage(0);
 		// reset
@@ -43,12 +42,10 @@ namespace tlv320aic3204
 			0x01
 		};
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
-		vTaskDelay(10);
-
 		PowerUp();
-		vTaskDelay(10);
 		HeadphoneDriverSetup();
-		vTaskDelay(10);
+		SetAudioInterfaceTo32BitsI2S();
+		SetSampleRateTo48KHz();
 		output_->Initialize();
 		input_->Initialize();
 	}
@@ -468,6 +465,15 @@ namespace tlv320aic3204
 			// 0b00000000
 		};
 		tlv320aic3204_write_buffer(i2s, sizeof(i2s));
+
+		// // TODO TEST
+		// uint8_t loop[] =
+		// {
+		// 	29,
+		// 	// Audio Data in is routed to Audio Data out. (Works only when WCLK is configured as input.)
+		// 	(1 << 5)
+		// };
+		// tlv320aic3204_write_buffer(loop, sizeof(loop));
 	}
 
 	/*-----------------------------------------------------------------//

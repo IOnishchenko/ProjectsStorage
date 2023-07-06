@@ -1,6 +1,8 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
+#include "driver/gpio.h"
+
 /*-----------------------------------------------------------------//
 // I2C configuration
 //-----------------------------------------------------------------*/
@@ -9,15 +11,12 @@
 #define I2C0_MASTER_SCL_IO	(GPIO_NUM_21)
 #define I2C0_DEVICE_PORT	0x00
 
-#if I2C0_MASTER_SDA_IO == I2C0_MASTER_SCL_IO
-	#error "Please set I2C0 GPIO"
-#endif
-
 /*-----------------------------------------------------------------//
 // I2S configuration
 //-----------------------------------------------------------------*/
 #define AUDIO_CODEC_DATA_WIDTH	32U
 #define I2S_NUM				(0)
+#define I2S_MCLK			(GPIO_NUM_NC)
 #define I2S_BCK_IO			(GPIO_NUM_0)
 #define I2S_WS_IO			(GPIO_NUM_2)
 #define I2S_DO_IO			(GPIO_NUM_4)

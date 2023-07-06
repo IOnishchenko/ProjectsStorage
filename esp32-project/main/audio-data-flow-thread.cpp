@@ -15,7 +15,7 @@ uint32_t audio_data[RX_IQ_BUFFER_SIZE] = {0};
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-extern "C" void audio_data_flow_thread(void * args)
+void audio_data_flow_thread(void * args)
 {
 	size_t bytes_read = 0;
 	size_t bytes_write = 0;
@@ -30,6 +30,14 @@ extern "C" void audio_data_flow_thread(void * args)
 		if(res != ESP_OK || (bytes_read != RX_IQ_BUFFER_SIZE))
 		{
 			printf("audio_data_flow_thread: reading: err = %d, size = %d", res, bytes_read);
+		}
+		uint32_t * leftWord = audio_data;
+		uint32_t * rightWord = &audio_data[1];
+		for(int i = 0; i < RX_IQ_BUFFER_SIZE/2; i++)
+		{
+			*leftWord = *rightWord;
+			leftWord += 2;
+			rightWord += 2;
 		}
 
 		res = i2s_channel_write(i2s0_tx_handle, audio_data, RX_IQ_BUFFER_SIZE, &bytes_write, 1000);

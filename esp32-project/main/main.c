@@ -12,7 +12,6 @@
 //-----------------------------------------------------------------*/
 //extern void gui_128x64_thread(void *args);
 extern void tlv320aic3204_codec_thread(void * args);
-extern void audio_data_flow_thread(void * args);
 
 /*-----------------------------------------------------------------//
 //
@@ -91,6 +90,7 @@ static inline int i2s0_initialize()
 		},
 		.gpio_cfg =
 		{
+			.mclk = I2S_MCLK,
 			.bclk = I2S_BCK_IO,
 			.ws = I2S_WS_IO,
 			.dout = I2S_DO_IO,
@@ -129,10 +129,9 @@ static int hw_initialize()
 void app_main(void)
 {
 	printf("ESP32 Project started!!!\n");
-	if(hw_initialize())
+	if(hw_initialize() == ESP_OK)
 	{
 		//xTaskCreate(gui_128x64_thread, "gui 128x64", 1024 * 2, (void *)0, 10, NULL);
 		xTaskCreate(tlv320aic3204_codec_thread, "tlv320aic3204", 1024 * 2, (void *)0, 10, NULL);
-		xTaskCreate(audio_data_flow_thread, "audio data flow", 1024 * 2, (void *)0, 10, NULL);
 	}
 }
