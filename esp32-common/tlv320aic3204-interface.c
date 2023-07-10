@@ -55,7 +55,7 @@ void tlv320aic3204_read_buffer(uint8_t * pDst, uint16_t size)
 		TLV320AIC3204_I2C_ADDRESS, pDst, size, 1000);
 		
 	if(err != ESP_OK)
-		printf("tlv320aic3204_write_buffer. Cannot write data: 0x%X\n", err);
+		printf("tlv320aic3204_read_buffer. Cannot read data: 0x%X\n", err);
 	else
 		printf("tlv320aic3204_read_buffer. OK\n");
 

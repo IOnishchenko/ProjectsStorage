@@ -4,6 +4,7 @@
 #include "ssd1306-interfaces.h"
 #include "lcd-driver.h"
 #include "tlv320aic3204-interface.h"
+#include "si5351-interface.h"
 
 #include "configuration.h"
 
@@ -50,6 +51,7 @@ static inline int i2c0_initialize()
 	// set i2c for lcd
 	//ssd1306_set_interface(I2C0_DEVICE_PORT);
 	tlv320aic3204_set_interface(I2C0_DEVICE_PORT);
+	si5351_set_interface(I2C0_DEVICE_PORT);
 	return ESP_OK;
 }
 

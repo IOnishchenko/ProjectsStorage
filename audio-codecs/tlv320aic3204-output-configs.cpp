@@ -232,9 +232,9 @@ namespace tlv320aic3204
 		uint8_t cmd3[] =
 		{
 			P1_LOL_ROUTING_SELECTION_REG,
-			// LOR to LOL
-			(1 << 0),
-			// Right DAC to LOR
+			// Right DAC(N) to LOL
+			(1 << 4),
+			// Right DAC(P) to LOR
 			(1 << 3)
 		};
 		tlv320aic3204_write_buffer(cmd3, sizeof(cmd3));
@@ -250,7 +250,7 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
 
 		// TODO
-		WriteAnalogGainToCodec(16);
+		WriteAnalogGainToCodec(8u);
 
 		AudioCodecDriver::IAudioOutput::SetRegisterPage(0);
 		// Right DAC config
@@ -258,14 +258,13 @@ namespace tlv320aic3204
 		{
 			P0_DAC_CHANNEL_SETUP_REG1,
 			// Right DAC power up
-			// Left DAC data is disabled
+			// Left DAC data Left Channel
 			// Right DAC data Right Channel
-			(1 << 6)|(0b00 << 4)|(0b01 << 2),
+			(1 << 6)|(0b01 << 4)|(0b01 << 2),
 			// DAC is auto muted if input data is DC for more than 100 consecutive inputs
 			// Left DAC Channel muted
 			// Right DAC Channel not muted
-			// Right Channel Volume is controlled by Left Channel Volume Control setting
-			(0b001 << 4)|(1 << 3)|(0 << 2)|(0b10 << 0)
+			(0b001 << 4)|(1 << 3)|(0 << 2)
 		};
 		tlv320aic3204_write_buffer(cmd4, sizeof(cmd4));
 

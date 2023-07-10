@@ -54,6 +54,32 @@ namespace tlv320aic3204
 	}
 
 	//-----------------------------------------------------------------//
+	// StereoPGADifferntialInput class
+	StereoPGADifferntialInput::StereoPGADifferntialInput()
+		:analogGain_(APGA_DIFFERENTIAL_MIN_GAIN, APGA_DIFFERENTIAL_MAX_GAIN, APGA_GAIN_STEP, 50) // PGA
+	{}
+
+	void StereoPGADifferntialInput::SetAnalogGain(uint32_t index)
+	{
+		WriteAnalogGainToCodec(index);
+		analogGain_.SetValueByIndex(index);
+	}
+
+	inline void StereoPGADifferntialInput::WriteAnalogGainToCodec(uint8_t gain)
+	{
+		SetRegisterPage(1);
+		uint8_t buff[] =
+		{
+			P1_LEFT_MICPGA_VOL_CONTROL_REG,
+			// Lett MICPGA Gain Enable D7 = 0
+			gain,
+			// Right MICPGA Gain Enable D7 = 0
+			gain
+		};
+		tlv320aic3204_write_buffer(buff, sizeof(buff));
+	}
+
+	//-----------------------------------------------------------------//
 	// RightADCVolumeConntrol class
 	RightADCVolumeConntrol::RightADCVolumeConntrol()
 		:digitalGain_(DIGITAL_GAIN_MIN_GAIN, DIGITAL_GAIN_MAX_GAIN, DIGITAL_GAIN_STEP, 24) // Digital Volume Control
@@ -93,6 +119,32 @@ namespace tlv320aic3204
 		
 	}
 
+	//-----------------------------------------------------------------//
+	// StereoADCVolumeControl class
+	StereoADCVolumeControl::StereoADCVolumeControl()
+		:digitalGain_(DIGITAL_GAIN_MIN_GAIN, DIGITAL_GAIN_MAX_GAIN, DIGITAL_GAIN_STEP, 24) // Digital Volume Control
+	{}
+	
+	void StereoADCVolumeControl::SetVolumeComtrolValue(uint32_t index)
+	{
+		WriteVolumeControlToCodec(index);
+		digitalGain_.SetValueByIndex(index);
+	}
+
+	inline void StereoADCVolumeControl::WriteVolumeControlToCodec(uint8_t gain)
+	{
+		constexpr int32_t offset = DIGITAL_GAIN_MIN_GAIN/DIGITAL_GAIN_STEP;
+		uint8_t value = static_cast<uint8_t>((gain + offset) & 0x7f);
+		SetRegisterPage(0);
+		uint8_t buff[] =
+		{
+			P0_LEFT_ADC_DIGITAL_GAIN_REG,
+			value,
+			value
+		};
+		tlv320aic3204_write_buffer(buff, sizeof(buff));
+	}
+
 	/*-----------------------------------------------------------------//
 	// Right ADC Single Ended Inputs
 	//-----------------------------------------------------------------*/
@@ -128,7 +180,7 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
 		// TODO after testing take the gain value from analogGain_
-		WriteAnalogGainToCodec(32);
+		WriteAnalogGainToCodec(5);
 
 		// Right ADC config
 		AudioCodecDriver::IAudioInput::SetRegisterPage(0);
@@ -206,7 +258,7 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
 		// TODO after testing take the gain value from analogGain_
-		WriteAnalogGainToCodec(16);
+		WriteAnalogGainToCodec(5);
 		// WriteVolumeControlToCodec(0); - useless in case of mixer amp.
 	}
 
@@ -225,5 +277,77 @@ namespace tlv320aic3204
 			P1_RIGHT_MICPGA_VOL_CONTROL_REG, (1 << 7)
 		};
 		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
+	}
+
+	//-----------------------------------------------------------------//
+	// StereoADCDifferntialInput_IN1_IN2 class methods
+	void StereoADCDifferntialInput_IN1_IN2::Initialize()
+	{
+		// input config
+		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_LEFT_MIC_PGA_POSITIVE_INPUT_REG,
+			// IN2L is routed to Left MICPGA with 10k resistance
+			(0b01 << 4),
+			// Reserved. Write only default values
+			0x00,
+			// IN2R is routed to Left MICPGA with 10k resistance
+			(0b01 << 4),
+			// IN1R is routed to Right MICPGA with 10k resistance
+			(0b01 << 6),
+			// Reserved. Write only default values
+			0x00,
+			// IN1L is routed to Right MICPGA with 10k resistance
+			(0b01 << 4),
+			// IN3L, IN3R inputs are weakly driven to common mode
+			(1 << 3)|(1 << 2)
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
+
+		// TODO after testing take the gain value from analogGain_
+		WriteAnalogGainToCodec(16);
+
+		// Right ADC config
+		AudioCodecDriver::IAudioInput::SetRegisterPage(0);
+		uint8_t cmd2[] =
+		{
+			P0_ADC_CHANNEL_SETUP_REG,
+			// Left Channel ADC is powered up
+			// Right Channel ADC is powered up
+			(1 << 7)|(1 << 6),
+			// Left ADC Channel Un-muted
+			// Right ADC Channel Un-muted
+			(0 << 7)|(0 << 3)
+		};
+		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
+		
+		// TODO
+		WriteVolumeControlToCodec(0);
+	}
+
+	void StereoADCDifferntialInput_IN1_IN2::Deinitialize()
+	{
+		// input reset
+		AudioCodecDriver::IAudioInput::SetRegisterPage(1);
+		uint8_t cmd0[] =
+		{
+			P1_LEFT_MIC_PGA_POSITIVE_INPUT_REG, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+		};
+		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
+
+		uint8_t cmd1[] =
+		{
+			P1_RIGHT_MICPGA_VOL_CONTROL_REG, (1 << 7)
+		};
+		tlv320aic3204_write_buffer(cmd1, sizeof(cmd1));
+
+		// Right ADC reset
+		AudioCodecDriver::IAudioInput::SetRegisterPage(0);
+		uint8_t cmd2[] =
+		{
+			P0_ADC_CHANNEL_SETUP_REG, 0x00, (1 << 7)|(1 << 3)
+		};
+		tlv320aic3204_write_buffer(cmd2, sizeof(cmd2));
 	}
 }

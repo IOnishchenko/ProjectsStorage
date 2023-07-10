@@ -35,6 +35,30 @@ namespace tlv320aic3204
 	};
 
 	//-----------------------------------------------------------------//
+	class StereoPGADifferntialInput : public virtual AudioCodecDriver::IAudioInputPGA
+	{
+	public:
+		// constructor
+		StereoPGADifferntialInput();
+
+		// destructot
+		~StereoPGADifferntialInput() override = default;
+		
+		// methods
+		void SetAnalogGain(uint32_t index) override;
+		const IValue<float> & GetAnalogGain() const override
+		{
+			return analogGain_;
+		}
+
+	protected:
+		void WriteAnalogGainToCodec(uint8_t gain) override;
+
+	private:
+		Value<float> analogGain_;
+	};
+
+	//-----------------------------------------------------------------//
 	class RightADCVolumeConntrol : public virtual AudioCodecDriver::IAudioInputVolumeControl
 	{
 	public:
@@ -82,6 +106,30 @@ namespace tlv320aic3204
 		RightMixerAmpVolumeControl & rightOutpur_;
 	};
 
+	//-----------------------------------------------------------------//
+	class StereoADCVolumeControl : public virtual AudioCodecDriver::IAudioInputVolumeControl
+	{
+	public:
+		// constructor
+		StereoADCVolumeControl();
+
+		// destructot
+		~StereoADCVolumeControl() override = default;
+
+		// methods
+		void SetVolumeComtrolValue(uint32_t index) override;
+		const IValue<float> & GetVolumeComtrolValue() const override
+		{
+			return digitalGain_;
+		}
+
+	protected:
+		void WriteVolumeControlToCodec(uint8_t gain) override;
+
+	private:
+		Value<float> digitalGain_;
+	};
+
 	/*-----------------------------------------------------------------//
 	// Right ADC Single Ended Inputs
 	//-----------------------------------------------------------------*/
@@ -110,6 +158,21 @@ namespace tlv320aic3204
 
 		// destructor
 		~RightMixAmpSingleEndedInput_IN3R() override = default;
+
+		void Initialize() override;
+		void Deinitialize() override;
+	};
+
+	/*-----------------------------------------------------------------//
+	// Stereo ADC Ended Differntial Inputs
+	//-----------------------------------------------------------------*/
+	class StereoADCDifferntialInput_IN1_IN2
+		:public StereoPGADifferntialInput, public StereoADCVolumeControl,
+		 public AudioCodecDriver::IAudioInput
+	{
+	public:
+		// destructor
+		~StereoADCDifferntialInput_IN1_IN2() override = default;
 
 		void Initialize() override;
 		void Deinitialize() override;

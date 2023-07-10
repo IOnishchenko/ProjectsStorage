@@ -132,51 +132,59 @@ namespace tlv320aic3204
 	//-----------------------------------------------------------------*/
 	void AudioCodecDriver::ResetSampleRateSettings()
 	{
-		// set page 0
-		SetRegisterPage(0);
-		// set PLL
-		uint8_t cmd[] = 
-		{
-			P0_PLL_P_R_VALUES_REG,
-			// PLL is powered down
-			// PLL divider P = 1
-			// PLL divider R = 4
-			(0 << 7)|(1 << 4)|(1),
-			// PLL divider J = 36
-			4
-		};
-		tlv320aic3204_write_buffer(cmd, sizeof(cmd));
+		/*	slaa557.pdf
+			When the ADC channel is powered down, the device internally initiates a powerdown sequence for proper shut-down.
+			During this shut-down sequence, the NADC and MADC dividers
+			must not be powered down, or else a proper low power shut-down may not take place. The user can read
+			the power-status flag in Page 0, Register 36, D(6) and Page 0, Register 36, D(2). When both flags
+			indicate power-down, the MADC divider may be powered down, followed by NADC divider.
+		*/
+		
+		// // set page 0
+		// SetRegisterPage(0);
+		// // set PLL
+		// uint8_t cmd[] = 
+		// {
+		// 	P0_PLL_P_R_VALUES_REG,
+		// 	// PLL is powered down
+		// 	// PLL divider P = 1
+		// 	// PLL divider R = 4
+		// 	(0 << 7)|(1 << 4)|(1),
+		// 	// PLL divider J = 36
+		// 	4
+		// };
+		// tlv320aic3204_write_buffer(cmd, sizeof(cmd));
 
-		// set DAC clocks
-		uint8_t dac_clck[] =
-		{
-			P0_NDAC_REG,
-			// NDAC power down
-			// NDAC = 2
-			(0 << 7)|(1),
-			// MDAC power down
-			// MDAC = 9
-			(0 << 7)|(1),
-			// DOSR = 128, DOSR MSB = 0
-			0x00,
-			// DOSR LSB = 128
-			0x80
-		};
-		tlv320aic3204_write_buffer(dac_clck, sizeof(dac_clck));
+		// // set DAC clocks
+		// uint8_t dac_clck[] =
+		// {
+		// 	P0_NDAC_REG,
+		// 	// NDAC power down
+		// 	// NDAC = 2
+		// 	(0 << 7)|(1),
+		// 	// MDAC power down
+		// 	// MDAC = 9
+		// 	(0 << 7)|(1),
+		// 	// DOSR = 128, DOSR MSB = 0
+		// 	0x00,
+		// 	// DOSR LSB = 128
+		// 	0x80
+		// };
+		// tlv320aic3204_write_buffer(dac_clck, sizeof(dac_clck));
 
-		//set ADC clock
-		uint8_t adc_clck[] =
-		{
-			P0_NADC_REG,
-			// NADC power down. DAC_CLK is used
-			0x01,
-			// MADC power down
-			// MADC = 18
-			0x01,
-			// AOSR = 128
-			0x80
-		};
-		tlv320aic3204_write_buffer(adc_clck, sizeof(adc_clck));
+		// //set ADC clock
+		// uint8_t adc_clck[] =
+		// {
+		// 	P0_NADC_REG,
+		// 	// NADC power down. DAC_CLK is used
+		// 	0x01,
+		// 	// MADC power down
+		// 	// MADC = 18
+		// 	0x01,
+		// 	// AOSR = 128
+		// 	0x80
+		// };
+		// tlv320aic3204_write_buffer(adc_clck, sizeof(adc_clck));
 	}
 
 	/*-----------------------------------------------------------------//
@@ -224,26 +232,27 @@ namespace tlv320aic3204
 		uint8_t adc_clck[] =
 		{
 			P0_NADC_REG,
-			// NADC power down. DAC_CLK is used
-			0x00,
+			// NADC power up. DAC_CLK is used
+			// NDAC = 2
+			(1 << 7)|(4),
 			// MADC power up
 			// MADC = 18
 			(1 << 7)|(18),
-			// AOSR = 256
-			0x00
+			// AOSR = 128
+			0x80
 		};
 		tlv320aic3204_write_buffer(adc_clck, sizeof(adc_clck));
 		
-		// set DAC and ADC Processing block
-		uint8_t prb[] =
-		{
-			P0_DAC_PROCESSING_BLOCK_REG,
-			// DAC - PRB_P4
-			4,
-			// ADC - PRB_R4
-			4
-		};
-		tlv320aic3204_write_buffer(prb, sizeof(prb));
+		// // set DAC and ADC Processing block
+		// uint8_t prb[] =
+		// {
+		// 	P0_DAC_PROCESSING_BLOCK_REG,
+		// 	// DAC - PRB_P4
+		// 	4,
+		// 	// ADC - PRB_R4
+		// 	4
+		// };
+		// tlv320aic3204_write_buffer(prb, sizeof(prb));
 	}
 
 	/*-----------------------------------------------------------------//
@@ -262,11 +271,11 @@ namespace tlv320aic3204
 			// PLL Clock is CODEC_CLKIN
 			0b01000111,
 			// PLL is powered up
-			// PLL divider P = 2
+			// PLL divider P = 1
 			// PLL divider R = 4
-			(1 << 7)|(2 << 4)|(4),
-			// PLL divider J = 36
-			36
+			(1 << 7)|(1 << 4)|(4),
+			// PLL divider J = 18
+			18
 		};
 		tlv320aic3204_write_buffer(cmd, sizeof(cmd));
 
@@ -291,25 +300,27 @@ namespace tlv320aic3204
 		uint8_t adc_clck[] =
 		{
 			P0_NADC_REG,
-			// NADC power down. DAC_CLK is used
-			0x00,
-			// MADC power down. DAC_MOD_CLK is used
-			0x00,
+			// NADC power up
+			// NADC = 2
+			(1 << 7)|(2),
+			// MADC power up
+			// MADC = 9
+			(1 << 7)|(9),
 			// AOSR = 256
 			0x00
 		};
 		tlv320aic3204_write_buffer(adc_clck, sizeof(adc_clck));
 		
-		// set DAC and ADC Processing block
-		uint8_t prb[] =
-		{
-			P0_DAC_PROCESSING_BLOCK_REG,
-			// DAC - PRB_P4
-			4,
-			// ADC - PRB_R4
-			4
-		};
-		tlv320aic3204_write_buffer(prb, sizeof(prb));
+		// // set DAC and ADC Processing block
+		// uint8_t prb[] =
+		// {
+		// 	P0_DAC_PROCESSING_BLOCK_REG,
+		// 	// DAC - PRB_P4
+		// 	4,
+		// 	// ADC - PRB_R4
+		// 	4
+		// };
+		// tlv320aic3204_write_buffer(prb, sizeof(prb));
 	}
 
 	/*-----------------------------------------------------------------//
@@ -328,11 +339,11 @@ namespace tlv320aic3204
 			// PLL Clock is CODEC_CLKIN
 			0b01000111,
 			// PLL is powered up
-			// PLL divider P = 4
+			// PLL divider P = 1
 			// PLL divider R = 4
-			(1 << 7)|(4 << 4)|(4),
-			// PLL divider J = 36
-			36
+			(1 << 7)|(1 << 4)|(4),
+			// PLL divider J = 9
+			9
 		};
 		tlv320aic3204_write_buffer(cmd, sizeof(cmd));
 
@@ -357,25 +368,27 @@ namespace tlv320aic3204
 		uint8_t adc_clck[] =
 		{
 			P0_NADC_REG,
-			// NADC power down. DAC_CLK is used
-			0x00,
-			// MADC power down. DAC_MOD_CLK is used
-			0x00,
+			// NADC power up
+			// NADC = 2
+			(1 << 7)|(2),
+			// MADC power up
+			// MADC = 9
+			(1 << 7)|(9),
 			// AOSR = 128
 			0x80
 		};
 		tlv320aic3204_write_buffer(adc_clck, sizeof(adc_clck));
 		
-		// set DAC and ADC Processing block
-		uint8_t prb[] =
-		{
-			P0_DAC_PROCESSING_BLOCK_REG,
-			// DAC - PRB_P4
-			4,
-			// ADC - PRB_R4
-			4
-		};
-		tlv320aic3204_write_buffer(prb, sizeof(prb));
+		// // set DAC and ADC Processing block
+		// uint8_t prb[] =
+		// {
+		// 	P0_DAC_PROCESSING_BLOCK_REG,
+		// 	// DAC - PRB_P4
+		// 	4,
+		// 	// ADC - PRB_R4
+		// 	4
+		// };
+		// tlv320aic3204_write_buffer(prb, sizeof(prb));
 	}
 
 	/*-----------------------------------------------------------------//
@@ -394,11 +407,11 @@ namespace tlv320aic3204
 			// PLL Clock is CODEC_CLKIN
 			0b01000111,
 			// PLL is powered up
-			// PLL divider P = 8
-			// PLL divider R = 4
-			(1 << 7)|(8 << 4)|(4),
+			// PLL divider P = 1
+			// PLL divider R = 2
+			(1 << 7)|(8 << 4)|(2),
 			// PLL divider J = 36
-			36
+			9
 		};
 		tlv320aic3204_write_buffer(cmd, sizeof(cmd));
 
@@ -423,25 +436,27 @@ namespace tlv320aic3204
 		uint8_t adc_clck[] =
 		{
 			P0_NADC_REG,
-			// NADC power down. DAC_CLK is used
-			0x00,
-			// MADC power down. DAC_MOD_CLK is used
-			0x00,
+			// NADC power up
+			// NADC = 2
+			(1 << 7)|(2),
+			// MADC power up
+			// MADC = 9
+			(1 << 7)|(9),
 			// AOSR = 64
 			0x40
 		};
 		tlv320aic3204_write_buffer(adc_clck, sizeof(adc_clck));
 		
-		// set DAC and ADC Processing block
-		uint8_t prb[] =
-		{
-			P0_DAC_PROCESSING_BLOCK_REG,
-			// DAC - PRB_P4
-			4,
-			// ADC - PRB_R4
-			4
-		};
-		tlv320aic3204_write_buffer(prb, sizeof(prb));
+		// // set DAC and ADC Processing block
+		// uint8_t prb[] =
+		// {
+		// 	P0_DAC_PROCESSING_BLOCK_REG,
+		// 	// DAC - PRB_P4
+		// 	4,
+		// 	// ADC - PRB_R4
+		// 	4
+		// };
+		// tlv320aic3204_write_buffer(prb, sizeof(prb));
 	}
 
 	/*-----------------------------------------------------------------//
@@ -460,20 +475,11 @@ namespace tlv320aic3204
 			// BCLK as input
 			// WCLK as input
 			// DOUT will be high impedance after data has been transferred
-			(0b00 << 6)|(0b11 << 4)|(0b0 << 3)|(0b0 << 2)|(0b0 << 1)|(0b1),
+			(0b00 << 6)|(0b11 << 4)|(0b0 << 3)|(0b0 << 2)|(0b1 << 0),
 			// Data offset value = 0 BCLKs
 			// 0b00000000
 		};
 		tlv320aic3204_write_buffer(i2s, sizeof(i2s));
-
-		// // TODO TEST
-		// uint8_t loop[] =
-		// {
-		// 	29,
-		// 	// Audio Data in is routed to Audio Data out. (Works only when WCLK is configured as input.)
-		// 	(1 << 5)
-		// };
-		// tlv320aic3204_write_buffer(loop, sizeof(loop));
 	}
 
 	/*-----------------------------------------------------------------//
@@ -492,7 +498,7 @@ namespace tlv320aic3204
 			// BCLK as input
 			// WCLK as input
 			// DOUT will be high impedance after data has been transferred
-			(0b00 << 6)|(0b10 << 4)|(0b0 << 3)|(0b0 << 2)|(0b0 << 1)|(0b1),
+			(0b00 << 6)|(0b11 << 4)|(0b0 << 3)|(0b0 << 2)|(0b1 << 0),
 			// Data offset value = 0 BCLKs
 			// 0b00000000
 		};

@@ -5,6 +5,7 @@ include("${project_dir}/gui-128x64/gui-128x64.cmake")
 include("${project_dir}/gui-resources/gui-resources.cmake")
 include("${project_dir}/audio-codecs/audio-codecs.cmake")
 include("${project_dir}/command/command.cmake")
+include("${project_dir}/clock-generator/si5351-driver.cmake")
 
 set(PROJET_SRCS
 	"main.c"
@@ -16,6 +17,7 @@ set(PROJET_SRCS
 	"${GUI_128x64_SRCS}"
 	"${GUI_RESOURCES_SRCS}"
 	"${AUDIO_CODEC_DRIVER_SRCS}"
+	"${SI5351_DRIVER_SRCS}"
 )
 
 set(INCLUDE_DIRS
@@ -27,6 +29,7 @@ set(INCLUDE_DIRS
 	"${GUI_RESOURCES_INCS}"
 	"${AUDIO_CODEC_DRIVER_INCS}"
 	"${COMMAND_INCS}"
+	"${SI5351_DRIVER_INCS}"
 )
 
 idf_component_register(
