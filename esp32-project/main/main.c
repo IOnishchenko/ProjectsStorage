@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include "driver/i2c.h"
 #include "driver/i2s_std.h"
-#include "ssd1306-interfaces.h"
+#include "ssd1306-interface.h"
 #include "lcd-driver.h"
 #include "tlv320aic3204-interface.h"
 #include "si5351-interface.h"
+#include "st7789-interface.h"
 
 #include "configuration.h"
 
@@ -67,7 +68,7 @@ static inline int i2s0_initialize()
 		.role = I2S_ROLE_MASTER,
 		.dma_desc_num = 4, // DMA buffers number
 		.dma_frame_num = RX_IQ_BUFFER_SIZE,
-		.auto_clear = false,
+		.auto_clear = true,
 	};
 	res |= i2s_new_channel(&chan_cfg, &i2s0_tx_handle, &i2s0_rx_handle);
 
@@ -87,7 +88,7 @@ static inline int i2s0_initialize()
 			.slot_mask = I2S_STD_SLOT_BOTH,
 			.ws_width = I2S_DATA_BIT_WIDTH_32BIT,
 			.ws_pol = false,
-			.bit_shift = true,
+			.bit_shift = false,
 			.msb_right = false
 		},
 		.gpio_cfg =
@@ -115,6 +116,16 @@ static inline int i2s0_initialize()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
+static int hspi_initialize()
+{
+	int res = ESP_OK;
+
+	return res;
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
 static int hw_initialize()
 {
 	int res = ESP_OK;
@@ -122,6 +133,8 @@ static int hw_initialize()
 	res |= i2c0_initialize();
 	// i2s config
 	res |= i2s0_initialize();
+	// hspi config
+	res |= hspi_initialize();
 	return res;
 }
 
@@ -133,7 +146,9 @@ void app_main(void)
 	printf("ESP32 Project started!!!\n");
 	if(hw_initialize() == ESP_OK)
 	{
-		//xTaskCreate(gui_128x64_thread, "gui 128x64", 1024 * 2, (void *)0, 10, NULL);
-		xTaskCreate(tlv320aic3204_codec_thread, "tlv320aic3204", 1024 * 2, (void *)0, 10, NULL);
+		// TODO enable after LCD driver has been done
+		// xTaskCreate(tlv320aic3204_codec_thread, "tlv320aic3204", 1024 * 2, (void *)0, 10, NULL);
+
+		
 	}
 }

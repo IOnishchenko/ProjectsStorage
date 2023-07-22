@@ -44,8 +44,76 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 		PowerUp();
 		HeadphoneDriverSetup();
-		SetAudioInterfaceTo32BitsI2S();
+		SetAudioInterfaceTo32BitsRJF();
 		SetSampleRateTo48KHz();
+		
+		// load ADC filter coefs
+		// uint8_t coefs[] =
+		// {
+		// 	0x03, 0x7F, 0x0C,
+		// 	0x03, 0x7F, 0x0C,
+		// 	0x03, 0x7F, 0x0C,
+		// 	0x34, 0x56, 0x3C,
+		// 	0x89, 0x57, 0xD5,
+		// };
+
+		// LPF 6 kHz
+		// uint8_t coefsN0[] = { /* P = 8, R = 36 */ 36, 0x0C, 0x7F, 0x03};
+		// uint8_t coefsN1[] = { /* P = 8, R = 40 */ 40, 0x0C, 0x7F, 0x03};
+		// uint8_t coefsN2[] = { /* P = 8, R = 44 */ 44, 0x0C, 0x7F, 0x03};
+		// uint8_t coefsD1[] = { /* P = 8, R = 48 */ 48, 0x3C, 0x56, 0x34};
+		// uint8_t coefsD2[] = { /* P = 8, R = 52 */ 52, 0xD5, 0x57, 0x89};
+
+		// LPF 500 Hz
+		// uint8_t coefsN0[] = { /* P = 8, R = 36 */ 36, 0x00, 0x21, 0x87};
+		// uint8_t coefsN1[] = { /* P = 8, R = 40 */ 40, 0x00, 0x21, 0x87};
+		// uint8_t coefsN2[] = { /* P = 8, R = 44 */ 44, 0x00, 0x21, 0x87};
+		// uint8_t coefsD1[] = { /* P = 8, R = 48 */ 48, 0x7A, 0x14, 0x4B};
+		// uint8_t coefsD2[] = { /* P = 8, R = 52 */ 52, 0x8B, 0x51, 0x4C};
+
+
+		// load to left channel
+		// SetRegisterPage(8);
+		// for(int i = 0; i < 5; i++)
+		// {
+		// 	tlv320aic3204_write_buffer(coefsN0, sizeof(coefsN0));
+		// 	tlv320aic3204_write_buffer(coefsN1, sizeof(coefsN1));
+		// 	tlv320aic3204_write_buffer(coefsN2, sizeof(coefsN2));
+		// 	tlv320aic3204_write_buffer(coefsD1, sizeof(coefsD1));
+		// 	tlv320aic3204_write_buffer(coefsD2, sizeof(coefsD2));
+		// 	// update registers address with ofset
+		// 	// slaa557 - Table 2-9. ADC Biquad Filter Coefficients, Table 5-2. ADC Coefficient Buffer-A Map
+		// 	coefsN0[0] += 20;
+		// 	coefsN1[0] += 20;
+		// 	coefsN2[0] += 20;
+		// 	coefsD1[0] += 20;
+		// 	coefsD2[0] += 20;
+		// }
+
+		// // load to the right channel
+		// coefsN0[0] = 44;
+		// coefsN1[0] = 48;
+		// coefsN2[0] = 52;
+		// coefsD1[0] = 56;
+		// coefsD2[0] = 60;
+
+		// SetRegisterPage(9);
+		// for(int i = 0; i < 5; i++)
+		// {
+		// 	tlv320aic3204_write_buffer(coefsN0, sizeof(coefsN0));
+		// 	tlv320aic3204_write_buffer(coefsN1, sizeof(coefsN1));
+		// 	tlv320aic3204_write_buffer(coefsN2, sizeof(coefsN2));
+		// 	tlv320aic3204_write_buffer(coefsD1, sizeof(coefsD1));
+		// 	tlv320aic3204_write_buffer(coefsD2, sizeof(coefsD2));
+		// 	// update registers address with ofset
+		// 	// slaa557 - Table 2-9. ADC Biquad Filter Coefficients, Table 5-2. ADC Coefficient Buffer-A Map
+		// 	coefsN0[0] += 20;
+		// 	coefsN1[0] += 20;
+		// 	coefsN2[0] += 20;
+		// 	coefsD1[0] += 20;
+		// 	coefsD2[0] += 20;
+		// }
+
 		output_->Initialize();
 		input_->Initialize();
 	}
@@ -337,13 +405,13 @@ namespace tlv320aic3204
 			// High PLL Clock Range
 			// BCLK pin is PLL input
 			// PLL Clock is CODEC_CLKIN
-			0b01000111,
+			(1 << 6)|(0b01 << 2)|(0b11),
 			// PLL is powered up
 			// PLL divider P = 1
 			// PLL divider R = 4
 			(1 << 7)|(1 << 4)|(4),
-			// PLL divider J = 9
-			9
+			// PLL divider J = 8
+			8
 		};
 		tlv320aic3204_write_buffer(cmd, sizeof(cmd));
 
@@ -355,12 +423,12 @@ namespace tlv320aic3204
 			// NDAC = 2
 			(1 << 7)|(2),
 			// MDAC power up
-			// MDAC = 9
-			(1 << 7)|(9),
+			// MDAC = 8
+			(1 << 7)|(8),
 			// DOSR = 128, DOSR MSB = 0
-			0x00,
+			0,
 			// DOSR LSB = 0x80
-			0x80
+			128
 		};
 		tlv320aic3204_write_buffer(dac_clck, sizeof(dac_clck));
 
@@ -372,23 +440,23 @@ namespace tlv320aic3204
 			// NADC = 2
 			(1 << 7)|(2),
 			// MADC power up
-			// MADC = 9
-			(1 << 7)|(9),
+			// MADC = 8
+			(1 << 7)|(8),
 			// AOSR = 128
-			0x80
+			128
 		};
 		tlv320aic3204_write_buffer(adc_clck, sizeof(adc_clck));
 		
-		// // set DAC and ADC Processing block
-		// uint8_t prb[] =
-		// {
-		// 	P0_DAC_PROCESSING_BLOCK_REG,
-		// 	// DAC - PRB_P4
-		// 	4,
-		// 	// ADC - PRB_R4
-		// 	4
-		// };
-		// tlv320aic3204_write_buffer(prb, sizeof(prb));
+		// set DAC and ADC Processing block
+		uint8_t prb[] =
+		{
+			P0_DAC_PROCESSING_BLOCK_REG,
+			// DAC - PRB_P1
+			1,
+			// ADC - PRB_R2
+			2
+		};
+		tlv320aic3204_write_buffer(prb, sizeof(prb));
 	}
 
 	/*-----------------------------------------------------------------//
@@ -493,12 +561,12 @@ namespace tlv320aic3204
 		uint8_t rjf[] =
 		{
 			P0_AUDIO_INTERFACE_REG,
-			// Audio Interface = I2S
+			// Audio Interface = RJF
 			// Audio Data length = 32
 			// BCLK as input
 			// WCLK as input
 			// DOUT will be high impedance after data has been transferred
-			(0b00 << 6)|(0b11 << 4)|(0b0 << 3)|(0b0 << 2)|(0b1 << 0),
+			(0b10 << 6)|(0b11 << 4)|(0b0 << 3)|(0b0 << 2)|(0b1 << 0),
 			// Data offset value = 0 BCLKs
 			// 0b00000000
 		};

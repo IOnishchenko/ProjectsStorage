@@ -5,5 +5,5 @@
 		"target/esp32.cfg"
 	],
 	"idf.flashType": "JTAG",
-	"idf.portWin": "COM11"
+	"idf.portWin": "COM19"
 }

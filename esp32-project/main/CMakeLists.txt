@@ -1,21 +1,18 @@
 set(project_dir "./../..")
-include("${project_dir}/esp32-common/esp32-common.cmake")
-include("${project_dir}/lcd-drivers/ssd1306-driver.cmake")
-include("${project_dir}/gui-128x64/gui-128x64.cmake")
-include("${project_dir}/gui-resources/gui-resources.cmake")
-include("${project_dir}/audio-codecs/audio-codecs.cmake")
+
 include("${project_dir}/command/command.cmake")
+include("${project_dir}/esp32-common/esp32-common.cmake")
+include("${project_dir}/lcd-drivers/st7789-driver.cmake")
+include("${project_dir}/audio-codecs/tlv320aic3204-driver.cmake")
 include("${project_dir}/clock-generator/si5351-driver.cmake")
 
 set(PROJET_SRCS
 	"main.c"
 	"instances.cpp"
-	"audio-codec-thread.cpp"
+	"i2c-devices-thread.cpp"
 	"audio-data-flow-thread.cpp"
 	"${ESP32_COMMON_SRCS}"
 	"${LCD_DRIVER_SRCS}"
-	"${GUI_128x64_SRCS}"
-	"${GUI_RESOURCES_SRCS}"
 	"${AUDIO_CODEC_DRIVER_SRCS}"
 	"${SI5351_DRIVER_SRCS}"
 )

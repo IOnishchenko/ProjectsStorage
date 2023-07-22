@@ -13,6 +13,7 @@
 //
 //-----------------------------------------------------------------*/
 extern void audio_data_flow_thread(void * args);
+extern iq_measurement iq_params;
 
 /*-----------------------------------------------------------------//
 // Audio codec class instances
@@ -42,15 +43,18 @@ extern "C" void tlv320aic3204_codec_thread(void * args)
 	printf("--== tlv320aic3204_codec_thread has started ==--\n");
 
 	AudioDevice.Initialize();
-	xTaskCreate(audio_data_flow_thread, "audio-data-flow", 1024 * 2, (void *)0, 10, NULL);
 
 	if(Synthesizer.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0))
 	{
+	//	Synthesizer.set_clock_disable(SI5351_CLK0, SI5351_CLK_DISABLE_LOW);
+	//	Synthesizer.set_clock_disable(SI5351_CLK1, SI5351_CLK_DISABLE_LOW);
+		//Synthesizer.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
+
 		// We will output 14.1 MHz on CLK0 and CLK1.
 		// A PLLA frequency of 705 MHz was chosen to give an even
 		// divisor by 14.1 MHz.
-		unsigned long long freq = 13'760'000'00ULL;
-		unsigned long long pll_freq = 825'600'000'00ULL;
+		unsigned long long freq = 13'760'000'00ULL + 12'000'00LL;
+		unsigned long long pll_freq = freq * 50;
 
 		// Set CLK0 and CLK1 to use PLLA as the MS source.
 		// This is not explicitly necessary in v2 of this library,
@@ -66,7 +70,7 @@ extern "C" void tlv320aic3204_codec_thread(void * args)
 		// 50 in the CLK1 phase register, since the ratio of the PLL to
 		// the clock frequency is 50.
 		Synthesizer.set_phase(SI5351_CLK0, 0);
-		Synthesizer.set_phase(SI5351_CLK1, 60);
+		Synthesizer.set_phase(SI5351_CLK1, 50);
 
 		// We need to reset the PLL before they will be in phase alignment
 		Synthesizer.pll_reset(SI5351_PLLA);
@@ -76,6 +80,8 @@ extern "C" void tlv320aic3204_codec_thread(void * args)
 		Synthesizer.update_status();
 	}
 
+	xTaskCreate(audio_data_flow_thread, "audio-data-flow", 1024 * 2, (void *)0, 10, NULL);
+
 	int i = 0;
 	for(;;)
 	{
@@ -83,6 +89,13 @@ extern "C" void tlv320aic3204_codec_thread(void * args)
 		i++;
 		//printf("--== initialize ==--\n");
 		//AudioDevice.Initialize();
-		vTaskDelay(300);
+		vTaskDelay(500);
+		printf("Phase error is %f/%f, %f\n", iq_params.psi, iq_params.psi * 180.f / 3.14159265f, iq_params.teta1/iq_params.teta3);
+		// float a0 = asinf(0.f) * 180 / 3.14159265f;
+		// float a1 = asinf(1.f) * 180 / 3.14159265f;
+		// float a05 = asinf(0.5f) * 180 / 3.14159265f;
+		// float a11 = asinf(-1.f) * 180 / 3.14159265f;
+		// float a051 = asinf(-0.5f) * 180 / 3.14159265f;
+		// printf("a0 = %f, a1 = %f, a05 = %f, a11 = %f, a051 = %f\n", a0, a1, a05, a11, a051);
 	}
 }

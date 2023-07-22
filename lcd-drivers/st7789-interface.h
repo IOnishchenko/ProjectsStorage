@@ -1,8 +1,8 @@
-#ifndef I2C_FUNCTIONS_H
-#define I2C_FUNCTIONS_H
+#ifndef ST7789_INTERFACE_H
+#define ST7789_INTERFACE_H
 
+#include "types.h"
 #include "stdint.h"
-#include "driver/i2c.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,14 +10,13 @@ extern "C" {
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-
+extern void ssd1306_set_interface(i2c_device_int port);
+extern void ssd1306_write_commands(const uint8_t * cmds, uint16_t size);
+extern void ssd1306_write_gdata(const uint8_t * data, uint16_t size);
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-extern void i2c_write_data(uint16_t address, uint8_t * data, uint16_t size);
-
 #ifdef __cplusplus
 }
 #endif
-
-#endif // I2C_FUNCTIONS_H
+#endif // ST7789_INTERFACE_H

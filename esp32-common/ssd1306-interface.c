@@ -1,5 +1,5 @@
 #include "ssd1306.h"
-#include "ssd1306-interfaces.h"
+#include "ssd1306-interface.h"
 #include "driver/i2c.h"
 
 /*-----------------------------------------------------------------//
