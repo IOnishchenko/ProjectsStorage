@@ -11,6 +11,7 @@ set(PROJET_SRCS
 	"instances.cpp"
 	"i2c-devices-thread.cpp"
 	"audio-data-flow-thread.cpp"
+	"gui-thread.cpp"
 	"${ESP32_COMMON_SRCS}"
 	"${LCD_DRIVER_SRCS}"
 	"${AUDIO_CODEC_DRIVER_SRCS}"
@@ -20,16 +21,14 @@ set(PROJET_SRCS
 set(INCLUDE_DIRS
 	"."
 	"${project_dir}/common"
+	"${COMMAND_INCS}"
 	"${ESP32_COMMON_INCS}"
 	"${LCD_DRIVER_INCS}"
-	"${GUI_128x64_INCS}"
-	"${GUI_RESOURCES_INCS}"
 	"${AUDIO_CODEC_DRIVER_INCS}"
-	"${COMMAND_INCS}"
 	"${SI5351_DRIVER_INCS}"
 )
 
 idf_component_register(
 	SRCS "${PROJET_SRCS}" 
-    INCLUDE_DIRS "${INCLUDE_DIRS}"
+	INCLUDE_DIRS "${INCLUDE_DIRS}"
 )

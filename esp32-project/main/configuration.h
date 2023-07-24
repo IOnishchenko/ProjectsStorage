@@ -27,16 +27,26 @@
 
 /*-----------------------------------------------------------------//
 // LCD:
-// HSPI configuration
+// VSPI configuration
 // GPIO configuration
 //-----------------------------------------------------------------*/
+// lcd parameters
+#define LCD_VERTICAL_SIZE	240u
+#define LCD_HORIZONTAL_SIZE	320u
+#define LCD_DRAW_LINE_PER_TRANSACTION	24
+#define LCD_SPI_CLOCK	15000000u // 15MHz is max clock
+// lcd pins
 #define LCD_SPI		(VSPI_HOST)
 #define LCD_MOSI	(GPIO_NUM_23)
 #define LCD_MISO	(GPIO_NUM_NC)
 #define LCD_CS		(GPIO_NUM_5)
 #define LCD_SCL		(GPIO_NUM_18)
-
 #define LCD_C_D		(GPIO_NUM_19)
+#define LCD_RST		(GPIO_NUM_17)
+// VSPI settings
+#define VSPI_BYTE_SIZE			8u // bits per byte
+#define VSPI_MAX_BUFFER_SIZE	(LCD_DRAW_LINE_PER_TRANSACTION*LCD_VERTICAL_SIZE) // max buffer size that can be used for a trasaction
+#define VSPI_QUEUE_SIZE			4U
 
 /*-----------------------------------------------------------------//
 // Receiver data flow parameters

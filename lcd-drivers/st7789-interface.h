@@ -10,9 +10,10 @@ extern "C" {
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-extern void ssd1306_set_interface(i2c_device_int port);
-extern void ssd1306_write_commands(const uint8_t * cmds, uint16_t size);
-extern void ssd1306_write_gdata(const uint8_t * data, uint16_t size);
+extern void st7789_set_interface(spi_device_handle_t port);
+extern void st7789_write_commands(const uint8_t * cmds, uint16_t size);
+extern void st7789_write_gdata(const uint8_t * data, uint16_t size);
+extern void st7789_wait(uint32_t ms);
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/

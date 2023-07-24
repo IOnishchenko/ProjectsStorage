@@ -53,7 +53,7 @@ extern "C" void tlv320aic3204_codec_thread(void * args)
 		// We will output 14.1 MHz on CLK0 and CLK1.
 		// A PLLA frequency of 705 MHz was chosen to give an even
 		// divisor by 14.1 MHz.
-		unsigned long long freq = 13'760'000'00ULL + 12'000'00LL;
+		unsigned long long freq = 15'590'000'00ULL + 12'000'00LL;
 		unsigned long long pll_freq = freq * 50;
 
 		// Set CLK0 and CLK1 to use PLLA as the MS source.
