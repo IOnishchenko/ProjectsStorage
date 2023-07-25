@@ -44,8 +44,8 @@
 #define LCD_C_D		(GPIO_NUM_19)
 #define LCD_RST		(GPIO_NUM_17)
 // VSPI settings
-#define VSPI_BYTE_SIZE			8u // bits per byte
-#define VSPI_MAX_BUFFER_SIZE	(LCD_DRAW_LINE_PER_TRANSACTION*LCD_VERTICAL_SIZE) // max buffer size that can be used for a trasaction
+#define VSPI_BYTE_SIZE			8u 		// bits per byte
+#define VSPI_MAX_BUFFER_SIZE	(1024*2)	// max buffer size that can be used for a trasaction
 #define VSPI_QUEUE_SIZE			4U
 
 /*-----------------------------------------------------------------//
