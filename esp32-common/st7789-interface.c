@@ -64,6 +64,7 @@ void st7789_write_commands(const uint8_t * cmd, uint16_t size)
 	spi_transaction_t * command = spi_get_transaction();
 	command->flags = SPI_TRANS_USE_TXDATA;
 	command->length = VSPI_BYTE_SIZE;
+	command->rxlength = 0;
 	command->tx_data[0] = cmd[0];
 	command->user = (void *)LCD_COMMAND;
 
@@ -108,6 +109,7 @@ static inline void st7789_write_data(const uint8_t * data, uint16_t size)
 {
 	spi_transaction_t * trans = spi_get_transaction();
 	trans->length = VSPI_BYTE_SIZE * size;
+	trans->rxlength = 0;
 	trans->user = (void *)LCD_DATA;
 
 	if(size > sizeof(trans->tx_data))

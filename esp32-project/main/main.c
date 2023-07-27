@@ -130,7 +130,7 @@ static esp_err_t spi_initialize()
 		.data5_io_num = GPIO_NUM_NC,
 		.data6_io_num = GPIO_NUM_NC,
 		.data7_io_num = GPIO_NUM_NC,
-		.max_transfer_sz = VSPI_MAX_BUFFER_SIZE+8,
+		.max_transfer_sz = VSPI_MAX_BUFFER_SIZE,
 		.flags = SPICOMMON_BUSFLAG_MASTER | SPICOMMON_BUSFLAG_NATIVE_PINS,
 		.isr_cpu_id = INTR_CPU_ID_AUTO,
 		.intr_flags = ESP_INTR_FLAG_LEVEL1

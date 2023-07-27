@@ -15,10 +15,20 @@ void lcd_initialize()
 	uint8_t cmd36[] =
 	{
 		ST7789_MEMORY_ACCESS_CMD,
-		//MY = 0, MX = 0, MV = 1, ML = 0, RGB = 1, MH = 0,
-		(1 << 5)
+		//MY = 1, MX = 1, MV = 1, ML = 0, RGB = 1, MH = 0,
+		(0 << 7) | (1 << 6) | (0 << 5) | (1 << 4) | (0 << 3) | (0 << 2)
 	};
 	st7789_write_commands(cmd36, sizeof(cmd36));
+
+	uint8_t cmdb0[] =
+	{
+		ST7789_RAN_CONTROL_CMD,
+		// RM = 0, DM1 = DM0 = 0
+		(0 << 4)|(0 << 1)|(0 << 0),
+		// EPF1 = EPF0 = 1, ENDIAN = 1, RIM = 0, MDT1 = MDT0 = 0 
+		(0b11 << 6)|(0b11 << 4)|(1 << 3)
+	};
+	st7789_write_commands(cmdb0, sizeof(cmdb0));
 
 	uint8_t cmd3a[] =
 	{
@@ -29,7 +39,7 @@ void lcd_initialize()
 	st7789_write_commands(cmd3a, sizeof(cmd3a));
 
 	// fill gram
-	lcd_fill_gram();
+	//lcd_fill_gram();
 
 	uint8_t cmd11[] =
 	{
@@ -59,21 +69,21 @@ void lcd_deinitialize()
 //-----------------------------------------------------------------*/
 void lcd_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
-	uint16_t xe = x + w - 1;
+	uint16_t ye = y + h - 1;
 	uint8_t cmd2a[] =
 	{
 		ST7789_COLUMN_ADDRESS_CMD,
-		(x >> 8), (x & 0xff), // XS = 0
-		(xe >> 8), (xe & 0xff) // XE = 319
+		(y >> 8), (y & 0xff), // XS = 0
+		(ye >> 8), (ye & 0xff) // XE = 319
 	};
 	st7789_write_commands(cmd2a, sizeof(cmd2a));
 
-	uint16_t ye = y + h - 1;
+	uint16_t xe = x + w - 1;
 	uint8_t cmd2b[] =
 	{
 		ST7789_ROW_ADDRESS_CMD,
-		(y >> 8), (y & 0xff), // YS = 0
-		(ye >> 8), (ye & 0xff) // YE = 239
+		(x >> 8), (x & 0xff), // YS = 0
+		(xe >> 8), (xe & 0xff) // YE = 239
 	};
 	st7789_write_commands(cmd2b, sizeof(cmd2b));
 }

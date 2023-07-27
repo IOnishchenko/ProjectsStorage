@@ -29,6 +29,7 @@ extern "C" {
 #define ST7789_CONTINUE_WRITE_MEMORY_CMD	0x3cu
 #define ST7789_CONTINUE_READ_MEMORY_CMD		0x3eu
 
+#define ST7789_RAN_CONTROL_CMD				0xb0u // has 2 parameter bytes
 
 /*-----------------------------------------------------------------//
 //
