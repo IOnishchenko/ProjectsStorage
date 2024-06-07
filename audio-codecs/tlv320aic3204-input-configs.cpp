@@ -306,7 +306,7 @@ namespace tlv320aic3204
 		tlv320aic3204_write_buffer(cmd0, sizeof(cmd0));
 
 		// TODO after testing take the gain value from analogGain_
-		WriteAnalogGainToCodec(0);
+		WriteAnalogGainToCodec(16);
 
 		// ADCs config
 		AudioCodecDriver::IAudioInput::SetRegisterPage(0);

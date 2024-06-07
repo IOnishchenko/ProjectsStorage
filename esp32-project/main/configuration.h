@@ -55,6 +55,15 @@
 #define RX_REAL_DATA_SIZE	(RX_IQ_BUFFER_SIZE/2)
 
 /*-----------------------------------------------------------------//
+// DSP parameters
+//-----------------------------------------------------------------*/
+#define DSP_IQ_CORRECTION_CHUNK_PER_BUFFER	16
+#define DSP_IQ_CORRECTION_CHUNK_SIZE (RX_IQ_BUFFER_SIZE/DSP_IQ_CORRECTION_CHUNK_PER_BUFFER)
+#if RX_IQ_BUFFER_SIZE % (2 * DSP_IQ_CORRECTION_CHUNK_PER_BUFFER) != 0
+	#error "Wrong IQ correction buffer size. Condition should be false!"
+#endif
+
+/*-----------------------------------------------------------------//
 // Transmitter data flow parameters
 //-----------------------------------------------------------------*/
 

@@ -53,8 +53,9 @@ extern "C" void tlv320aic3204_codec_thread(void * args)
 		// We will output 14.1 MHz on CLK0 and CLK1.
 		// A PLLA frequency of 705 MHz was chosen to give an even
 		// divisor by 14.1 MHz.
-		unsigned long long freq = 15'590'000'00ULL + 12'000'00LL;
-		unsigned long long pll_freq = freq * 50;
+		unsigned long long freq = 11'800'000'00ULL + 6'000'00LL;
+		unsigned long long mult = 60;
+		unsigned long long pll_freq = freq * mult;
 
 		// Set CLK0 and CLK1 to use PLLA as the MS source.
 		// This is not explicitly necessary in v2 of this library,
@@ -70,7 +71,7 @@ extern "C" void tlv320aic3204_codec_thread(void * args)
 		// 50 in the CLK1 phase register, since the ratio of the PLL to
 		// the clock frequency is 50.
 		Synthesizer.set_phase(SI5351_CLK0, 0);
-		Synthesizer.set_phase(SI5351_CLK1, 50);
+		Synthesizer.set_phase(SI5351_CLK1, mult);
 
 		// We need to reset the PLL before they will be in phase alignment
 		Synthesizer.pll_reset(SI5351_PLLA);
