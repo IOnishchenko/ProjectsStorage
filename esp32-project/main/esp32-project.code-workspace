@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"configuration.h": "c",
+			"lcd-driver.h": "c",
+			"cstdint": "cpp"
+		}
+	}
+}

@@ -2,7 +2,8 @@
     "configurations": [
         {
             "name": "ESP-IDF",
-            "compilerPath": "C:\\Users\\Iurii\\.espressif\\tools\\xtensa-esp32-elf\\esp-12.2.0_20230208\\xtensa-esp32-elf\\bin\\xtensa-esp32-elf-gcc.exe",
+            "compilerPath": "${config:idf.toolsPathWin}/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc.exe",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
             "includePath": [
                 "${config:idf.espIdfPath}/components/**",
                 "${config:idf.espIdfPathWin}/components/**",
@@ -24,7 +25,7 @@
             },
             "cStandard": "c17",
             "cppStandard": "c++20",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            // "configurationProvider": "ms-vscode.cmake-tools"
         },
         {
             "name": "MDK-STM32F1xxx"

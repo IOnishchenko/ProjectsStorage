@@ -10,9 +10,15 @@ extern "C" {
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-extern void ssd1306_set_interface(i2c_device_int port);
-extern void ssd1306_write_commands(const uint8_t * cmds, uint16_t size);
+#define SSD1306_INTERFACE_BUFFER_SIZE		64u
+#define SSD1606_INTERFACE_BUFFER_NUMBER		4u
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+extern void ssd1306_set_interface(i2c_device_t device);
+extern void ssd1306_write_command(const uint8_t * cmds, uint16_t size);
 extern void ssd1306_write_gdata(const uint8_t * data, uint16_t size);
+extern void ssd1306_read_gdata(const uint8_t * data, uint16_t size);
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/

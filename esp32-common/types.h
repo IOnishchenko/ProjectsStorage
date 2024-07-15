@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "driver/spi_master.h"
 
 #ifdef __cplusplus
@@ -10,7 +10,7 @@ extern "C" {
 /*-----------------------------------------------------------------//
 // internal types definition
 //-----------------------------------------------------------------*/
-typedef i2c_port_t i2c_device_int;
+typedef i2c_master_bus_handle_t i2c_device_t;
 typedef spi_device_handle_t spi_device_int;
 /*-----------------------------------------------------------------//
 //

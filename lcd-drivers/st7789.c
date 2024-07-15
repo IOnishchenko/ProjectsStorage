@@ -1,16 +1,17 @@
 #include "st7789.h"
 #include "st7789-interface.h"
 #include "configuration.h"
+#include "lcd-driver.h"
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static void lcd_fill_gram();
+static void st7789_fill_gram();
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void lcd_initialize()
+static void st7789_initialize()
 {
 	uint8_t cmd36[] =
 	{
@@ -18,7 +19,7 @@ void lcd_initialize()
 		//MY = 1, MX = 1, MV = 1, ML = 0, RGB = 1, MH = 0,
 		(0 << 7) | (1 << 6) | (0 << 5) | (1 << 4) | (0 << 3) | (0 << 2)
 	};
-	st7789_write_commands(cmd36, sizeof(cmd36));
+	st7789_write_command(cmd36, sizeof(cmd36));
 
 	uint8_t cmdb0[] =
 	{
@@ -28,7 +29,7 @@ void lcd_initialize()
 		// EPF1 = EPF0 = 1, ENDIAN = 1, RIM = 0, MDT1 = MDT0 = 0 
 		(0b11 << 6)|(0b11 << 4)|(1 << 3)
 	};
-	st7789_write_commands(cmdb0, sizeof(cmdb0));
+	st7789_write_command(cmdb0, sizeof(cmdb0));
 
 	uint8_t cmd3a[] =
 	{
@@ -36,30 +37,30 @@ void lcd_initialize()
 		// 5-6-5
 		(0b101 << 4)|(0b101 << 0)
 	};
-	st7789_write_commands(cmd3a, sizeof(cmd3a));
+	st7789_write_command(cmd3a, sizeof(cmd3a));
 
 	// fill gram
-	//lcd_fill_gram();
+	st7789_fill_gram();
 
 	uint8_t cmd11[] =
 	{
 		ST7789_SLEEP_OUT_CMD
 	};
-	st7789_write_commands(cmd11, sizeof(cmd11));
-	st7789_wait(100);
+	st7789_write_command(cmd11, sizeof(cmd11));
+	st7789_wait_and_delay(100);
 
 	uint8_t cmd29[] =
 	{
 		ST7789_DISPLAY_ON_CMD
 	};
-	st7789_write_commands(cmd29, sizeof(cmd29));
-	st7789_wait(100);
+	st7789_write_command(cmd29, sizeof(cmd29));
+	st7789_wait_and_delay(100);
 }
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void lcd_deinitialize()
+static void st7789_deinitialize()
 {
 
 }
@@ -67,7 +68,7 @@ void lcd_deinitialize()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void lcd_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+static void st7789_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
 	uint16_t ye = y + h - 1;
 	uint8_t cmd2a[] =
@@ -76,7 +77,7 @@ void lcd_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 		(y >> 8), (y & 0xff), // XS = 0
 		(ye >> 8), (ye & 0xff) // XE = 319
 	};
-	st7789_write_commands(cmd2a, sizeof(cmd2a));
+	st7789_write_command(cmd2a, sizeof(cmd2a));
 
 	uint16_t xe = x + w - 1;
 	uint8_t cmd2b[] =
@@ -85,37 +86,29 @@ void lcd_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 		(x >> 8), (x & 0xff), // YS = 0
 		(xe >> 8), (xe & 0xff) // YE = 239
 	};
-	st7789_write_commands(cmd2b, sizeof(cmd2b));
+	st7789_write_command(cmd2b, sizeof(cmd2b));
 }
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void lcd_start_writing_gdata()
+static void st7789_start_writing_gdata()
 {
 	uint8_t cmd2c[] =
 	{
 		ST7789_START_WRITE_MEMORY_CMD
 	};
-	st7789_write_commands(cmd2c, sizeof(cmd2c));
+	st7789_write_command(cmd2c, sizeof(cmd2c));
 }
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void lcd_write_gdata(const uint8_t * data, uint16_t size)
-{
-	st7789_write_gdata(data, size);
-}
-
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-static void lcd_fill_gram()
+static void st7789_fill_gram()
 {
 	// fill gram to display picture or color
 	// select region
-	lcd_set_region(0, 0, LCD_HORIZONTAL_SIZE, LCD_VERTICAL_SIZE);
+	st7789_set_region(0, 0, LCD_HORIZONTAL_SIZE, LCD_VERTICAL_SIZE);
 	// fill screen
 	uint8_t * gdata = heap_caps_malloc(VSPI_MAX_BUFFER_SIZE, MALLOC_CAP_DMA);
 	uint32_t byte_count = LCD_VERTICAL_SIZE * LCD_HORIZONTAL_SIZE * 2;
@@ -128,7 +121,7 @@ static void lcd_fill_gram()
 	}
 	
 	// write data to screan
-	lcd_start_writing_gdata();
+	st7789_start_writing_gdata();
 	while(byte_count)
 	{
 		uint32_t size = VSPI_MAX_BUFFER_SIZE < byte_count ? VSPI_MAX_BUFFER_SIZE : byte_count;
@@ -136,6 +129,35 @@ static void lcd_fill_gram()
 		byte_count -= size;
 	}
 	// wait for the transaction has finished to free memory
-	st7789_wait(0);
+	st7789_wait_and_delay(0);
 	heap_caps_free(gdata);
 }
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+static void st7789_start_reading_gdata()
+{
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+static void st7789_read_gdata(const uint8_t * data, uint16_t size)
+{
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+lcd_driver st7789 =
+{
+	.initialize = st7789_initialize,
+	.deinitialize = st7789_deinitialize,
+	.set_region = st7789_set_region,
+	.start_writing_gdata = st7789_start_writing_gdata,
+	.write_gdata = st7789_write_gdata,
+	.wait_and_delay = st7789_wait_and_delay,
+	.start_reading_gdata = st7789_start_reading_gdata,
+	.read_gdata = st7789_read_gdata,
+};

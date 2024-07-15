@@ -6,18 +6,16 @@ extern "C" {
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-#define SSD1306_I2C_ADDRESS			0x3c
+#define SSD1306_I2C_ADDRESS_SIZE	7
+#define SSD1306_I2C_ADDRESS			0b0111100
 //#define SSD1306_I2C_ADDRESS		0x3d
-#define SSD1306_I2C_ADDR_TO_READ	((SSD1306_I2C_ADDRESS << 1) | 1)
-#define SSD1306_I2C_ADDR_TO_WRITE	((SSD1306_I2C_ADDRESS << 1) | 0)
+//#define SSD1306_I2C_ADDR_TO_READ	((SSD1306_I2C_ADDRESS << 1) | 1)
+//#define SSD1306_I2C_ADDR_TO_WRITE	((SSD1306_I2C_ADDRESS << 1) | 0)
 
-#define SSD1306_I2C_LAST_CMD_BYTE	(0 << 6)
-#define SSD1306_I2C_CMD_BYTE		((1 << 7) | SSD1306_I2C_LAST_CMD_BYTE)
-
-#define SSD1306_I2C_LAST_GDATA_BYTE	(1 << 6)
-#define SSD1306_I2C_GDATA_BYTE		((1 << 7) | SSD1306_I2C_LAST_GDATA_BYTE)
-
-#define SSD1306_GDATA_BUFFER_SIZE	128
+#define SSD1306_I2C_LAST_BYTE		(0 << 7)
+#define SSD1306_I2C_NOT_LAST_BYTE	(1 << 7)
+#define SSD1306_I2C_CMD_BYTE		(0 << 6)
+#define SSD1306_I2C_DATA_BYTE		(1 << 6)
 
 // Fundamental Command Table
 #define SSD1306_SET_CONTRAST_CMD	0x81
@@ -48,8 +46,8 @@ extern "C" {
 #define SSD1306_PAGE_ADDR_VAL1		7		// end page
 
 // Hardware Configuration
-#define SSD1306_SET_SEG_REMAP_CMD	0xa0	// column address 0 to seg0
-//#define SSD1306_SET_SEG_REMAP_CMD	0xa1	// column address 0 to seg127
+// #define SSD1306_SET_SEG_REMAP_CMD	0xa0	// column address 0 to seg0
+#define SSD1306_SET_SEG_REMAP_CMD	0xa1	// column address 0 to seg127
 
 #define SSD1306_SET_MUX_RATIO_CMD	0xa8
 #define SSD1306_SET_MUX_RATIO_VAL	63
@@ -58,10 +56,10 @@ extern "C" {
 //#define SSD1306_SET_SCAN_DIR_CMD	0xc8	// remapped mode. Scan from COM[N-1] to COM0. Where N is the Multiplex ratio.
 
 #define SSD1306_SET_OFFSET_CMD		0xd3	// Set vertical shift by COM from 0d~63d
-#define SSD1306_SET_OFFSET_VAL		0
+#define SSD1306_SET_OFFSET_VAL		0x00
 
 #define SSD1306_SET_CON_PINS_CMD	0xda
-#define SSD1306_SET_CON_PINS_VAL	0x12	// default value
+#define SSD1306_SET_CON_PINS_VAL	0x32	// default value
 /* SSD1306_SET_CON_PINS_VAL 
 A[4]=0b, Sequential COM pin configuration
 A[4]=1b(RESET), Alternative COM pin

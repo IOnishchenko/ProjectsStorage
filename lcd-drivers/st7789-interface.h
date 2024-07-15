@@ -11,9 +11,9 @@ extern "C" {
 //
 //-----------------------------------------------------------------*/
 extern void st7789_set_interface(spi_device_handle_t port);
-extern void st7789_write_commands(const uint8_t * cmds, uint16_t size);
+extern void st7789_write_command(const uint8_t * cmds, uint16_t size);
 extern void st7789_write_gdata(const uint8_t * data, uint16_t size);
-extern void st7789_wait(uint32_t ms);
+extern void st7789_wait_and_delay(uint32_t ms);
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/

@@ -2,24 +2,28 @@
     "configurations": [
         {
             "name": "ESP-IDF",
-            "compilerPath": "C:\\Users\\Iurii\\.espressif\\tools\\xtensa-esp32-elf\\esp-12.2.0_20230208\\xtensa-esp32-elf\\bin\\xtensa-esp32-elf-gcc.exe",
             "includePath": [
                 "${config:idf.espIdfPath}/components/**",
                 "${config:idf.espIdfPathWin}/components/**",
                 "${config:idf.espAdfPath}/components/**",
-                "${config:idf.espAdfPathWin}/components/**"
+                "${config:idf.espAdfPathWin}/components/**",
+                "${workspaceFolder}/**"
             ],
             "browse": {
                 "path": [
                     "${config:idf.espIdfPath}/components",
                     "${config:idf.espIdfPathWin}/components",
                     "${config:idf.espAdfPath}/components/**",
-                    "${config:idf.espAdfPathWin}/components/**"
+                    "${config:idf.espAdfPathWin}/components/**",
+                    "${workspaceFolder}/**"
                 ],
                 "limitSymbolsToIncludedHeaders": false
             },
             "cStandard": "c17",
             "cppStandard": "c++20"
+        },
+        {
+            "name": "EMPTY"
         }
     ],
     "version": 4

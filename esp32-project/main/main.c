@@ -53,8 +53,8 @@ static esp_err_t i2c0_initialize()
 		return ESP_FAIL;
 	}
 	// set i2c for lcd
-	tlv320aic3204_set_interface(I2C0_DEVICE_PORT);
-	si5351_set_interface(I2C0_DEVICE_PORT);
+	// tlv320aic3204_set_interface(I2C0_DEVICE_PORT);
+	// si5351_set_interface(I2C0_DEVICE_PORT);
 	return ESP_OK;
 }
 
@@ -132,7 +132,7 @@ static esp_err_t spi_initialize()
 		.data7_io_num = GPIO_NUM_NC,
 		.max_transfer_sz = VSPI_MAX_BUFFER_SIZE,
 		.flags = SPICOMMON_BUSFLAG_MASTER | SPICOMMON_BUSFLAG_NATIVE_PINS,
-		.isr_cpu_id = INTR_CPU_ID_AUTO,
+		.isr_cpu_id = ESP_INTR_CPU_AFFINITY_AUTO,
 		.intr_flags = ESP_INTR_FLAG_LEVEL1
 	};
 	//Initialize the SPI bus
@@ -185,11 +185,11 @@ static esp_err_t gpio_initialize()
 static esp_err_t hw_initialize()
 {
 	// i2c configuration
-	esp_err_t res = i2c0_initialize();
+	// esp_err_t res = i2c0_initialize();
 	// i2s config
-	res |= i2s0_initialize();
+	// res |= i2s0_initialize();
 	// hspi config
-	res = spi_initialize();
+	esp_err_t res = spi_initialize();
 	// gpio configuration
 	res |= gpio_initialize();
 	return res;
@@ -210,8 +210,8 @@ void app_main(void)
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 
 		// create threads
-		BaseType_t ret0 = xTaskCreate(tlv320aic3204_codec_thread, "tlv320aic3204", 1024 * 2, (void *)0, 10, NULL);
-		printf("tlv320aic3204_codec_thread was created with code %d\n", ret0);
+		//BaseType_t ret0 = xTaskCreate(tlv320aic3204_codec_thread, "tlv320aic3204", 1024 * 2, (void *)0, 10, NULL);
+		//printf("tlv320aic3204_codec_thread was created with code %d\n", ret0);
 
 		//Reset the display
 		BaseType_t ret1 = xTaskCreate(gui_thread, "guithread", 1024 * 2, (void *)0, 10, NULL);

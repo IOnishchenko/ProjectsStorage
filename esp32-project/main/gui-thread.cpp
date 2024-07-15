@@ -6,7 +6,6 @@
 #include "configuration.h"
 #include "picture_types.h"
 #include "test_pic.h"
-#include "st7789-interface.h"
 
 /*-----------------------------------------------------------------//
 //
@@ -18,7 +17,7 @@
 extern "C" void gui_thread(void * args)
 {
 	printf("gui_thread started!!!\n");
-	lcd_initialize();
+	st7789.initialize();
 	printf("lcd_initialize done !!!\n");
 
 	// draw picture
@@ -43,8 +42,8 @@ extern "C" void gui_thread(void * args)
 	uint32_t buff_index = 0;
 	uint8_t * l8_data = (uint8_t*)test_pic.items[0]->data;
 
-	lcd_set_region(0, 0, LCD_HORIZONTAL_SIZE, LCD_VERTICAL_SIZE);
-	lcd_start_writing_gdata();
+	st7789.set_region(0, 0, LCD_HORIZONTAL_SIZE, LCD_VERTICAL_SIZE);
+	st7789.start_writing_gdata();
 	while(full_size)
 	{
 		uint16_t * buffer = gdata[buff_index];
@@ -55,14 +54,14 @@ extern "C" void gui_thread(void * args)
 			full_size--;
 		}
 
-		lcd_write_gdata((uint8_t*)gdata[buff_index], size*2);
+		st7789.write_gdata((uint8_t*)gdata[buff_index], size*2);
 
 		buff_index++;
 		if(buff_index == BUFFER_COUNT)
 			buff_index = 0;
 	}
 
-	st7789_wait(0);
+	st7789.wait_and_delay(0);
 	free(palet_cache);
 	for(int i = 0; i < BUFFER_COUNT; i++)
 	{

@@ -59,7 +59,7 @@ void st7789_set_interface(spi_device_handle_t port)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void st7789_write_commands(const uint8_t * cmd, uint16_t size)
+void st7789_write_command(const uint8_t * cmd, uint16_t size)
 {
 	spi_transaction_t * command = spi_get_transaction();
 	command->flags = SPI_TRANS_USE_TXDATA;
@@ -88,7 +88,7 @@ void st7789_write_gdata(const uint8_t * data, uint16_t size)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void st7789_wait(uint32_t ms)
+void st7789_wait_and_delay(uint32_t ms)
 {
 	while(activ_tx_number != 0)
 	{
