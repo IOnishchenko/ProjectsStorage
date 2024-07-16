@@ -21,9 +21,9 @@ namespace gui
 		};
 
 		// fields
-		PictureData ForegroundPicture;
 		uint16_t Width;
 		uint16_t Height;
+		PictureData Foreground;
 
 		// constructor
 		GEPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,

@@ -7,8 +7,8 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	Button::Button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		IGElement & normalGEl, IGElement & pressedGEl, const Action<void(Button*)>& clickCmd)
-		:_state{ButtonState::Normal}, _clickCmd{clickCmd}, _normalBG{&normalGEl}, _pressedBG{&pressedGEl},
-		IUIControl(x, y, w, h, context)
+		:IUIControl(x, y, w, h, context), _state{ButtonState::Normal}, _clickCmd{clickCmd},
+		_normalBG{&normalGEl}, _pressedBG{&pressedGEl}
 	{
 	}
 
@@ -31,7 +31,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnPress(TouchScreenEven & penInfo)
+	void Button::OnPress(ITouchScreenEventHandler &)
 	{
 		_state = ButtonState::Pressed;
 		Draw();
@@ -40,7 +40,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnRelease(TouchScreenEven & penInfo)
+	void Button::OnRelease(ITouchScreenEventHandler &)
 	{
 		_state = ButtonState::Normal;
 		Draw();
@@ -50,7 +50,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnPenLeave(TouchScreenEven & penInfo)
+	void Button::OnPenLeave(ITouchScreenEventHandler &)
 	{
 		if(_state == ButtonState::Normal)
 			return;

@@ -15,10 +15,10 @@ namespace gui
 	public:
 	
 		// fields
+		std::string_view Text;
 		uint32_t Foreground;
 		uint32_t Background;
-		std::string_view Text;
-	
+
 		// constructor
 		GEText(uint16_t x, uint16_t y, const std::string_view & txt, uint32_t foreground, uint32_t background,
 			const Font & font, IGElement * nextElement);
@@ -35,8 +35,8 @@ namespace gui
 		GEText& operator=(const std::string_view & txt);
 
 	private:
-		uint32_t _currectIndex;
 		const Font & _font;
+		uint32_t _currectIndex;
 	};
 }
 

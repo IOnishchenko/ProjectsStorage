@@ -1,5 +1,5 @@
 
-#include "GERectangle.h"
+#include "GERectangle.hpp"
 
 namespace gui
 {
@@ -9,13 +9,13 @@ namespace gui
 	//------------------------------------------------------------*/
 	GERectangle::GERectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
 		uint32_t color, IGElement * nextElement)
-		: IGElement(x, y, nextElement), _width(width), _height(height), Color(color)
+		: IGElement(x, y, nextElement), Color(color), _width(width), _height(height)
 	{}
 	
 	/*------------------------------------------------------------//
 	// Draws the graphic element by hardware features
 	//------------------------------------------------------------*/
-	void GEText::DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer)
+	void GERectangle::DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer)
 	{
 		renderer.Draw(this, x, y);
 	}

@@ -1,6 +1,8 @@
 #ifndef GUI_IUICONTEXT_HPP
 #define GUI_IUICONTEXT_HPP
 
+#include "UIControlEvents.hpp"
+
 namespace gui
 {
 	class IUIControl;
@@ -11,6 +13,7 @@ namespace gui
 		IRenderer & Renderer;
 		IUIControl * FocusedControl;
 		IUIControl * PressedControl;
+		TouchScreenEven LastTouchScreenEvent;
 	};
 }
 

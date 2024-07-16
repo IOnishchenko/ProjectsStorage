@@ -16,7 +16,7 @@ namespace gui
 		static uint16_t GetCharacterWidthInPixels(const Font & font, uint8_t c);
 		static uint16_t GetCharacterHeightInPixels(const Font & font);
 		static uint16_t GetTextLineWidthInPixels(const Font & font, const std::string_view & text);
-		static const PictureDataItem & GetCharacterGraphicData(uint8_t c);
+		static const PictureDataItem & GetCharacterGraphicData(const Font & font, uint8_t scode);
 
 		// constructor
 		Font(const PictureCollection & fontGraphicData);
@@ -24,7 +24,7 @@ namespace gui
 	private:
 		// fields
 		const PictureCollection & _fontGraphicData; 
-	}
+	};
 }
 
 #endif // GUI_FONT_HPP

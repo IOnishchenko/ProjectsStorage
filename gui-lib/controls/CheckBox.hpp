@@ -28,9 +28,7 @@ namespace gui
 		// constructor
 		CheckBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			const Action<void(CheckBox *)> &checkedCmd, const Action<void(CheckBox *)> &uncheckedCmd,
-			IGElement * unchecked = &UncheckedCheckboxBase,
-			IGElement * pressed = &UncheckedCheckboxBase,
-			IGElement * checked = &CheckedCheckboxBase);
+			IGElement * unchecked, IGElement * pressed, IGElement * checked);
 		
 		// destructor
 		~CheckBox() override = default;
@@ -38,9 +36,9 @@ namespace gui
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;
 		// ITouchScreenEventHandler methods
-		void OnPress(TouchScreenEven & penInfo) override;
-		void OnRelease(TouchScreenEven & penInfo) override;
-		void OnPenLeave(TouchScreenEven & penInfo) override;
+		void OnPress(ITouchScreenEventHandler & penInfo) override;
+		void OnRelease(ITouchScreenEventHandler & penInfo) override;
+		void OnPenLeave(ITouchScreenEventHandler & penInfo) override;
 		// methods
 		CheckBoxState GetState();
 		void SetState(CheckBoxState state);

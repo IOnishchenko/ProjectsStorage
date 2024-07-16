@@ -5,7 +5,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnPress(TouchScreenEven &)
+	void ITouchScreenEventHandler::OnPress(ITouchScreenEventHandler &)
 	{
 
 	}
@@ -13,7 +13,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnRelease(TouchScreenEven &)
+	void ITouchScreenEventHandler::OnRelease(ITouchScreenEventHandler &)
 	{
 
 	}
@@ -21,7 +21,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnLongPress(TouchScreenEven &)
+	void ITouchScreenEventHandler::OnLongPress(ITouchScreenEventHandler &)
 	{
 
 	}
@@ -29,7 +29,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnPenEnter(TouchScreenEven &)
+	void ITouchScreenEventHandler::OnPenEnter(ITouchScreenEventHandler &)
 	{
 
 	}
@@ -37,7 +37,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnPenLeave(TouchScreenEven &)
+	void ITouchScreenEventHandler::OnPenLeave(ITouchScreenEventHandler &)
 	{
 
 	}
@@ -45,7 +45,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnPenMove(TouchScreenEven &)
+	void ITouchScreenEventHandler::OnPenMove(ITouchScreenEventHandler &)
 	{
 
 	}

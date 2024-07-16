@@ -6,9 +6,8 @@ namespace gui
 	// constructor
 	//------------------------------------------------------------*/
 	GEPicture::GEPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-		uint16_t skippedLines, uint16_t skippedRows, const PictureDataItem &bitmap, IGElement * nextElemen)
-		: GraphicElement(x, y, nextElement), Width{width}, Height{height},
-		ForegroundPicture{skippedLines, skippedRows, bitmap}
+		uint16_t skippedLines, uint16_t skippedRows, const PictureDataItem &bitmap, IGElement * nextElement)
+		: IGElement(x, y, nextElement), Width{width}, Height{height}, Foreground{skippedLines, skippedRows, bitmap}
 	{
 	}
 
@@ -16,9 +15,9 @@ namespace gui
 	/*------------------------------------------------------------//
 	// constructor
 	//------------------------------------------------------------*/
-	GEPicture::GEPicture(const PictureDataItem &bitmap, IGElement * nextElemen)
-		: GraphicElement(0, 0, nextElement), Width{bitmap.width}, Height{bitmap.height},
-		ForegroundPicture{0, 0, bitmap}
+	GEPicture::GEPicture(const PictureDataItem &bitmap, IGElement * nextElement)
+		: IGElement(0, 0, nextElement), Width{bitmap.width}, Height{bitmap.height},
+		Foreground{0, 0, bitmap}
 	{
 	}
 	

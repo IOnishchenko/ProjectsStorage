@@ -2,6 +2,7 @@
 #define GUI_ITOUCH_SCREEN_EVENT_OBSERVER_HPP
 
 #include "ITouchScreenEventHandler.hpp"
+#include "UIControlEvents.hpp"
 #include "AsyncCommand.hpp"
 #include "AsyncCommandDispatcher.hpp"
 
@@ -11,7 +12,7 @@ namespace gui
 	{
 	public:
 		// constructor
-		ITouchScreenEventObserver(AsyncCommandDispatcher & asyncDispatcher)
+		ITouchScreenEventObserver(AsyncCommandDispatcher & asyncDispatcher);
 
 		// destructor
 		virtual ~ITouchScreenEventObserver() = default;

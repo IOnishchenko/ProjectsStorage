@@ -17,19 +17,18 @@ namespace gui
 		RadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			const std::initializer_list<IUIControl *> & items, IGElement * gelement);
 
-		RadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h,
+		RadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			const std::forward_list<IUIControl *> & items, IGElement * gelement);
 
 		// destructor
 		~RadioButton() override = default;
 		
 		// methods
-		void OnPress(TouchScreenEven &) override;
-		void OnRelease(TouchScreenEven &) override;
-		void OnPenLeave(TouchScreenEven &) override;
-		void OnPenMove(TouchScreenEven &) override;
-		
-		IGElement * GetIGElement() override;
+		void OnPress(ITouchScreenEventHandler &) override;
+		void OnRelease(ITouchScreenEventHandler &) override;
+		void OnPenLeave(ITouchScreenEventHandler &) override;
+		void OnPenMove(ITouchScreenEventHandler &) override;
+
 		void SetSelected(RadioButtonItem * selected);
 		void ClearSelection();
 		

@@ -13,6 +13,7 @@ include("${root_dir}/esp32-common/esp32-common.cmake")
 include("${root_dir}/lcd-drivers/st7789-driver.cmake")
 include("${root_dir}/lcd-drivers/sh1106-driver.cmake")
 include("${root_dir}/gui-lib/gui-lib.cmake")
+include("${root_dir}/gui-resources/gui-resources.cmake")
 
 set(PROJET_SRCS
 	"main.c"
@@ -30,6 +31,7 @@ set(INCLUDE_DIRS
 	"${LCD_ST7789_DRIVER_INCS}"
 	"${LCD_SH1106_DRIVER_INCS}"
 	"${GUI_LIB_DIRS}"
+	"${GUI_RESOURCES_INCS}"
 )
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)

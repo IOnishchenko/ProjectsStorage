@@ -7,7 +7,7 @@ namespace gui
 	//------------------------------------------------------------*/
 	uint16_t Font::GetCharacterWidthInPixels(const Font & font, uint8_t c)
 	{
-		return Font::GetCharacterGraphicData(font, text[i]).width;
+		return Font::GetCharacterGraphicData(font, c).width;
 	}
 
 	/*------------------------------------------------------------//

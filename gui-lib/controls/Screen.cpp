@@ -38,10 +38,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void Screen::SetScreen(IUIControl * cntr)
 	{
-		_content.front()->OnDeinitialize();
 		ReplaceDynamicUIControl(cntr);
-		cntr->OnInitialize(0);
-		_activeControl = cntr;
 		cntr->Draw();
 	}
 

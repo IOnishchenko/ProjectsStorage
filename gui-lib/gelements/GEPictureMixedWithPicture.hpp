@@ -17,11 +17,11 @@ namespace gui
 
 		// constructor
 		GEPictureMixedWithPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-			uint16_t fskippedLines, uint16_t fskippedRows, const PictureDataItem &fbitmap,
-			uint16_t bskippedLines, uint16_t bskippedRows, const PictureDataItem &bbitmap,
+			uint16_t fskippedLines, uint16_t fskippedRows, const PictureDataItem & fbitmap,
+			uint16_t bskippedLines, uint16_t bskippedRows, const PictureDataItem & bbitmap,
 			IGElement * nextElemen);
 
-		GEPicture(const PictureDataItem &fbitmap, const PictureDataItem &bbitmap,
+		GEPictureMixedWithPicture(const PictureDataItem & fbitmap, const PictureDataItem & bbitmap,
 			IGElement * nextElemen);
 
 		// destructor

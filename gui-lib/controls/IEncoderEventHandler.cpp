@@ -5,7 +5,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnEncoderMoved(EncoderEvent &)
+	void IEncoderEventHandler::OnEncoderMoved(EncoderEvent &)
 	{
 
 	}

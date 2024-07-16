@@ -28,9 +28,9 @@ namespace gui
 			
 			// methods
 			IGElement * GetGraphicElement() override;
-			void OnPress(TouchScreenEven &) override;
-			void OnRelease(TouchScreenEven &) override;
-			void OnPenLeave(TouchScreenEven &) override;
+			void OnPress(ITouchScreenEventHandler &) override;
+			void OnRelease(ITouchScreenEventHandler &) override;
+			void OnPenLeave(ITouchScreenEventHandler &) override;
 		
 		protected:
 			bool _isDrawn = false;

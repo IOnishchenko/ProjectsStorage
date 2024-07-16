@@ -8,34 +8,30 @@ namespace gui
 	Slider::Slider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		uint16_t borderSize, int maxValue, int value, const Action<void(int)> &onValueChenged,
 		const GEPicture &thumb, const GEPicture &leftTrack, const GEPicture &rightTrack)
-		:UIControl(x, y, w, h, context), MaxValue{0}, MinValue{0}, Value{value}, _borderSize{borderSize},
-		_valueChengedCmd{onValueChenged}, LeftTrack{LeftTrack}, Thumb{thumb}, RightTrack{RightTrack}
+		:IUIControl(x, y, w, h, context), MaxValue{0}, MinValue{0}, Value{value}, _borderSize{borderSize},
+		LeftTrack{leftTrack}, Thumb{thumb}, RightTrack{rightTrack}, _valueChengedCmd{onValueChenged}
 	{
 		SyncThumbPositionWithValue();
 	}
 
 	/*--------------------------------------------------------------------------//
-	// ------------------------- Public Methods --------------------------------
-	//--------------------------------------------------------------------------*/
-	
-	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnPress(TouchScreenEven & pen)
+	void Slider::OnPress(ITouchScreenEventHandler & event)
 	{
-		uint16_t xpen = pen.x - X;
+		uint16_t xpen = _context.LastTouchScreenEvent.x - X;
 		uint16_t xthumb = Thumb.X;
 		// check if the thumb is under the pen
 		if((xpen > xthumb)&&(xpen < (xthumb + Thumb.GetWidth())))
 			return;
 
-		OnPenMove(pen);
+		OnPenMove(event);
 	}
 	
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnRelease(TouchScreenEven & pen)
+	void Slider::OnRelease(ITouchScreenEventHandler &)
 	{
 		SyncThumbPositionWithValue();
 		Draw();
@@ -44,25 +40,25 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnPenEnter(TouchScreenEven & pen)
+	void Slider::OnPenEnter(ITouchScreenEventHandler & event)
 	{
-		OnPenMove(pen);
+		OnPenMove(event);
 	}
 	
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnPenLeave(TouchScreenEven & pen)
+	void Slider::OnPenLeave(ITouchScreenEventHandler & event)
 	{
-		OnRelease(pen);
+		OnRelease(event);
 	}
 	
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnPenMove(TouchScreenEven & pen)
+	void Slider::OnPenMove(ITouchScreenEventHandler &)
 	{
-		auto xpen = pen.x - X;
+		auto xpen = _context.LastTouchScreenEvent.x - X;
 		if(!((xpen >= _borderSize) && (xpen <= (Width - _borderSize))))
 			return;
 		// move thumb to position
@@ -98,15 +94,7 @@ namespace gui
 			}
 		}
 	}
-	
-	// /*--------------------------------------------------------------------------//
-	// // 
-	// //--------------------------------------------------------------------------*/
-	// void Slider::OnInitialize(int value)
-	// {
-	// 	SyncThumbPositionWithValue();
-	// }
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
@@ -189,7 +177,7 @@ namespace gui
 	void Slider::SetGraphicElemntsWithThumbPosition(uint16_t x)
 	{
 		// left track gelement
-		LeftTrack.PictureData.Width = x;
+		LeftTrack.Width = x;
 		
 		// thumb gelement
 		Thumb.X = x;
@@ -197,7 +185,8 @@ namespace gui
 		// right track gelement
 		x += Thumb.GetWidth(); // x to begin right track drawing
 		RightTrack.X = x;
-		RightTrack.PictureData.Width = Width - x;
-		RightTrack.PictureData.SkippedRows = RightTrack.PictureData.Bitmap.width - RightTrack.GetWidth();
+		RightTrack.Width = Width - x;
+		RightTrack.Foreground.SkippedRows =
+			RightTrack.Foreground.Bitmap.width - RightTrack.GetWidth();
 	}
 }

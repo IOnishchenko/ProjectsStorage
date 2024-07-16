@@ -31,14 +31,15 @@ namespace gui
 		const Action<void(RadioButtonItem *)> * OnItemSelected;
 
 		// methods
-		IGElement * GetIGElement() override;
+		IGElement * GetGraphicElement() override;
 		RadioButtonItem::State GetState() {return _state;};
 		
 	protected:
+		// fields
+		RadioButtonItem::State _state;
 		IGElement * _normalGEl;
 		IGElement * _pressedGEl;
 		IGElement * _selectedGEl;
-		RadioButtonItem::State _state;
 		
 		friend class RadioButton;
 	};

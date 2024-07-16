@@ -7,9 +7,8 @@ namespace gui
 	//------------------------------------------------------------*/
 	GEText::GEText(uint16_t x, uint16_t y, const std::string_view & txt, uint32_t foreground, uint32_t background,
 		const Font & font, IGElement * nextElement)
-		: IGElement(x, y, nextElement), Text{txt}, 
-		Foreground{foreground}, Background{background}, _font{font},
-		_currectIndex{0}
+		: IGElement(x, y, nextElement), Text{txt}, Foreground{foreground}, Background{background},
+		_font{font}, _currectIndex{0}
 	{
 	}
 
@@ -36,14 +35,6 @@ namespace gui
 	}
 
 	/*------------------------------------------------------------//
-	// Gets a gdata of current symbols (according CurrentSymbols value)
-	//------------------------------------------------------------*/
-	const PictureDataItem * GEText::GetCurrentCharacterGData()
-	{
-		return Font::GetCharacterGraphicData(Text[_currectIndex]);
-	}
-	
-	/*------------------------------------------------------------//
 	// Gets a text height (pixels)
 	//------------------------------------------------------------*/
 	uint16_t GEText::GetHeight()
@@ -56,7 +47,7 @@ namespace gui
 	//------------------------------------------------------------*/
 	uint16_t GEText::GetWidth()
 	{
-		return Font::GetTextLineWidthInPixels(Text);
+		return Font::GetTextLineWidthInPixels(_font, Text);
 	}
 	
 	/*------------------------------------------------------------//

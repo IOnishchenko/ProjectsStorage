@@ -9,7 +9,6 @@
 
 #include "lcd-driver.h"
 
-#include "font_bw_size8.h"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -148,8 +147,6 @@ void gui_thread(void * args)
 	// 	0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa
 	// };
 	// sh1106.write_gdata(&gdata0[0], sizeof(gdata0));
-
-	sh1106.write_gdata(pixelsData_Old_School_Adventures7_0x30, );
 
 	while(1)
 	{

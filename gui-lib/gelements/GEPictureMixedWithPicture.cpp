@@ -17,7 +17,8 @@ namespace gui
 	/*------------------------------------------------------------//
 	// constructor
 	//------------------------------------------------------------*/
-	GEPicture(const PictureDataItem &fbitmap, const PictureDataItem &bbitmap, IGElement * nextElemen)
+	GEPictureMixedWithPicture::GEPictureMixedWithPicture(const PictureDataItem &fbitmap, const PictureDataItem &bbitmap,
+		IGElement * nextElemen)
 		:GEPicture(fbitmap, nextElemen), BackgroundPicture{0, 0, bbitmap}
 	{
 	}

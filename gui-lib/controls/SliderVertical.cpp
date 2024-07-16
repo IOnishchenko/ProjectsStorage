@@ -6,10 +6,10 @@ namespace gui
 	// constructors
 	//--------------------------------------------------------------------------*/
 	SliderVertical::SliderVertical(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		uint16_t borderSize, int maxValue, int value, const Action<void(int)> &onValueChenged,
-		const GEPicture &thumb, const GEPicture &leftTrack, const GEPicture &rightTrack)
-		:UIControl(x, y, w, h, context), MaxValue{0}, MinValue{0}, Value{value}, _borderSize{borderSize},
-		_valueChengedCmd{onValueChenged}, LeftTrack{LeftTrack}, Thumb{thumb}, RightTrack{RightTrack}
+		uint16_t borderSize, int maxValue, int value, const Action<void(int)> & onValueChenged,
+		const GEPicture & thumb, const GEPicture & topTrack, const GEPicture & bottomTrack)
+		:IUIControl(x, y, w, h, context), MaxValue{0}, MinValue{0}, Value{value}, _borderSize{borderSize},
+		TopTrack{topTrack}, Thumb{thumb}, BottomTrack{bottomTrack}, _valueChangedCmd{onValueChenged}
 	{
 		SyncThumbPositionWithValue();
 	}
@@ -17,48 +17,48 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPress(TouchScreenEven & pen)
+	void SliderVertical::OnPress(ITouchScreenEventHandler & event)
 	{
-		uint16_t ypen = pen.y - Y;
+		uint16_t ypen = _context.LastTouchScreenEvent.y - Y;
 		uint16_t ythumb = Thumb.Y;
 		// check if the thumb is under the pen
 		if((ypen > ythumb)&&(ypen < (ythumb + Thumb.GetHeight())))
 			return;
 
-		OnPenMove(pen);
+		OnPenMove(event);
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnRelease(TouchScreenEven & pen)
+	void SliderVertical::OnRelease(ITouchScreenEventHandler &)
 	{
 		SyncThumbPositionWithValue();
 		Draw();
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenEnter(TouchScreenEven & pen)
+	void SliderVertical::OnPenEnter(ITouchScreenEventHandler & event)
 	{
-		OnPenMove(pen);
+		OnPenMove(event);
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenLeave(TouchScreenEven & pen)
+	void SliderVertical::OnPenLeave(ITouchScreenEventHandler & event)
 	{
-		OnRelease(pen);
+		OnRelease(event);
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenMove(TouchScreenEven & pen)
+	void SliderVertical::OnPenMove(ITouchScreenEventHandler &)
 	{
-		auto ypen = pen.y - Y;
+		auto ypen = _context.LastTouchScreenEvent.y - Y;
 		if(!((ypen >= _borderSize) && (ypen <= (Height - _borderSize))))
 			return;
 		// move thumb to position
@@ -94,15 +94,7 @@ namespace gui
 			}
 		}
 	}
-	
-	// /*--------------------------------------------------------------------------//
-	// // 
-	// //--------------------------------------------------------------------------*/
-	// void SliderVertical::OnInitialize(int value)
-	// {
-	// 	SyncThumbPositionWithValue();
-	// }
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
@@ -133,11 +125,7 @@ namespace gui
 	{
 		return &TopTrack;
 	}
-	
-	/*--------------------------------------------------------------------------//
-	// ---------------------- Protected Methods --------------------------------
-	//--------------------------------------------------------------------------*/
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
@@ -156,7 +144,7 @@ namespace gui
 		SetGraphicElemntsWithThumbPosition(yn);
 		return yn;
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
@@ -187,17 +175,17 @@ namespace gui
 		if(y & 0x01)
 			y++;
 
-		TopTrack.PictureData.Height = y;
+		TopTrack.Height = y;
 
 		Thumb.Y = y;
 		y += Thumb.GetHeight();
 
 		BottomTrack.Y = y;
-		BottomTrack.PictureData.Height = Height - TopTrack.GetHeight() - Thumb.GetHeight();
-		if(BottomTrack.PictureData.Height & 0x01)
-			BottomTrack.PictureData.Height--;
+		BottomTrack.Height = Height - TopTrack.GetHeight() - Thumb.GetHeight();
+		if(BottomTrack.Height & 0x01)
+			BottomTrack.Height--;
 
-		BottomTrack.PictureData.SkippedLines =
-			BottomTrack.PictureData.Bitmap.height - BottomTrack.PictureData.Height;
+		BottomTrack.Foreground.SkippedLines =
+			BottomTrack.Foreground.Bitmap.height - BottomTrack.Height;
 	}
 }

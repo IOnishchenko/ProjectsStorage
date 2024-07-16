@@ -16,7 +16,8 @@ namespace gui
 	/*------------------------------------------------------------//
 	// constructor
 	//------------------------------------------------------------*/
-	GEMixedPictureWithColor(const PictureDataItem &bitmap, uint32_t backgroundColor, IGElement * nextElemen)
+	GEMixedPictureWithColor::GEMixedPictureWithColor(const PictureDataItem &bitmap, uint32_t backgroundColor,
+		IGElement * nextElemen)
 		:GEPicture(bitmap, nextElemen), BackgroundColor{backgroundColor}
 	{
 	}

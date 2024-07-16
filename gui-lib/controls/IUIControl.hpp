@@ -28,7 +28,7 @@ namespace gui
 
 		// methods
 		virtual IGElement * GetGraphicElement() = 0;
-		virtual void Draw();
+		virtual void Draw() = 0;
 		// common methods
 		bool IsEnable() const;
 		virtual void SetEnable(bool);
@@ -38,9 +38,9 @@ namespace gui
 		
 	protected:
 
-		IUIContext & _context;
 		bool _enable;
 		bool _visible;
+		const IUIContext & _context;
 	};
 }
 

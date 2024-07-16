@@ -6,8 +6,8 @@ namespace gui
 	// 
 	//--------------------------------------------------------------------------*/
 	ITouchScreenEventObserver::ITouchScreenEventObserver(AsyncCommandDispatcher & asyncDispatcher)
-		:HandleTouchPanelEventCmd(this, ITouchScreenEventObserver::HandleTouchPanelEvent,
-		asyncDispatcher, ITouchScreenEventObserver::HasRegistratedHandlers)
+		:HandleTouchPanelEventCmd(this, &ITouchScreenEventObserver::HandleTouchPanelEvent,
+		asyncDispatcher, &ITouchScreenEventObserver::HasRegistratedHandlers)
 	{}
 
 	/*--------------------------------------------------------------------------//
@@ -23,6 +23,6 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	bool ITouchScreenEventObserver::HasRegistratedHandlers()
 	{
-
+		return true;
 	}
 }

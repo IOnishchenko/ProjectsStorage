@@ -1,7 +1,5 @@
 
 #include "CheckBox.hpp"
-#include "bitmap_resources.h"
-
 
 namespace gui
 {
@@ -11,9 +9,9 @@ namespace gui
 	CheckBox::CheckBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		const Action<void(CheckBox *)> &checkedCmd, const Action<void(CheckBox *)> &uncheckedCmd,
 		IGElement * unchecked, IGElement * pressed, IGElement * checked)
-		:UIControl(x, y, w, h, context), _state(CheckBoxState::Unchecked), _visualState(CheckBoxState::Unchecked),
-		_uncheckedGEl{unchecked}, _pressedGEl{pressed}, _checkedGEl{checked},
-		_checkedCmd{checkedCmd}, _uncheckedCmd{uncheckedCmd}
+		:IUIControl(x, y, w, h, context), _state(CheckBoxState::Unchecked), _visualState(CheckBoxState::Unchecked),
+		_checkedCmd{checkedCmd}, _uncheckedCmd{uncheckedCmd},
+		_uncheckedGEl{unchecked}, _pressedGEl{pressed}, _checkedGEl{checked}
 	{
 	}
 
@@ -37,7 +35,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnPress(TouchScreenEven & penInfo)
+	void CheckBox::OnPress(ITouchScreenEventHandler &)
 	{
 		_visualState = CheckBoxState::Pressed;
 		Draw();
@@ -46,7 +44,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnRelease(TouchScreenEven & penInfo)
+	void CheckBox::OnRelease(ITouchScreenEventHandler &)
 	{ 
 		if(_visualState != CheckBoxState::Pressed)
 			return;
@@ -69,7 +67,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnPenLeave(TouchScreenEven & penInfo)
+	void CheckBox::OnPenLeave(ITouchScreenEventHandler &)
 	{
 		if(_visualState != CheckBoxState::Pressed)
 			return;

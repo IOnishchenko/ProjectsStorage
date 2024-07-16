@@ -11,51 +11,51 @@ namespace gui
 	{
 	}
 
-	RadioButton::RadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h,
+	RadioButton::RadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		const std::initializer_list<IUIControl *> & items, IGElement * gelement)
-		: Group(x, y, w, h, context, items, gelement)
+		:Group(x, y, w, h, context, items, gelement)
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPress(TouchScreenEven & penInfo)
+	void RadioButton::OnPress(ITouchScreenEventHandler &)
 	{
-		RadioButtonItem * cntr = static_cast<RadioButtonItem *>(GetEnabledControlByCoordinate(penInfo.x, penInfo.y));
-		if(cntr && (cntr != _activeControl))
-		{
-			cntr->_state = RadioButtonItem::State::Pressed;
-			cntr->Draw();
-		}
+		// RadioButtonItem * cntr = static_cast<RadioButtonItem *>(GetEnabledControlByCoordinate(penInfo.x, penInfo.y));
+		// if(cntr && (cntr != _activeControl))
+		// {
+		// 	cntr->_state = RadioButtonItem::State::Pressed;
+		// 	cntr->Draw();
+		// }
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnRelease(TouchScreenEven & penInfo)
+	void RadioButton::OnRelease(ITouchScreenEventHandler &)
 	{
-		auto pressedControl = FindItemWithState(RadioButtonItem::State::Pressed);
+		// auto pressedControl = FindItemWithState(RadioButtonItem::State::Pressed);
 		
-		if(!pressedControl)
-			return;
+		// if(!pressedControl)
+		// 	return;
 		
-		if(_activeControl)
-		{
-			auto activeControl = static_cast<RadioButtonItem*>(_activeControl);
-			activeControl->_state = RadioButtonItem::State::Normal;
-			activeControl->Draw();
-		}
-		_activeControl = pressedControl;
-		pressedControl->_state = RadioButtonItem::State::Selected;
-		pressedControl->Draw();
-		(*pressedControl->OnItemSelected)(pressedControl);
+		// if(_activeControl)
+		// {
+		// 	auto activeControl = static_cast<RadioButtonItem*>(_activeControl);
+		// 	activeControl->_state = RadioButtonItem::State::Normal;
+		// 	activeControl->Draw();
+		// }
+		// _activeControl = pressedControl;
+		// pressedControl->_state = RadioButtonItem::State::Selected;
+		// pressedControl->Draw();
+		// (*pressedControl->OnItemSelected)(pressedControl);
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPenLeave(TouchScreenEven & penInfo)
+	void RadioButton::OnPenLeave(ITouchScreenEventHandler &)
 	{
 		auto cntr = FindItemWithState(RadioButtonItem::State::Pressed);
 		if(cntr)
@@ -68,22 +68,14 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPenMove(TouchScreenEven & penInfo)
+	void RadioButton::OnPenMove(ITouchScreenEventHandler &)
 	{
-		auto cntr = FindItemWithState(RadioButtonItem::State::Pressed);
-		if(cntr && !cntr->IsPositionInsideControl(penInfo.x, penInfo.y))
-		{
-			cntr->_state = RadioButtonItem::State::Normal;
-			cntr->Draw();
-		}
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	IGElement * RadioButton::GetGraphicElement()
-	{
-		return _gelement;
+		// auto cntr = FindItemWithState(RadioButtonItem::State::Pressed);
+		// if(cntr && !cntr->IsPositionInsideControl(penInfo.x, penInfo.y))
+		// {
+		// 	cntr->_state = RadioButtonItem::State::Normal;
+		// 	cntr->Draw();
+		// }
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -91,14 +83,14 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void RadioButton::SetSelected(RadioButtonItem * selected)
 	{
-		for(auto item : _content)
-		{
-			auto rbutton = static_cast<RadioButtonItem *>(item);
-			rbutton->_state = rbutton == selected
-				? RadioButtonItem::State::Selected
-				: RadioButtonItem::State::Normal;
-		}
-		_activeControl = selected;
+		// for(auto item : _content)
+		// {
+		// 	auto rbutton = static_cast<RadioButtonItem *>(item);
+		// 	rbutton->_state = rbutton == selected
+		// 		? RadioButtonItem::State::Selected
+		// 		: RadioButtonItem::State::Normal;
+		// }
+		// _activeControl = selected;
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -106,13 +98,13 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void RadioButton::ClearSelection()
 	{
-		if(_activeControl)
-		{
-			auto itm = static_cast<RadioButtonItem *>(_activeControl);
-			itm->_state = RadioButtonItem::State::Normal;
-			itm->Draw();
-			_activeControl = nullptr;
-		}
+		// if(_activeControl)
+		// {
+		// 	auto itm = static_cast<RadioButtonItem *>(_activeControl);
+		// 	itm->_state = RadioButtonItem::State::Normal;
+		// 	itm->Draw();
+		// 	_activeControl = nullptr;
+		// }
 	}
 
 	/*--------------------------------------------------------------------------//

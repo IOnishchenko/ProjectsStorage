@@ -86,8 +86,8 @@ struct Command : public Action<void(TParam...)>
 	}
 
 private:
-	void(TClss::*_action)(TParam...);
 	TClss * _class;
+	void(TClss::*_action)(TParam...);
 };
 
 #endif // COMMAND_HPP

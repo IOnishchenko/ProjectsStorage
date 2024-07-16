@@ -12,7 +12,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	class Slider : public UIControl, public ITouchScreenEventHandler, public IEncoderEventHandler
+	class Slider : public IUIControl, public ITouchScreenEventHandler, public IEncoderEventHandler
 	{
 	public:
 		// properties
@@ -29,26 +29,24 @@ namespace gui
 		~Slider() override = default;
 
 		// ITouchScreenEventHandler methods
-		void OnPress(TouchScreenEven &) override;
-		void OnRelease(TouchScreenEven &) override;
-		void OnPenEnter(TouchScreenEven &) override;
-		void OnPenLeave(TouchScreenEven &) override;
-		void OnPenMove(TouchScreenEven &) override;
+		void OnPress(ITouchScreenEventHandler &) override;
+		void OnRelease(ITouchScreenEventHandler &) override;
+		void OnPenEnter(ITouchScreenEventHandler &) override;
+		void OnPenLeave(ITouchScreenEventHandler &) override;
+		void OnPenMove(ITouchScreenEventHandler &) override;
 		// IEncoderEventHandler methods
 		void OnEncoderMoved(EncoderEvent &) override;
-		// UIControl methods
-		// void OnInitialize(int) override;
+		// IUIControl methods
 		IGElement * GetGraphicElement() override;
 		// methods
 		int GetValue();
 			
 	protected:
 		// proprties
+		const uint16_t _borderSize;
 		GEPicture LeftTrack;
 		GEPicture Thumb;
 		GEPicture RightTrack;
-		
-		const uint16_t _borderSize;
 		const Action<void(int)> & _valueChengedCmd;
 		// methods
 		void SetValue(int value);
