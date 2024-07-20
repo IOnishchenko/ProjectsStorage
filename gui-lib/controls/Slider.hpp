@@ -4,6 +4,8 @@
 #include "IUIControl.hpp"
 #include "ITouchScreenEventHandler.hpp"
 #include "IEncoderEventHandler.hpp"
+#include "IFocusEventHandler.hpp"
+#include "IKeyboardEventHandler.hpp"
 #include "GEPicture.hpp"
 #include "Action.hpp"
 
@@ -12,7 +14,9 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	class Slider : public IUIControl, public ITouchScreenEventHandler, public IEncoderEventHandler
+	class Slider : public IUIControl,
+		public ITouchScreenEventHandler, public IEncoderEventHandler,
+		public IFocusEventHandler, public IKeyboardEventHandler
 	{
 	public:
 		// properties
@@ -26,18 +30,31 @@ namespace gui
 			const GEPicture & thumb, const GEPicture & leftTrack, const GEPicture & rightTrack);
 		
 		// dectructor
-		~Slider() override = default;
+		~Slider() override;
 
 		// ITouchScreenEventHandler methods
-		void OnPress(ITouchScreenEventHandler &) override;
-		void OnRelease(ITouchScreenEventHandler &) override;
-		void OnPenEnter(ITouchScreenEventHandler &) override;
-		void OnPenLeave(ITouchScreenEventHandler &) override;
-		void OnPenMove(ITouchScreenEventHandler &) override;
+		void OnPress(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPenEnter(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		bool IsUnderTouch(uint16_t x, uint16_t y) override;
+
+		// IFocusEventHandler method
+		void OnFocused(IFocusEventHandler *) override;
+		void OnFocusLost(IFocusEventHandler *) override;
+
 		// IEncoderEventHandler methods
-		void OnEncoderMoved(EncoderEvent &) override;
+		void OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event) override;
+
+		// IKeyboardEventHandler methods
+		void OnKeyPress(IKeyboardEventHandler *, KeyEvent & event) override;
+		void OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event) override;
+		void OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event) override;
+
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;
+	
 		// methods
 		int GetValue();
 			

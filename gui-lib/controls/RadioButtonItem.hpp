@@ -26,7 +26,7 @@ namespace gui
 
 		// destructor
 		~RadioButtonItem() override = default;
-		
+
 		// properties
 		const Action<void(RadioButtonItem *)> * OnItemSelected;
 

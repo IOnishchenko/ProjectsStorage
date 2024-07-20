@@ -1,6 +1,7 @@
 #ifndef GUI_ITOUCH_SCREEN_EVENT_OBSERVER_HPP
 #define GUI_ITOUCH_SCREEN_EVENT_OBSERVER_HPP
 
+#include "ISubscriberManager.hpp"
 #include "ITouchScreenEventHandler.hpp"
 #include "UIControlEvents.hpp"
 #include "AsyncCommand.hpp"
@@ -8,7 +9,7 @@
 
 namespace gui
 {
-	class ITouchScreenEventObserver
+	class ITouchScreenEventObserver : public ISubscriberManager<ITouchScreenEventHandler>
 	{
 	public:
 		// constructor
@@ -16,10 +17,6 @@ namespace gui
 
 		// destructor
 		virtual ~ITouchScreenEventObserver() = default;
-		
-		// methods
-		void RegistrateHandler(ITouchScreenEventHandler * handler);
-		void UnregistrateHandler(ITouchScreenEventHandler * handler);
 
 		// fields
 		// called in another thread or interrupt handler
@@ -28,7 +25,6 @@ namespace gui
 	private:
 		// methods
 		void HandleTouchPanelEvent(TouchScreenEven event);
-		bool HasRegistratedHandlers();
 	};
 }
 

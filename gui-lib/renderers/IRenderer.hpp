@@ -4,7 +4,7 @@
 #include "stdint.h"
 
 namespace gui
-{    
+{
 	class GEText;
 	class GERectangle;
 	class GEPicture;
@@ -12,7 +12,7 @@ namespace gui
 	class GEPictureMixedWithPicture;
 
 	struct IRenderer
-    {
+	{
 		// dectructor
 		virtual ~IRenderer() = default;
 
@@ -22,7 +22,7 @@ namespace gui
 		virtual void Draw(const GEPicture * gel, uint16_t x, uint16_t y, bool enabled = true) = 0;
 		virtual void Draw(const GEPictureMixedWithColor * gel, uint16_t x, uint16_t y, bool enabled = true) = 0;
 		virtual void Draw(const GEPictureMixedWithPicture * gel, uint16_t x, uint16_t y, bool enabled = true) = 0;
-    };
+	};
 }
 
 #endif // GUI_IRENDERER_HPP

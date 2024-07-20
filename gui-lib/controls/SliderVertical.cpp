@@ -1,4 +1,5 @@
 #include "SliderVertical.hpp"
+#include "ITouchScreenEventObserver.hpp"
 
 namespace gui
 {
@@ -12,26 +13,35 @@ namespace gui
 		TopTrack{topTrack}, Thumb{thumb}, BottomTrack{bottomTrack}, _valueChangedCmd{onValueChenged}
 	{
 		SyncThumbPositionWithValue();
+		context.TouchScreenObserver->Subscribe(this);
+	}
+
+	/*--------------------------------------------------------------------------//
+	// destructor
+	//--------------------------------------------------------------------------*/
+	SliderVertical::~SliderVertical()
+	{
+		_context.TouchScreenObserver->Unsubscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPress(ITouchScreenEventHandler & event)
+	void SliderVertical::OnPress(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
-		uint16_t ypen = _context.LastTouchScreenEvent.y - Y;
+		uint16_t ypen = event.y - Y;
 		uint16_t ythumb = Thumb.Y;
 		// check if the thumb is under the pen
 		if((ypen > ythumb)&&(ypen < (ythumb + Thumb.GetHeight())))
 			return;
 
-		OnPenMove(event);
+		OnPenMove(handler, event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnRelease(ITouchScreenEventHandler &)
+	void SliderVertical::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		SyncThumbPositionWithValue();
 		Draw();
@@ -40,25 +50,25 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenEnter(ITouchScreenEventHandler & event)
+	void SliderVertical::OnPenEnter(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
-		OnPenMove(event);
+		OnPenMove(handler, event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenLeave(ITouchScreenEventHandler & event)
+	void SliderVertical::OnPenLeave(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
-		OnRelease(event);
+		OnRelease(handler, event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenMove(ITouchScreenEventHandler &)
+	void SliderVertical::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
-		auto ypen = _context.LastTouchScreenEvent.y - Y;
+		auto ypen = event.y - Y;
 		if(!((ypen >= _borderSize) && (ypen <= (Height - _borderSize))))
 			return;
 		// move thumb to position
@@ -72,13 +82,59 @@ namespace gui
 		}
 		Draw();
 	}
-	
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	bool SliderVertical::IsUnderTouch(uint16_t x, uint16_t y)
+	{
+		return IsPositionInsideControl(x, y);
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void SliderVertical::OnFocused(IFocusEventHandler *)
+	{
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void SliderVertical::OnFocusLost(IFocusEventHandler *)
+	{
+	}
+
+		/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void SliderVertical::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void SliderVertical::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void SliderVertical::OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnEncoderMoved(EncoderEvent & action)
+	void SliderVertical::OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event)
 	{
-		switch(action.Direction)
+		switch(event.Direction)
 		{
 			case EncoderDirection::ENC_INCREASE:
 			{

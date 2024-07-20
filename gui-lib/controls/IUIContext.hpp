@@ -5,15 +5,20 @@
 
 namespace gui
 {
-	class IUIControl;
 	class IRenderer;
+	class IEncoderEventObserver;
+	class IFocusManager;
+	class ITouchScreenEventObserver;
 
 	struct IUIContext
 	{
 		IRenderer & Renderer;
-		IUIControl * FocusedControl;
-		IUIControl * PressedControl;
-		TouchScreenEven LastTouchScreenEvent;
+
+		IEncoderEventObserver * EncoderEventObserver;
+
+		IFocusManager * FocusManager;
+
+		ITouchScreenEventObserver * TouchScreenObserver;
 	};
 }
 

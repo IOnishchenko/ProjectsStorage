@@ -27,7 +27,7 @@ static void sh1106_initialize()
 		0x81, // The Contrast Control Mode Set
 		0x80,
 
-		0xa1, // Set Segment Re-map
+		0xa0, // Set Segment Re-map - none
 		0xa4, // Set Entire Display OFF/ON
 		0xa6, // Set Normal/Reverse Display
 
@@ -38,7 +38,7 @@ static void sh1106_initialize()
 		0x8b,
 		
 		0xb0, // Set Page Address
-		0xc8, // Set Common Output Scan Direction
+		0xc0, // Set Common Output Scan Direction - none
 
 		0xd3, // Set Display Offset
 		0x02,

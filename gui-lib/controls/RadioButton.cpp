@@ -1,4 +1,5 @@
 #include "RadioButton.hpp"
+#include "ITouchScreenEventObserver.hpp"
 
 namespace gui
 {
@@ -9,18 +10,28 @@ namespace gui
 		const std::forward_list<IUIControl *> & items, IGElement * gelement)
 		:Group(x, y, w, h, context, items, gelement)
 	{
+		context.TouchScreenObserver->Subscribe(this);
 	}
 
 	RadioButton::RadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		const std::initializer_list<IUIControl *> & items, IGElement * gelement)
 		:Group(x, y, w, h, context, items, gelement)
 	{
+		context.TouchScreenObserver->Subscribe(this);
+	}
+
+	/*--------------------------------------------------------------------------//
+	// destructor
+	//--------------------------------------------------------------------------*/
+	RadioButton::~RadioButton()
+	{
+		_context.TouchScreenObserver->Unsubscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPress(ITouchScreenEventHandler &)
+	void RadioButton::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		// RadioButtonItem * cntr = static_cast<RadioButtonItem *>(GetEnabledControlByCoordinate(penInfo.x, penInfo.y));
 		// if(cntr && (cntr != _activeControl))
@@ -33,7 +44,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnRelease(ITouchScreenEventHandler &)
+	void RadioButton::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		// auto pressedControl = FindItemWithState(RadioButtonItem::State::Pressed);
 		
@@ -55,7 +66,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPenLeave(ITouchScreenEventHandler &)
+	void RadioButton::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		auto cntr = FindItemWithState(RadioButtonItem::State::Pressed);
 		if(cntr)
@@ -68,7 +79,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPenMove(ITouchScreenEventHandler &)
+	void RadioButton::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		// auto cntr = FindItemWithState(RadioButtonItem::State::Pressed);
 		// if(cntr && !cntr->IsPositionInsideControl(penInfo.x, penInfo.y))
@@ -76,6 +87,44 @@ namespace gui
 		// 	cntr->_state = RadioButtonItem::State::Normal;
 		// 	cntr->Draw();
 		// }
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	bool RadioButton::IsUnderTouch(uint16_t x, uint16_t y)
+	{
+		return IsPositionInsideControl(x, y);
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void RadioButton::OnFocused(IFocusEventHandler *)
+	{
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void RadioButton::OnFocusLost(IFocusEventHandler *)
+	{
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void RadioButton::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void RadioButton::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
 	}
 
 	/*--------------------------------------------------------------------------//

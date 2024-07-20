@@ -13,7 +13,7 @@ namespace gui
 		virtual ~IEncoderEventHandler() = default;
 
 		// methods
-		virtual void OnEncoderMoved(EncoderEvent &);
+		virtual void OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event) = 0;
 	};
 }
 

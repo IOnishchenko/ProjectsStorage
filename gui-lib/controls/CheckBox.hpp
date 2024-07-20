@@ -3,6 +3,8 @@
 
 #include "IUIControl.hpp"
 #include "ITouchScreenEventHandler.hpp"
+#include "IFocusEventHandler.hpp"
+#include "IKeyboardEventHandler.hpp"
 #include "IGElement.hpp"
 #include "Action.hpp"
 
@@ -21,7 +23,9 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	class CheckBox : public IUIControl, public ITouchScreenEventHandler
+	class CheckBox : public IUIControl,
+		public ITouchScreenEventHandler, public IFocusEventHandler,
+		public IKeyboardEventHandler
 	{
 		
 	public:
@@ -31,14 +35,25 @@ namespace gui
 			IGElement * unchecked, IGElement * pressed, IGElement * checked);
 		
 		// destructor
-		~CheckBox() override = default;
+		~CheckBox() override;
 
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;
+
 		// ITouchScreenEventHandler methods
-		void OnPress(ITouchScreenEventHandler & penInfo) override;
-		void OnRelease(ITouchScreenEventHandler & penInfo) override;
-		void OnPenLeave(ITouchScreenEventHandler & penInfo) override;
+		void OnPress(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		bool IsUnderTouch(uint16_t x, uint16_t y) override;
+
+		// IFocusEventHandler methods
+		void OnFocused(IFocusEventHandler *) override;
+		void OnFocusLost(IFocusEventHandler *) override;
+
+		// IKeyboardEventHandler methods
+		void OnKeyPress(IKeyboardEventHandler *, KeyEvent & event) override;
+		void OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event) override;
+
 		// methods
 		CheckBoxState GetState();
 		void SetState(CheckBoxState state);

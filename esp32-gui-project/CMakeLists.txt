@@ -7,6 +7,9 @@ cmake_minimum_required(VERSION 3.20)
 set(root_dir "./..")
 set(project_dir "./../..")
 
+# add_compile_definitions(GUI_TOUCH_SCREEN_ENABLED)
+add_compile_definitions(GUI_FOCUSABLE_CONTROLS_ENABLE)
+
 include("${root_dir}/command/command.cmake")
 include("${root_dir}/common/common.cmake")
 include("${root_dir}/esp32-common/esp32-common.cmake")

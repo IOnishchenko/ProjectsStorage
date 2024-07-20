@@ -3,6 +3,8 @@
 
 #include "RadioButtonItem.hpp"
 #include "ITouchScreenEventHandler.hpp"
+#include "IFocusEventHandler.hpp"
+#include "IKeyboardEventHandler.hpp"
 #include "Group.hpp"
 
 namespace gui
@@ -10,7 +12,9 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	class RadioButton : public ITouchScreenEventHandler, public Group
+	class RadioButton : public Group,
+		public ITouchScreenEventHandler, public IFocusEventHandler,
+		public IKeyboardEventHandler
 	{
 	public:
 		// constructors
@@ -21,13 +25,23 @@ namespace gui
 			const std::forward_list<IUIControl *> & items, IGElement * gelement);
 
 		// destructor
-		~RadioButton() override = default;
+		~RadioButton() override;
 		
 		// methods
-		void OnPress(ITouchScreenEventHandler &) override;
-		void OnRelease(ITouchScreenEventHandler &) override;
-		void OnPenLeave(ITouchScreenEventHandler &) override;
-		void OnPenMove(ITouchScreenEventHandler &) override;
+		// ITouchScreenEventHandler methods
+		void OnPress(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		bool IsUnderTouch(uint16_t x, uint16_t y) override;
+
+		// IFocusEventHandler methods
+		void OnFocused(IFocusEventHandler *) override;
+		void OnFocusLost(IFocusEventHandler *) override;
+
+		// IKeyboardEventHandler methods
+		void OnKeyPress(IKeyboardEventHandler *, KeyEvent & event) override;
+		void OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event) override;
 
 		void SetSelected(RadioButtonItem * selected);
 		void ClearSelection();

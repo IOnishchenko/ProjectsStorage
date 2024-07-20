@@ -1,4 +1,5 @@
 #include "Slider.hpp"
+#include "ITouchScreenEventObserver.hpp"
 
 namespace gui
 {
@@ -12,53 +13,62 @@ namespace gui
 		LeftTrack{leftTrack}, Thumb{thumb}, RightTrack{rightTrack}, _valueChengedCmd{onValueChenged}
 	{
 		SyncThumbPositionWithValue();
+		context.TouchScreenObserver->Subscribe(this);
+	}
+
+	/*--------------------------------------------------------------------------//
+	// destructor
+	//--------------------------------------------------------------------------*/
+	Slider::~Slider()
+	{
+		_context.TouchScreenObserver->Unsubscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnPress(ITouchScreenEventHandler & event)
+	void Slider::OnPress(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
-		uint16_t xpen = _context.LastTouchScreenEvent.x - X;
+		uint16_t xpen = event.x - X;
 		uint16_t xthumb = Thumb.X;
 		// check if the thumb is under the pen
 		if((xpen > xthumb)&&(xpen < (xthumb + Thumb.GetWidth())))
 			return;
 
-		OnPenMove(event);
+		OnPenMove(handler, event);
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnRelease(ITouchScreenEventHandler &)
+	void Slider::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		SyncThumbPositionWithValue();
 		Draw();
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnPenEnter(ITouchScreenEventHandler & event)
+	void Slider::OnPenEnter(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
-		OnPenMove(event);
+		OnPenMove(handler, event);
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnPenLeave(ITouchScreenEventHandler & event)
+	void Slider::OnPenLeave(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
-		OnRelease(event);
+		OnRelease(handler, event);
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnPenMove(ITouchScreenEventHandler &)
+	void Slider::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
-		auto xpen = _context.LastTouchScreenEvent.x - X;
+		auto xpen = event.x - X;
 		if(!((xpen >= _borderSize) && (xpen <= (Width - _borderSize))))
 			return;
 		// move thumb to position
@@ -72,13 +82,21 @@ namespace gui
 		}
 		Draw();
 	}
-	
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	bool Slider::IsUnderTouch(uint16_t x, uint16_t y)
+	{
+		return IsPositionInsideControl(x, y);
+	}
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void Slider::OnEncoderMoved(EncoderEvent & action)
+	void Slider::OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event)
 	{
-		switch(action.Direction)
+		switch(event.Direction)
 		{
 			case EncoderDirection::ENC_INCREASE:
 			{
@@ -93,6 +111,30 @@ namespace gui
 				break;
 			}
 		}
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void Slider::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void Slider::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void Slider::OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
 	}
 
 	/*--------------------------------------------------------------------------//

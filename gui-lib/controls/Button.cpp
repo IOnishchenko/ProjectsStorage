@@ -1,4 +1,5 @@
 #include "Button.hpp"
+#include "ITouchScreenEventObserver.hpp"
 
 namespace gui
 {
@@ -10,6 +11,15 @@ namespace gui
 		:IUIControl(x, y, w, h, context), _state{ButtonState::Normal}, _clickCmd{clickCmd},
 		_normalBG{&normalGEl}, _pressedBG{&pressedGEl}
 	{
+		context.TouchScreenObserver->Subscribe(this);
+	}
+
+	/*--------------------------------------------------------------------------//
+	// destructor
+	//--------------------------------------------------------------------------*/
+	Button::~Button()
+	{
+		_context.TouchScreenObserver->Unsubscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -31,7 +41,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnPress(ITouchScreenEventHandler &)
+	void Button::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		_state = ButtonState::Pressed;
 		Draw();
@@ -40,21 +50,59 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnRelease(ITouchScreenEventHandler &)
+	void Button::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		_state = ButtonState::Normal;
 		Draw();
 		_clickCmd(this);
 	}
-	
+
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnPenLeave(ITouchScreenEventHandler &)
+	void Button::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		if(_state == ButtonState::Normal)
 			return;
 		_state = ButtonState::Normal;
 		Draw();
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	bool Button::IsUnderTouch(uint16_t x, uint16_t y)
+	{
+		return IsPositionInsideControl(x, y);
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void Button::OnFocused(IFocusEventHandler *)
+	{
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void Button::OnFocusLost(IFocusEventHandler *)
+	{
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void Button::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void Button::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
 	}
 }
