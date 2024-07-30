@@ -3,10 +3,14 @@
 #include "configuration.h"
 #include "lcd-driver.h"
 
+#define ST7789_DONT_FILL_GRAM_WITH_COLOR
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
+#ifndef ST7789_DONT_FILL_GRAM_WITH_COLOR
 static void st7789_fill_gram();
+#endif // ST7789_DONT_FILL_GRAM_WITH_COLOR
 
 /*-----------------------------------------------------------------//
 //
@@ -39,8 +43,10 @@ static void st7789_initialize()
 	};
 	st7789_write_command(cmd3a, sizeof(cmd3a));
 
+#ifndef ST7789_DONT_FILL_GRAM_WITH_COLOR
 	// fill gram
 	st7789_fill_gram();
+#endif // ST7789_DONT_FILL_GRAM_WITH_COLOR
 
 	uint8_t cmd11[] =
 	{
@@ -104,6 +110,7 @@ static void st7789_start_writing_gdata()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
+#ifndef ST7789_DONT_FILL_GRAM_WITH_COLOR
 static void st7789_fill_gram()
 {
 	// fill gram to display picture or color
@@ -132,6 +139,7 @@ static void st7789_fill_gram()
 	st7789_wait_and_delay(0);
 	heap_caps_free(gdata);
 }
+#endif // ST7789_DONT_FILL_GRAM_WITH_COLOR
 
 /*-----------------------------------------------------------------//
 //

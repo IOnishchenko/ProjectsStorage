@@ -20,7 +20,6 @@ namespace gui
 		~GERectangle() override = default;
 
 		// methods
-		void DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer) override;
 		uint16_t GetWidth() override;
 		uint16_t GetHeight() override;
 		void SetWidth(uint16_t width);

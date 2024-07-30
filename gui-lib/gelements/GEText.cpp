@@ -5,33 +5,21 @@ namespace gui
 	/*------------------------------------------------------------//
 	// Constructor
 	//------------------------------------------------------------*/
-	GEText::GEText(uint16_t x, uint16_t y, const std::string_view & txt, uint32_t foreground, uint32_t background,
+	GEText::GEText(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
+		const std::string_view & txt, uint32_t foreground, uint32_t background,
 		const Font & font, IGElement * nextElement)
-		: IGElement(x, y, nextElement), Text{txt}, Foreground{foreground}, Background{background},
+		:GEPictureMixedWithColor(x, y, width, height, 0, 0,
+		&Font::GetFirstCharacterGraphicData(font), background, nextElement),
 		_font{font}, _currectIndex{0}
 	{
 	}
 
 	/*------------------------------------------------------------//
-	// Draws the graphic element by hardware features
+	// Gets a text width (pixels)
 	//------------------------------------------------------------*/
-	void GEText::DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer)
+	uint16_t GEText::GetWidth()
 	{
-		renderer.Draw(this, x, y);
-	}
-
-	/*------------------------------------------------------------//
-	//
-	//------------------------------------------------------------*/
-	IGElement * GEText::GetChild()
-	{
-		if((Text.length()-1) > _currectIndex)
-		{
-			++_currectIndex;
-			return this;
-		}
-		_currectIndex = 0;
-		return _gelement;
+		return Font::GetTextLineWidthInPixels(_font, Text);
 	}
 
 	/*------------------------------------------------------------//
@@ -41,15 +29,39 @@ namespace gui
 	{
 		return Font::GetCharacterHeightInPixels(_font);
 	}
-	
+
 	/*------------------------------------------------------------//
-	// Gets a text width (pixels)
+	//
 	//------------------------------------------------------------*/
-	uint16_t GEText::GetWidth()
+	IGElement * GEText::GetChild()
 	{
-		return Font::GetTextLineWidthInPixels(_font, Text);
+		if((Text.length() - 1) > _currectIndex)
+		{
+			++_currectIndex;
+			Foreground.Bitmap = &Font::GetCharacterGraphicData(_font, Text[_currectIndex]);
+			return this;
+		}
+		_currectIndex = 0;
+		return _gelement;
 	}
-	
+
+	/*------------------------------------------------------------//
+	// Draws the graphic element by hardware features
+	//------------------------------------------------------------*/
+	void GEText::DecodeGData(IPictureDecoder & decoder)
+	{
+		_currectIndex = 0;
+		decoder.Decode(this);
+	}
+
+	/*------------------------------------------------------------//
+	//
+	//------------------------------------------------------------*/
+	uint16_t GEText::GetCurrentCharacterIndex() const
+	{
+		return _currectIndex;
+	}
+
 	/*------------------------------------------------------------//
 	//
 	//------------------------------------------------------------*/

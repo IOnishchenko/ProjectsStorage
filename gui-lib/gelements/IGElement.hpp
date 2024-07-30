@@ -1,7 +1,6 @@
 #ifndef GUI_GRAPHIC_ELEMENT_BASE_H
 #define GUI_GRAPHIC_ELEMENT_BASE_H
 
-#include "IRenderer.hpp"
 #include "stdint.h"
 
 namespace gui
@@ -30,7 +29,6 @@ namespace gui
 
 		virtual IGElement * GetChild();
 		virtual void SetChild(IGElement * child);
-		virtual void DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer) = 0;
 			
 	protected:
 

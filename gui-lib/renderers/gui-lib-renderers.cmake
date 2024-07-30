@@ -1,6 +1,7 @@
 
 set(GUI_RENDERERS_SRCS
 	"${project_dir}/gui-lib/renderers/BitRenderer.cpp"
+	"${project_dir}/gui-lib/renderers/ControlRenderer.cpp"
 	"${project_dir}/gui-lib/renderers/RGBRenderer.cpp"
 )
 

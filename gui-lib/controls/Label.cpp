@@ -10,7 +10,7 @@ namespace gui
 	Label::Label(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		uint32_t foregroundRGB, uint32_t backgroundRGB, const Font & font, uint16_t textOffset)
 		:IUIControl(x, y, w, h, context), _background(0, 0, w, h, backgroundRGB, &_textGelement),
-		_textGelement(textOffset, (h - Font::GetCharacterHeightInPixels(font))/2,
+		_textGelement(textOffset, (h - Font::GetCharacterHeightInPixels(font))/2, w, h,
 		"", foregroundRGB, backgroundRGB, font, nullptr)
 	{
 	}

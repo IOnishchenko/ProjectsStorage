@@ -1,41 +1,38 @@
-#ifndef GUI_BUTTON_HPP
-#define GUI_BUTTON_HPP
+#ifndef GUI_IRADIO_BUTTON_HPP
+#define GUI_IRADIO_BUTTON_HPP
 
-#include "IUIControl.hpp"
+#include "IRadioButtonItem.hpp"
 #include "ITouchScreenEventHandler.hpp"
 #include "IFocusEventHandler.hpp"
 #include "IKeyboardEventHandler.hpp"
-#include "Action.hpp"
+#include "Group.hpp"
 
 namespace gui
 {
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	class Button : public IUIControl,
+	class IRadioButton : public Group,
 		public ITouchScreenEventHandler, public IFocusEventHandler,
 		public IKeyboardEventHandler
 	{
-		enum class ButtonState
-		{
-			Normal,
-			Pressed,
-		};
-	
 	public:
-		// constructor
-		Button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			IGElement & normalGEl, IGElement & pressedGEl, const Action<void(Button *)> & clickCmd);
+		// constructors
+		IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+			const std::initializer_list<IUIControl *> & items, IGElement * gelement);
+
+		IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+			const std::forward_list<IUIControl *> & items, IGElement * gelement);
 
 		// destructor
-		~Button() override;
+		~IRadioButton() override;
 		
 		// methods
 		// ITouchScreenEventHandler methods
-		IGElement * GetGraphicElement() override;
 		void OnPress(ITouchScreenEventHandler *, TouchScreenEven & event) override;
 		void OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event) override;
 		void OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event) override;
 		bool IsUnderTouch(uint16_t x, uint16_t y) override;
 
 		// IFocusEventHandler methods
@@ -45,14 +42,13 @@ namespace gui
 		// IKeyboardEventHandler methods
 		void OnKeyPress(IKeyboardEventHandler *, KeyEvent & event) override;
 		void OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event) override;
-	
+
+		void SetSelected(IRadioButtonItem * selected);
+		void ClearSelection();
+		
 	protected:
-		bool _isDrawn = false;
-		ButtonState _state;
-		const Action<void(Button *)> &_clickCmd;
-		IGElement * _normalBG;
-		IGElement * _pressedBG;
+		IRadioButtonItem * FindItemWithState(IRadioButtonItem::State state) const;
 	};
 }
 
-#endif // BUTTON_H
+#endif // GUI_IRADIO_BUTTON_HPP

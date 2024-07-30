@@ -3,32 +3,45 @@
 namespace gui
 {
 	/*------------------------------------------------------------//
-	// constructor
+	// constructor for L4, L8 pictures
 	//------------------------------------------------------------*/
 	GEPictureMixedWithPicture::GEPictureMixedWithPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-		uint16_t fskippedLines, uint16_t fskippedRows, const PictureDataItem &fbitmap,
-		uint16_t bskippedLines, uint16_t bskippedRows, const PictureDataItem &bbitmap,
-		IGElement * nextElemen)
-		:GEPicture(x, y, width, height, fskippedLines, fskippedRows, fbitmap, nextElemen),
-		BackgroundPicture{bskippedLines, bskippedRows, bbitmap}
+		uint16_t fskippedLines, uint16_t fskippedRows, const PictureObject * fbitmap,
+		uint16_t bskippedLines, uint16_t bskippedRows, const PictureObject * bbitmap,
+		IGElement * nextElement)
+		:GEPicture(x, y, width, height, fskippedLines, fskippedRows, fbitmap, nextElement),
+		BackgroundPicture{bskippedLines, bskippedRows, 0xff00'0000, bbitmap}
 	{
 	}
 
 	/*------------------------------------------------------------//
-	// constructor
+	// constructor for L4, L8 pictures
 	//------------------------------------------------------------*/
-	GEPictureMixedWithPicture::GEPictureMixedWithPicture(const PictureDataItem &fbitmap, const PictureDataItem &bbitmap,
-		IGElement * nextElemen)
-		:GEPicture(fbitmap, nextElemen), BackgroundPicture{0, 0, bbitmap}
+	GEPictureMixedWithPicture::GEPictureMixedWithPicture(const PictureObject * fbitmap, const PictureObject * bbitmap,
+		IGElement * nextElement)
+		:GEPicture(fbitmap, nextElement), BackgroundPicture{0, 0, 0xff00'0000, bbitmap}
 	{
 	}
 
 	/*------------------------------------------------------------//
-	// Draws the graphic element by hardware features
+	// constructor for A4, A8 pictures
 	//------------------------------------------------------------*/
-	void GEPictureMixedWithPicture::DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer)
+	GEPictureMixedWithPicture::GEPictureMixedWithPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
+		uint16_t fskippedLines, uint16_t fskippedRows, uint32_t fcolor, const PictureObject * fbitmap,
+		uint16_t bskippedLines, uint16_t bskippedRows, uint32_t bcolor, const PictureObject * bbitmap,
+		IGElement * nextElement)
+		:GEPicture(x, y, width, height, fskippedLines, fskippedRows, fcolor, fbitmap, nextElement),
+		BackgroundPicture{bskippedLines, bskippedRows, bcolor, bbitmap}
 	{
-		renderer.Draw(this, x, y);
+	}
+
+	/*------------------------------------------------------------//
+	// constructor for A4, A8 pictures
+	//------------------------------------------------------------*/
+	GEPictureMixedWithPicture::GEPictureMixedWithPicture(uint32_t fcolor, const PictureObject * fbitmap,
+		uint32_t bcolor, const PictureObject * bbitmap, IGElement * nextElement)
+		:GEPicture(fcolor, fbitmap, nextElement), BackgroundPicture{0, 0, bcolor, bbitmap}
+	{
 	}
 
 	/*------------------------------------------------------------//

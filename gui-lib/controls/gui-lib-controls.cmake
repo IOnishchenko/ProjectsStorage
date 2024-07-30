@@ -1,16 +1,17 @@
 
 set(GUI_CONTROLS_SRCS
-	"${project_dir}/gui-lib/controls/Button.cpp"
-	"${project_dir}/gui-lib/controls/CheckBox.cpp"
 	"${project_dir}/gui-lib/controls/Group.cpp"
+	"${project_dir}/gui-lib/controls/IButton.cpp"
+	"${project_dir}/gui-lib/controls/ICheckBox.cpp"
+	"${project_dir}/gui-lib/controls/IRadioButton.cpp"
+	"${project_dir}/gui-lib/controls/IRadioButtonItem.cpp"
+	"${project_dir}/gui-lib/controls/ISlider.cpp"
+	"${project_dir}/gui-lib/controls/ISliderVertical.cpp"
 	"${project_dir}/gui-lib/controls/IUIControl.cpp"
 	"${project_dir}/gui-lib/controls/Label.cpp"
 	"${project_dir}/gui-lib/controls/Picture.cpp"
-	"${project_dir}/gui-lib/controls/RadioButton.cpp"
-	"${project_dir}/gui-lib/controls/RadioButtonItem.cpp"
 	"${project_dir}/gui-lib/controls/Screen.cpp"
-	"${project_dir}/gui-lib/controls/Slider.cpp"
-	"${project_dir}/gui-lib/controls/SliderVertical.cpp"
+	"${project_dir}/gui-lib/controls/TextView.cpp"
 )
 
 set(GUI_CONTROLS_INCS

@@ -45,7 +45,7 @@ static void sh1106_initialize()
 	};
 	sh1106_write_command(cmd, sizeof(cmd));
 
-	// off segmets
+	// clear gram
 	uint8_t data[64] = {0};
 	for(int i = 0; i < 8; i++)
 	{
@@ -95,9 +95,6 @@ static void sh1106_set_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 		x & 0x0f,
 		0xb0 | y
 	};
-	printf("cmd[0] = 0x%X\n", cmd[0]);
-	printf("cmd[1] = 0x%X\n", cmd[1]);
-	printf("cmd[2] = 0x%X\n", cmd[2]);
 	sh1106_write_command(cmd, sizeof(cmd));
 }
 

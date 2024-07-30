@@ -2,7 +2,7 @@
 #define GUI_GROUP_HPP
 
 #include "IUIControl.hpp"
-#include <forward_list>
+#include <map>
 
 namespace gui
 {
@@ -15,28 +15,29 @@ namespace gui
 	public:
 		// constructor
 		Group(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			const std::forward_list<IUIControl *> & content, IGElement * gelement);
+			IGElement * gelement);
 
 		Group(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			const std::initializer_list<IUIControl *> & content, IGElement * gelement);
+			IGElement * gelement);
 
 		// destructor
 		~Group() override = default;
 
-		// system event handlers
+		// IUIControl methods
 		void SetEnable(bool) override;
 		void SetVisible(bool) override;
-		
 		IGElement * GetGraphicElement() override;
 		void Draw() override;
+		// Group methods
 		void RedrawChildren();
+		void AddChild(IUIControl * child);
 
 	protected:
-		std::forward_list<IUIControl *> _content;
+		std::map<int16_t, std::map<int16_t, IUIControl *>> _content;
 		IGElement * _background;
 		
 		IUIControl * GetEnabledControlByCoordinate(uint16_t x, uint16_t y);
 	};
 }
 
-#endif // GROUP_H
+#endif // GUI_GROUP_HPP

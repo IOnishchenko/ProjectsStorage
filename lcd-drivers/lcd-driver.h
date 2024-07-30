@@ -1,5 +1,5 @@
-#ifndef LCD_DRIVER__LCD_DRIVER_H
-#define LCD_DRIVER__LCD_DRIVER_H
+#ifndef LCD_DRIVER_LCD_DRIVER_H
+#define LCD_DRIVER_LCD_DRIVER_H
 
 #include "stdint.h"
 
@@ -47,4 +47,4 @@ extern lcd_driver sh1106;
 }
 #endif
 
-#endif // LCD_DRIVER__LCD_DRIVER_H
+#endif // LCD_DRIVER_LCD_DRIVER_H

@@ -16,19 +16,28 @@ namespace gui
 		PictureData BackgroundPicture;
 
 		// constructor
+		// L4, L8 pictures
 		GEPictureMixedWithPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-			uint16_t fskippedLines, uint16_t fskippedRows, const PictureDataItem & fbitmap,
-			uint16_t bskippedLines, uint16_t bskippedRows, const PictureDataItem & bbitmap,
-			IGElement * nextElemen);
+			uint16_t fskippedLines, uint16_t fskippedRows, const PictureObject * fbitmap,
+			uint16_t bskippedLines, uint16_t bskippedRows, const PictureObject * bbitmap,
+			IGElement * nextElement);
+		// L4, L8 pictures
+		GEPictureMixedWithPicture(const PictureObject * fbitmap, const PictureObject * bbitmap,
+			IGElement * nextElement);
 
-		GEPictureMixedWithPicture(const PictureDataItem & fbitmap, const PictureDataItem & bbitmap,
-			IGElement * nextElemen);
+		// A4, A8 pictures
+		GEPictureMixedWithPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
+			uint16_t fskippedLines, uint16_t fskippedRows, uint32_t fcolor, const PictureObject * fbitmap,
+			uint16_t bskippedLines, uint16_t bskippedRows, uint32_t bcolor, const PictureObject * bbitmap,
+			IGElement * nextElement);
+		// A4, A8 pictures
+		GEPictureMixedWithPicture(uint32_t fcolor, const PictureObject * fbitmap, uint32_t bcolor,
+			const PictureObject * bbitmap, IGElement * nextElement);
 
 		// destructor
 		~GEPictureMixedWithPicture() override = default;
 
 		// methods
-		void DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer) override;
 		void SetDrawingRegion(uint16_t skippedLines, uint16_t skippedRows,
 			uint16_t width,uint16_t height) override;
 	};

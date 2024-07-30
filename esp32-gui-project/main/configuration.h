@@ -49,6 +49,20 @@
 #define VSPI_QUEUE_SIZE			4U
 
 /*-----------------------------------------------------------------//
+// SPI configuration
+// GPIO configuration
+//-----------------------------------------------------------------*/
+#define SD_SPI	(HSPI_HOST)
+#define SD_SCK	(GPIO_NUM_27)
+#define SD_MISO	(GPIO_NUM_26)
+#define SD_MOSI	(GPIO_NUM_25)
+#define SD_CS	(GPIO_NUM_33)
+
+#define SD_MAX_BUFFER_SIZE		4000
+
+#define MOUNT_POINT "/sdcard"
+
+/*-----------------------------------------------------------------//
 // LCD:
 // SH1106 controller settings
 //-----------------------------------------------------------------*/

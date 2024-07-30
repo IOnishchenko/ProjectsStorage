@@ -3,38 +3,49 @@
 namespace gui
 {
 	/*------------------------------------------------------------//
-	// constructor
+	// constructor for L4, L8 pictures
 	//------------------------------------------------------------*/
-	GEMixedPictureWithColor::GEMixedPictureWithColor(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-		uint16_t skippedLines, uint16_t skippedRows, const PictureDataItem &bitmap,
-		uint32_t backgroundColor, IGElement * nextElemen)
-		:GEPicture(x, y, width, height, skippedLines, skippedRows, bitmap, nextElemen),
+	GEPictureMixedWithColor::GEPictureMixedWithColor(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
+		uint16_t skippedLines, uint16_t skippedRows, const PictureObject *  bitmap,
+		uint32_t backgroundColor, IGElement * nextElement)
+		:GEPicture(x, y, width, height, skippedLines, skippedRows, bitmap, nextElement),
 		BackgroundColor{backgroundColor}
 	{
 	}
 
 	/*------------------------------------------------------------//
-	// constructor
+	// constructor for L4, L8 pictures
 	//------------------------------------------------------------*/
-	GEMixedPictureWithColor::GEMixedPictureWithColor(const PictureDataItem &bitmap, uint32_t backgroundColor,
+	GEPictureMixedWithColor::GEPictureMixedWithColor(const PictureObject * bitmap, uint32_t backgroundColor,
 		IGElement * nextElemen)
-		:GEPicture(bitmap, nextElemen), BackgroundColor{backgroundColor}
+		:GEPicture(bitmap, nextElemen),	BackgroundColor{backgroundColor}
 	{
 	}
 
+	/*------------------------------------------------------------//
+	// constructor for A4, A8 pictures
+	//------------------------------------------------------------*/
+	GEPictureMixedWithColor::GEPictureMixedWithColor(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
+		uint16_t skippedLines, uint16_t skippedRows, const PictureObject * bitmap,
+		uint32_t foregroundColor, uint32_t backgroundColor, IGElement * nextElement)
+		:GEPicture(x, y, width, height, skippedLines, skippedRows, foregroundColor, bitmap, nextElement),
+		BackgroundColor{backgroundColor}
+	{
+	}
 
 	/*------------------------------------------------------------//
-	// Draws the graphic element by hardware features
+	// constructor for A4, A8 pictures
 	//------------------------------------------------------------*/
-	void GEMixedPictureWithColor::DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer)
+	GEPictureMixedWithColor::GEPictureMixedWithColor(const PictureObject * bitmap,
+		uint32_t foregroundColor, uint32_t backgroundColor, IGElement * nextElemen)
+		:GEPicture(foregroundColor, bitmap, nextElemen), BackgroundColor{backgroundColor}
 	{
-		renderer.Draw(this, x, y);
 	}
 
 	/*------------------------------------------------------------//
 	// Sets new parameters for next drawing
 	//------------------------------------------------------------*/
-	void GEMixedPictureWithColor::SetDrawingRegion(uint16_t skippedLines, uint16_t skippedRows,
+	void GEPictureMixedWithColor::SetDrawingRegion(uint16_t skippedLines, uint16_t skippedRows,
 		uint16_t width,uint16_t height)
 	{
 

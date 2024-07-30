@@ -1,4 +1,4 @@
-#include "RadioButton.hpp"
+#include "IRadioButton.hpp"
 #include "ITouchScreenEventObserver.hpp"
 
 namespace gui
@@ -6,14 +6,14 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// Constructor
 	//--------------------------------------------------------------------------*/
-	RadioButton::RadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+	IRadioButton::IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		const std::forward_list<IUIControl *> & items, IGElement * gelement)
 		:Group(x, y, w, h, context, items, gelement)
 	{
 		context.TouchScreenObserver->Subscribe(this);
 	}
 
-	RadioButton::RadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+	IRadioButton::IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		const std::initializer_list<IUIControl *> & items, IGElement * gelement)
 		:Group(x, y, w, h, context, items, gelement)
 	{
@@ -23,7 +23,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// destructor
 	//--------------------------------------------------------------------------*/
-	RadioButton::~RadioButton()
+	IRadioButton::~IRadioButton()
 	{
 		_context.TouchScreenObserver->Unsubscribe(this);
 	}
@@ -31,12 +31,12 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IRadioButton::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
-		// RadioButtonItem * cntr = static_cast<RadioButtonItem *>(GetEnabledControlByCoordinate(penInfo.x, penInfo.y));
+		// IRadioButtonItem * cntr = static_cast<IRadioButtonItem *>(GetEnabledControlByCoordinate(penInfo.x, penInfo.y));
 		// if(cntr && (cntr != _activeControl))
 		// {
-		// 	cntr->_state = RadioButtonItem::State::Pressed;
+		// 	cntr->_state = IRadioButtonItem::State::Pressed;
 		// 	cntr->Draw();
 		// }
 	}
@@ -44,21 +44,21 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IRadioButton::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
-		// auto pressedControl = FindItemWithState(RadioButtonItem::State::Pressed);
+		// auto pressedControl = FindItemWithState(IRadioButtonItem::State::Pressed);
 		
 		// if(!pressedControl)
 		// 	return;
 		
 		// if(_activeControl)
 		// {
-		// 	auto activeControl = static_cast<RadioButtonItem*>(_activeControl);
-		// 	activeControl->_state = RadioButtonItem::State::Normal;
+		// 	auto activeControl = static_cast<IRadioButtonItem*>(_activeControl);
+		// 	activeControl->_state = IRadioButtonItem::State::Normal;
 		// 	activeControl->Draw();
 		// }
 		// _activeControl = pressedControl;
-		// pressedControl->_state = RadioButtonItem::State::Selected;
+		// pressedControl->_state = IRadioButtonItem::State::Selected;
 		// pressedControl->Draw();
 		// (*pressedControl->OnItemSelected)(pressedControl);
 	}
@@ -66,12 +66,12 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IRadioButton::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
-		auto cntr = FindItemWithState(RadioButtonItem::State::Pressed);
+		auto cntr = FindItemWithState(IRadioButtonItem::State::Pressed);
 		if(cntr)
 		{
-			cntr->_state = RadioButtonItem::State::Normal;
+			cntr->_state = IRadioButtonItem::State::Normal;
 			cntr->Draw();
 		}
 	}
@@ -79,12 +79,12 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IRadioButton::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
-		// auto cntr = FindItemWithState(RadioButtonItem::State::Pressed);
+		// auto cntr = FindItemWithState(IRadioButtonItem::State::Pressed);
 		// if(cntr && !cntr->IsPositionInsideControl(penInfo.x, penInfo.y))
 		// {
-		// 	cntr->_state = RadioButtonItem::State::Normal;
+		// 	cntr->_state = IRadioButtonItem::State::Normal;
 		// 	cntr->Draw();
 		// }
 	}
@@ -92,7 +92,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	bool RadioButton::IsUnderTouch(uint16_t x, uint16_t y)
+	bool IRadioButton::IsUnderTouch(uint16_t x, uint16_t y)
 	{
 		return IsPositionInsideControl(x, y);
 	}
@@ -100,29 +100,21 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnFocused(IFocusEventHandler *)
+	void IRadioButton::OnFocused(IFocusEventHandler *)
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnFocusLost(IFocusEventHandler *)
+	void IRadioButton::OnFocusLost(IFocusEventHandler *)
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
-	{
-
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void RadioButton::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void IRadioButton::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
 	{
 
 	}
@@ -130,14 +122,22 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::SetSelected(RadioButtonItem * selected)
+	void IRadioButton::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void IRadioButton::SetSelected(IRadioButtonItem * selected)
 	{
 		// for(auto item : _content)
 		// {
-		// 	auto rbutton = static_cast<RadioButtonItem *>(item);
+		// 	auto rbutton = static_cast<IRadioButtonItem *>(item);
 		// 	rbutton->_state = rbutton == selected
-		// 		? RadioButtonItem::State::Selected
-		// 		: RadioButtonItem::State::Normal;
+		// 		? IRadioButtonItem::State::Selected
+		// 		: IRadioButtonItem::State::Normal;
 		// }
 		// _activeControl = selected;
 	}
@@ -145,12 +145,12 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void RadioButton::ClearSelection()
+	void IRadioButton::ClearSelection()
 	{
 		// if(_activeControl)
 		// {
-		// 	auto itm = static_cast<RadioButtonItem *>(_activeControl);
-		// 	itm->_state = RadioButtonItem::State::Normal;
+		// 	auto itm = static_cast<IRadioButtonItem *>(_activeControl);
+		// 	itm->_state = IRadioButtonItem::State::Normal;
 		// 	itm->Draw();
 		// 	_activeControl = nullptr;
 		// }
@@ -159,11 +159,11 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	RadioButtonItem * RadioButton::FindItemWithState(RadioButtonItem::State state) const
+	IRadioButtonItem * IRadioButton::FindItemWithState(IRadioButtonItem::State state) const
 	{
 		for(auto cntr : _content)
 		{
-			auto item = static_cast<RadioButtonItem *>(cntr);
+			auto item = static_cast<IRadioButtonItem *>(cntr);
 			if(item->_state == state)
 				return item;
 		}

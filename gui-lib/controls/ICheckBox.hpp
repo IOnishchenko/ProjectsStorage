@@ -1,5 +1,5 @@
-#ifndef GUI_CHECK_BOX_HPP
-#define GUI_CHECK_BOX_HPP
+#ifndef GUI_ICHECK_BOX_HPP
+#define GUI_ICHECK_BOX_HPP
 
 #include "IUIControl.hpp"
 #include "ITouchScreenEventHandler.hpp"
@@ -23,19 +23,19 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	class CheckBox : public IUIControl,
+	class ICheckBox : public IUIControl,
 		public ITouchScreenEventHandler, public IFocusEventHandler,
 		public IKeyboardEventHandler
 	{
 		
 	public:
 		// constructor
-		CheckBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			const Action<void(CheckBox *)> &checkedCmd, const Action<void(CheckBox *)> &uncheckedCmd,
+		ICheckBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+			const Action<void(ICheckBox *)> &checkedCmd, const Action<void(ICheckBox *)> &uncheckedCmd,
 			IGElement * unchecked, IGElement * pressed, IGElement * checked);
 		
 		// destructor
-		~CheckBox() override;
+		~ICheckBox() override;
 
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;
@@ -61,12 +61,12 @@ namespace gui
 	protected:
 		CheckBoxState _state;
 		CheckBoxState _visualState;
-		const Action<void(CheckBox *)> &_checkedCmd;
-		const Action<void(CheckBox *)> &_uncheckedCmd;
+		const Action<void(ICheckBox *)> &_checkedCmd;
+		const Action<void(ICheckBox *)> &_uncheckedCmd;
 		IGElement * _uncheckedGEl;
 		IGElement * _pressedGEl;
 		IGElement * _checkedGEl;
 	};
 }
 
-#endif // GUI_CHECK_BOX_HPP
+#endif // GUI_ICHECK_BOX_HPP

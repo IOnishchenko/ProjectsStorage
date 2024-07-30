@@ -1,4 +1,4 @@
-#include "Button.hpp"
+#include "IButton.hpp"
 #include "ITouchScreenEventObserver.hpp"
 
 namespace gui
@@ -6,8 +6,8 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// constructor
 	//--------------------------------------------------------------------------*/
-	Button::Button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		IGElement & normalGEl, IGElement & pressedGEl, const Action<void(Button*)>& clickCmd)
+	IButton::IButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+		IGElement & normalGEl, IGElement & pressedGEl, const Action<void(IButton*)>& clickCmd)
 		:IUIControl(x, y, w, h, context), _state{ButtonState::Normal}, _clickCmd{clickCmd},
 		_normalBG{&normalGEl}, _pressedBG{&pressedGEl}
 	{
@@ -17,7 +17,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// destructor
 	//--------------------------------------------------------------------------*/
-	Button::~Button()
+	IButton::~IButton()
 	{
 		_context.TouchScreenObserver->Unsubscribe(this);
 	}
@@ -25,7 +25,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	IGElement * Button::GetGraphicElement()
+	IGElement * IButton::GetGraphicElement()
 	{
 		switch(_state)
 		{
@@ -41,7 +41,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IButton::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		_state = ButtonState::Pressed;
 		Draw();
@@ -50,7 +50,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IButton::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		_state = ButtonState::Normal;
 		Draw();
@@ -60,7 +60,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IButton::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		if(_state == ButtonState::Normal)
 			return;
@@ -71,7 +71,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	bool Button::IsUnderTouch(uint16_t x, uint16_t y)
+	bool IButton::IsUnderTouch(uint16_t x, uint16_t y)
 	{
 		return IsPositionInsideControl(x, y);
 	}
@@ -79,21 +79,21 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnFocused(IFocusEventHandler *)
+	void IButton::OnFocused(IFocusEventHandler *)
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnFocusLost(IFocusEventHandler *)
+	void IButton::OnFocusLost(IFocusEventHandler *)
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	void IButton::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
 	{
 
 	}
@@ -101,7 +101,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void Button::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void IButton::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
 	{
 
 	}

@@ -1,5 +1,5 @@
-#ifndef GUI_SLIDER_HPP
-#define GUI_SLIDER_HPP
+#ifndef GUI_ISLIDER_HPP
+#define GUI_ISLIDER_HPP
 
 #include "IUIControl.hpp"
 #include "ITouchScreenEventHandler.hpp"
@@ -14,7 +14,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	class Slider : public IUIControl,
+	class ISlider : public IUIControl,
 		public ITouchScreenEventHandler, public IEncoderEventHandler,
 		public IFocusEventHandler, public IKeyboardEventHandler
 	{
@@ -25,12 +25,12 @@ namespace gui
 		int Value;
 		
 		// constructors
-		Slider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+		ISlider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			uint16_t borderSize, int maxValue, int value, const Action<void(int)> & onValueChenged,
 			const GEPicture & thumb, const GEPicture & leftTrack, const GEPicture & rightTrack);
 		
 		// dectructor
-		~Slider() override;
+		~ISlider() override;
 
 		// ITouchScreenEventHandler methods
 		void OnPress(ITouchScreenEventHandler *, TouchScreenEven & event) override;
@@ -74,4 +74,4 @@ namespace gui
 	};
 }
 
-#endif // GUI_SLIDER_HPP
+#endif // GUI_ISLIDER_HPP

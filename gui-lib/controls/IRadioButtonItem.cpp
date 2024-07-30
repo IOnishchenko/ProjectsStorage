@@ -1,14 +1,14 @@
-#include "RadioButtonItem.hpp"
+#include "IRadioButtonItem.hpp"
 
 namespace gui
 {
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	RadioButtonItem::RadioButtonItem(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+	IRadioButtonItem::IRadioButtonItem(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		IGElement * normal, IGElement * pressed, IGElement * selected,
-		const Action<void(RadioButtonItem *)> * selCmd)
-		:IUIControl(x, y, w, h, context), OnItemSelected{selCmd}, _state{RadioButtonItem::State::Normal},
+		const Action<void(IRadioButtonItem *)> * selCmd)
+		:IUIControl(x, y, w, h, context), OnItemSelected{selCmd}, _state{IRadioButtonItem::State::Normal},
 		_normalGEl{normal}, _pressedGEl{pressed}, _selectedGEl{selected}
 	{
 	}
@@ -16,15 +16,15 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	IGElement * RadioButtonItem::GetGraphicElement()
+	IGElement * IRadioButtonItem::GetGraphicElement()
 	{
 		switch(_state)
 		{
-			case RadioButtonItem::State::Selected:
+			case IRadioButtonItem::State::Selected:
 				return _selectedGEl;
-			case RadioButtonItem::State::Normal:
+			case IRadioButtonItem::State::Normal:
 				return _normalGEl;
-			case RadioButtonItem::State::Pressed:
+			case IRadioButtonItem::State::Pressed:
 				return _pressedGEl;
 			default:
 				return nullptr;

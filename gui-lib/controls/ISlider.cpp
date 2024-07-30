@@ -1,4 +1,4 @@
-#include "SliderVertical.hpp"
+#include "ISlider.hpp"
 #include "ITouchScreenEventObserver.hpp"
 
 namespace gui
@@ -6,11 +6,11 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// constructors
 	//--------------------------------------------------------------------------*/
-	SliderVertical::SliderVertical(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		uint16_t borderSize, int maxValue, int value, const Action<void(int)> & onValueChenged,
-		const GEPicture & thumb, const GEPicture & topTrack, const GEPicture & bottomTrack)
+	ISlider::ISlider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+		uint16_t borderSize, int maxValue, int value, const Action<void(int)> &onValueChenged,
+		const GEPicture &thumb, const GEPicture &leftTrack, const GEPicture &rightTrack)
 		:IUIControl(x, y, w, h, context), MaxValue{0}, MinValue{0}, Value{value}, _borderSize{borderSize},
-		TopTrack{topTrack}, Thumb{thumb}, BottomTrack{bottomTrack}, _valueChangedCmd{onValueChenged}
+		LeftTrack{leftTrack}, Thumb{thumb}, RightTrack{rightTrack}, _valueChengedCmd{onValueChenged}
 	{
 		SyncThumbPositionWithValue();
 		context.TouchScreenObserver->Subscribe(this);
@@ -19,7 +19,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// destructor
 	//--------------------------------------------------------------------------*/
-	SliderVertical::~SliderVertical()
+	ISlider::~ISlider()
 	{
 		_context.TouchScreenObserver->Unsubscribe(this);
 	}
@@ -27,12 +27,12 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPress(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISlider::OnPress(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
-		uint16_t ypen = event.y - Y;
-		uint16_t ythumb = Thumb.Y;
+		uint16_t xpen = event.x - X;
+		uint16_t xthumb = Thumb.X;
 		// check if the thumb is under the pen
-		if((ypen > ythumb)&&(ypen < (ythumb + Thumb.GetHeight())))
+		if((xpen > xthumb)&&(xpen < (xthumb + Thumb.GetWidth())))
 			return;
 
 		OnPenMove(handler, event);
@@ -41,7 +41,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ISlider::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		SyncThumbPositionWithValue();
 		Draw();
@@ -50,7 +50,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenEnter(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISlider::OnPenEnter(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
 		OnPenMove(handler, event);
 	}
@@ -58,7 +58,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenLeave(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISlider::OnPenLeave(ITouchScreenEventHandler * handler, TouchScreenEven & event)
 	{
 		OnRelease(handler, event);
 	}
@@ -66,19 +66,19 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ISlider::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
-		auto ypen = event.y - Y;
-		if(!((ypen >= _borderSize) && (ypen <= (Height - _borderSize))))
+		auto xpen = event.x - X;
+		if(!((xpen >= _borderSize) && (xpen <= (Width - _borderSize))))
 			return;
 		// move thumb to position
-		ypen = MoveThumbToPosition(ypen);
+		xpen = MoveThumbToPosition(xpen);
 		// update value according new the thumb position
-		int value = CalculateNewValue(ypen);
+		int value = CalculateNewValue(xpen);
 		if(value != Value)
 		{
 			Value = value;
-			_valueChangedCmd(value);
+			_valueChengedCmd(value);
 		}
 		Draw();
 	}
@@ -86,75 +86,61 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	bool SliderVertical::IsUnderTouch(uint16_t x, uint16_t y)
+	bool ISlider::IsUnderTouch(uint16_t x, uint16_t y)
 	{
 		return IsPositionInsideControl(x, y);
 	}
 
 	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnFocused(IFocusEventHandler *)
-	{
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnFocusLost(IFocusEventHandler *)
-	{
-	}
-
-		/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
-	{
-
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
-	{
-
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event)
-	{
-
-	}
-
-	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event)
+	void ISlider::OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event)
 	{
 		switch(event.Direction)
 		{
 			case EncoderDirection::ENC_INCREASE:
 			{
-				if(Value > MinValue)
-					SetValue(Value - 1);
+				if(Value < MaxValue)
+					SetValue(Value + 1);
 				break;
 			}
 			case EncoderDirection::ENC_DECREASE:
 			{
-				if(Value < MaxValue)
-					SetValue(Value + 1);
+				if(Value > MinValue)
+					SetValue(Value - 1);
 				break;
 			}
 		}
 	}
 
 	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void ISlider::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void ISlider::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void ISlider::OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::SetValue(int value)
+	void ISlider::SetValue(int value)
 	{
 		if(Value == value)
 			return;
@@ -162,14 +148,14 @@ namespace gui
 		Value = value;
 		
 		SyncThumbPositionWithValue();
-		_valueChangedCmd(value);
+		_valueChengedCmd(value);
 		Draw();
 	}
 	
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	int SliderVertical::GetValue()
+	int ISlider::GetValue()
 	{
 		return Value;
 	}
@@ -177,71 +163,72 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	IGElement * SliderVertical::GetGraphicElement()
+	IGElement * ISlider::GetGraphicElement()
 	{
-		return &TopTrack;
+		return &LeftTrack;
 	}
-
+	
+	/*--------------------------------------------------------------------------//
+	// ---------------------- Protected Methods --------------------------------
+	//--------------------------------------------------------------------------*/
+	
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	uint16_t SliderVertical::MoveThumbToPosition(uint16_t ypen)
+	uint16_t ISlider::MoveThumbToPosition(uint16_t xpen)
 	{
-		uint16_t yn; // new position to value calculate
-		uint16_t thumbHeight = Thumb.GetHeight();
+		uint16_t xn; // new position to value calculate
+		uint16_t thumbWidth = Thumb.GetWidth();
 		
-		if(ypen < (thumbHeight/2 + _borderSize))
-			yn = _borderSize;
-		else if(ypen > (Height - thumbHeight/2 - _borderSize))
-			yn = Height - thumbHeight - _borderSize;
+		// right the thumb position calculation
+		if(xpen < (thumbWidth/2 + _borderSize)) // move left
+			xn = _borderSize;
+		else if(xpen > (Width - thumbWidth/2 - _borderSize)) // move right
+			xn = Width - thumbWidth - _borderSize;
 		else
-			yn = ypen - thumbHeight/2;
+			xn = xpen - thumbWidth/2;
 		
-		SetGraphicElemntsWithThumbPosition(yn);
-		return yn;
-	}
-
-	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
-	void SliderVertical::SyncThumbPositionWithValue()
-	{
-		float height = (Height - _borderSize*2 - Thumb.GetHeight());
-		float step = height/(MaxValue - MinValue);
-		uint16_t y = step * (Value - MinValue) + _borderSize;
-		SetGraphicElemntsWithThumbPosition(y);
+		SetGraphicElemntsWithThumbPosition(xn);
+		return xn;
 	}
 	
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	int SliderVertical::CalculateNewValue(uint16_t y)
+	void ISlider::SyncThumbPositionWithValue()
 	{
-		float height = (Height - _borderSize*2 - Thumb.GetHeight());
-		float step = height/(MaxValue - MinValue);		
-		return (y - _borderSize)/step + MinValue;
+		float width = (Width - _borderSize*2 - Thumb.GetWidth());
+		float step = width/(MaxValue - MinValue);
+		uint16_t x = step * (Value - MinValue) + _borderSize;
+		SetGraphicElemntsWithThumbPosition(x);
 	}
-
+	
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void SliderVertical::SetGraphicElemntsWithThumbPosition(uint16_t y)
+	int ISlider::CalculateNewValue(uint16_t x)
 	{
-		// need an even value
-		if(y & 0x01)
-			y++;
-
-		TopTrack.Height = y;
-
-		Thumb.Y = y;
-		y += Thumb.GetHeight();
-
-		BottomTrack.Y = y;
-		BottomTrack.Height = Height - TopTrack.GetHeight() - Thumb.GetHeight();
-		if(BottomTrack.Height & 0x01)
-			BottomTrack.Height--;
-
-		BottomTrack.Foreground.SkippedLines =
-			BottomTrack.Foreground.Bitmap.height - BottomTrack.Height;
+		float width = (Width - _borderSize*2 - Thumb.GetWidth());
+		float step = width/(MaxValue - MinValue);		
+		return (x - _borderSize)/step + MinValue;
+	}
+	
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void ISlider::SetGraphicElemntsWithThumbPosition(uint16_t x)
+	{
+		// left track gelement
+		LeftTrack.Width = x;
+		
+		// thumb gelement
+		Thumb.X = x;
+		
+		// right track gelement
+		x += Thumb.GetWidth(); // x to begin right track drawing
+		RightTrack.X = x;
+		RightTrack.Width = Width - x;
+		RightTrack.Foreground.SkippedRows =
+			RightTrack.Foreground.Bitmap->width - RightTrack.Width;
 	}
 }

@@ -5,6 +5,7 @@
 
 namespace gui
 {
+	class IUIControlRenderer;
 	class IRenderer;
 	class IEncoderEventObserver;
 	class IFocusManager;
@@ -12,7 +13,7 @@ namespace gui
 
 	struct IUIContext
 	{
-		IRenderer & Renderer;
+		IUIControlRenderer & Renderer;
 
 		IEncoderEventObserver * EncoderEventObserver;
 

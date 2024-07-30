@@ -3,21 +3,42 @@
 namespace gui
 {
 	/*------------------------------------------------------------//
-	// constructor
+	// constructor for L4, L8 pictures
 	//------------------------------------------------------------*/
 	GEPicture::GEPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-		uint16_t skippedLines, uint16_t skippedRows, const PictureDataItem &bitmap, IGElement * nextElement)
-		: IGElement(x, y, nextElement), Width{width}, Height{height}, Foreground{skippedLines, skippedRows, bitmap}
+		uint16_t skippedLines, uint16_t skippedRows,
+		const PictureObject * bitmap, IGElement * nextElement)
+		: IGElement(x, y, nextElement), Width{width}, Height{height},
+		Foreground{skippedLines, skippedRows, 0xff000000, bitmap}
 	{
 	}
 
-	
 	/*------------------------------------------------------------//
-	// constructor
+	// constructor for L4, L8 pictures
 	//------------------------------------------------------------*/
-	GEPicture::GEPicture(const PictureDataItem &bitmap, IGElement * nextElement)
-		: IGElement(0, 0, nextElement), Width{bitmap.width}, Height{bitmap.height},
-		Foreground{0, 0, bitmap}
+	GEPicture::GEPicture(const PictureObject * bitmap, IGElement * nextElement)
+		: IGElement(0, 0, nextElement), Width{bitmap->width}, Height{bitmap->height},
+		Foreground{0, 0, 0xff000000, bitmap}
+	{
+	}
+
+	/*------------------------------------------------------------//
+	// constructor for A4, A8 pictures
+	//------------------------------------------------------------*/
+	GEPicture::GEPicture(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
+		uint16_t skippedLines, uint16_t skippedRows, uint32_t color,
+		const PictureObject * bitmap, IGElement * nextElement)
+		: IGElement(x, y, nextElement), Width{width}, Height{height},
+		Foreground{skippedLines, skippedRows, color, bitmap}
+	{
+	}
+
+	/*------------------------------------------------------------//
+	// constructor for A4, A8 pictures
+	//------------------------------------------------------------*/
+	GEPicture::GEPicture(uint32_t color, const PictureObject * bitmap, IGElement * nextElement)
+		: IGElement(0, 0, nextElement), Width{bitmap->width}, Height{bitmap->height},
+		Foreground{0, 0, color, bitmap}
 	{
 	}
 	
@@ -35,14 +56,6 @@ namespace gui
 	uint16_t GEPicture::GetHeight()
 	{
 		return Height;
-	}
-
-	/*------------------------------------------------------------//
-	// Draws the graphic element by hardware features
-	//------------------------------------------------------------*/
-	void GEPicture::DrawWithRenderer(uint16_t x, uint16_t y, IRenderer & renderer)
-	{
-		renderer.Draw(this, x, y);
 	}
 
 	/*------------------------------------------------------------//

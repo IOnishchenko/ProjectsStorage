@@ -24,6 +24,9 @@ set(PROJET_SRCS
 	"${LCD_ST7789_DRIVER_SRCS}"
 	"${LCD_SH1106_DRIVER_SRCS}"
 	"${GUI_LIB_SRCS}"
+	"../gui/gui-thread.cpp"
+	"../gui/sdr_dumy_picture_sdr_320x240_V2.c"
+	"../gui/MainScreen.cpp"
 )
 
 set(INCLUDE_DIRS
@@ -35,6 +38,7 @@ set(INCLUDE_DIRS
 	"${LCD_SH1106_DRIVER_INCS}"
 	"${GUI_LIB_DIRS}"
 	"${GUI_RESOURCES_INCS}"
+	"../gui/"
 )
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)

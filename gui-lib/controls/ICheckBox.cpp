@@ -1,5 +1,5 @@
 
-#include "CheckBox.hpp"
+#include "ICheckBox.hpp"
 #include "ITouchScreenEventObserver.hpp"
 
 namespace gui
@@ -7,8 +7,8 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	CheckBox::CheckBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		const Action<void(CheckBox *)> &checkedCmd, const Action<void(CheckBox *)> &uncheckedCmd,
+	ICheckBox::ICheckBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+		const Action<void(ICheckBox *)> &checkedCmd, const Action<void(ICheckBox *)> &uncheckedCmd,
 		IGElement * unchecked, IGElement * pressed, IGElement * checked)
 		:IUIControl(x, y, w, h, context), _state(CheckBoxState::Unchecked), _visualState(CheckBoxState::Unchecked),
 		_checkedCmd{checkedCmd}, _uncheckedCmd{uncheckedCmd},
@@ -20,7 +20,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// destructor
 	//--------------------------------------------------------------------------*/
-	CheckBox::~CheckBox()
+	ICheckBox::~ICheckBox()
 	{
 		_context.TouchScreenObserver->Unsubscribe(this);
 	}
@@ -28,7 +28,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	IGElement * CheckBox::GetGraphicElement()
+	IGElement * ICheckBox::GetGraphicElement()
 	{
 		switch(_visualState)
 		{
@@ -45,7 +45,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ICheckBox::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		_visualState = CheckBoxState::Pressed;
 		Draw();
@@ -54,7 +54,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ICheckBox::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{ 
 		if(_visualState != CheckBoxState::Pressed)
 			return;
@@ -77,7 +77,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ICheckBox::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
 	{
 		if(_visualState != CheckBoxState::Pressed)
 			return;
@@ -89,7 +89,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	bool CheckBox::IsUnderTouch(uint16_t x, uint16_t y)
+	bool ICheckBox::IsUnderTouch(uint16_t x, uint16_t y)
 	{
 		return IsPositionInsideControl(x, y);
 	}
@@ -97,29 +97,21 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnFocused(IFocusEventHandler *)
+	void ICheckBox::OnFocused(IFocusEventHandler *)
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnFocusLost(IFocusEventHandler *)
+	void ICheckBox::OnFocusLost(IFocusEventHandler *)
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
-	{
-
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void CheckBox::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void ICheckBox::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
 	{
 
 	}
@@ -127,7 +119,15 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	CheckBoxState CheckBox::GetState()
+	void ICheckBox::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	{
+
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	CheckBoxState ICheckBox::GetState()
 	{
 		return _state;
 	}
@@ -135,7 +135,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void CheckBox::SetState(CheckBoxState state)
+	void ICheckBox::SetState(CheckBoxState state)
 	{
 		_state = state;
 		_visualState = state;

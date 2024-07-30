@@ -15,7 +15,7 @@ namespace gui
 	//------------------------------------------------------------*/
 	uint16_t Font::GetCharacterHeightInPixels(const Font & font)
 	{
-		return font._fontGraphicData.items[0]->height;
+		return font._fontGraphicData[0]->height;
 	}
 
 	/*------------------------------------------------------------//
@@ -34,15 +34,23 @@ namespace gui
 	/*------------------------------------------------------------//
 	//
 	//------------------------------------------------------------*/
-	const PictureDataItem & Font::GetCharacterGraphicData(const Font & font, uint8_t scode)
+	const PictureObject & Font::GetCharacterGraphicData(const Font & font, uint8_t scode)
 	{
-		return *font._fontGraphicData.items[scode - CHARACTER_FIRST_CODE];
+		return *font._fontGraphicData[scode - CHARACTER_FIRST_CODE];
+	}
+
+	/*------------------------------------------------------------//
+	//
+	//------------------------------------------------------------*/
+	const PictureObject & Font::GetFirstCharacterGraphicData(const Font & font)
+	{
+		return *font._fontGraphicData[0];
 	}
 
 	/*------------------------------------------------------------//
 	// constructor
 	//------------------------------------------------------------*/
-	Font::Font(const PictureCollection & fontGraphicData)
+	Font::Font(const PictureObject * const * fontGraphicData)
 		: _fontGraphicData{fontGraphicData}
 	{
 	}
