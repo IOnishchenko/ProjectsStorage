@@ -25,7 +25,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void Group::SetEnable(bool state)
 	{
-		for(auto cntr : _content)
+		for(auto cntr : Controls)
 		{
 			cntr->SetEnable(state);
 		}
@@ -37,7 +37,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void Group::SetVisible(bool state)
 	{
-		for(auto cntr : _content)
+		for(auto cntr : Controls)
 		{
 			cntr->SetVisible(state);
 		}
@@ -57,7 +57,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void Group::Draw()
 	{
-		_context.Renderer.Draw(this);
+		//_context.Renderer.Draw(this);
 	}
 	
 	/*--------------------------------------------------------------------------//
@@ -65,12 +65,9 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void Group::RedrawChildren()
 	{
-		for(auto & [x, row] : _content)
+		for(auto & itm : Controls)
 		{
-			for(auto & [y ,cntr] : row)
-			{
-				_context.Renderer.Draw(cntr);
-			}
+			// _context.Renderer.Draw(itm);
 		}
 	}
 
@@ -79,8 +76,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void Group::AddChild(IUIControl * child)
 	{
-		auto & item = _content[child->X];
-		item[child->Y] = child;
+		Controls.push_front(child);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -88,13 +84,10 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	IUIControl * Group::GetEnabledControlByCoordinate(uint16_t x, uint16_t y)
 	{
-		for(auto & [x, row] : _content)
+		for(auto itm : Controls)
 		{
-			for(auto & [y ,cntr] : row)
-			{
-				if((cntr->IsEnable()) && (cntr->IsPositionInsideControl(x, y)))
-				return cntr;
-			}
+			if((itm->IsEnable()) && (itm->IsPositionInsideControl(x, y)))
+				return itm;
 		}
 		return nullptr;
 	}

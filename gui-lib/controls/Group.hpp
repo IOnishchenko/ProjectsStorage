@@ -2,7 +2,7 @@
 #define GUI_GROUP_HPP
 
 #include "IUIControl.hpp"
-#include <map>
+#include <forward_list>
 
 namespace gui
 {
@@ -32,8 +32,10 @@ namespace gui
 		void RedrawChildren();
 		void AddChild(IUIControl * child);
 
+		// fields
+		std::forward_list<IUIControl *> Controls;
+
 	protected:
-		std::map<int16_t, std::map<int16_t, IUIControl *>> _content;
 		IGElement * _background;
 		
 		IUIControl * GetEnabledControlByCoordinate(uint16_t x, uint16_t y);

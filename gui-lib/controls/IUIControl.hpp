@@ -35,6 +35,7 @@ namespace gui
 		bool IsVisible() const;
 		virtual void SetVisible(bool);
 		bool IsPositionInsideControl(uint16_t x, uint16_t y) const;
+		bool DoesOverlapRegion(uint16_t x, uint16_t y, uint16_t w, uint16_t h) const;
 		
 	protected:
 

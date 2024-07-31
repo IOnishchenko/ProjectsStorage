@@ -10,13 +10,28 @@ namespace gui
 	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
 	class ControlRenderer : public IUIControlRenderer
 	{
-		class UIControlDecorator
+		struct Picture2D
 		{
-		public:
-			IUIControl & Control;
-			int16_t skippedRows;
-			int16_t skippedLinesOnTop;
-			int16_t skippedLinesOnBottom;
+			uint16_t skippedRows;
+			uint16_t skippedLinesOnTop;
+			uint16_t skippedLinesOnBottom;
+			IGElement & gel;
+		};
+
+		struct GFrame
+		{
+			uint16_t X;
+			uint16_t Y;
+			uint16_t Width;
+			uint16_t Height;
+			TColor GRam[GBufferSize];
+		};
+
+		struct Frame2D
+		{
+			uint16_t Width;
+			uint16_t SkippedLines;
+			TColor * GData;
 		};
 
 	public:
@@ -32,54 +47,7 @@ namespace gui
 		//----------------------------------------------------------------*/
 		void Draw(const IUIControl & control) override
 		{
-			// create gframe objects
-			int16_t frameWidth = GBufferSize/(GFrameNumber*control.Height);
-			int16_t remainingWidth = control.Width;
-			int16_t x0 = control.X;
-
-			// config GFrame objects
-			for(int16_t i = 0; i < GFrameNumber; i++)
-			{
-				_frame[i].Y = 0;
-				_frame[i].skippedRows = 0;
-				_frame[i].skippedLines = 0;
-				_frame[i].Height = control.Height;
-				_frame[i].GRam = &_gdata[i * (frameWidth * control.Height)];
-			}
-
-			// create UIControl decorator
-			UIControlDecorator decor;
-			decor.Control = control;
-			decor.skippedRows = 0;
-			decor.skippedLinesOnTop = 0;
-			decor.skippedLinesOnBottom = 0;
-
-			// config LCD to start writing to the region
-			_lcd.set_region(control.X, control.Y, control.Width, control.Height);
-			_lcd.start_writing_gdata();
-
-			while(remainingWidth)
-			{
-				int16_t width = (remainingWidth > frameWidth)
-					? frameWidth : remainingWidth;
-				_frame[_frameIndex].X = x0;
-				_frame[_frameIndex].Width = width;
-
-				// decode data to current frame
-				DrawToGFrame(_frame[_frameIndex], decor);
-
-				// write the frame to LCD module
-				_lcd.write_gdata(_frame[_frameIndex].GRam,
-					width * control.Height * sizeof(TColor))
-
-				// update variables fot next iteration
-				remainingWidth -= width;
-				x0 += width;
-				decor.skippedRows += width;
-				_frameIndex++;
-				if(_frameIndex == GFrameNumber)
-					_frameIndex = 0;
-			}
+			
 		}
 		
 		/*----------------------------------------------------------------//
@@ -87,21 +55,82 @@ namespace gui
 		//----------------------------------------------------------------*/
 		void Draw(const Group & group) override
 		{
+			uint16_t fwidth = GBufferSize/group.Height;
+			uint16_t fullWidth = group.Width;
+			if(fullWidth < fwidth)
+				fwidth = fullWidth;
+			uint16_t x0 = group.X;
+
+			// send command to lcd to start gram data writing
+			// TODO
+
+			while(fullWidth)
+			{
+				GFrame * frameBuffer = _frame[_frameIndex];
+				frameBuffer->X = x0;
+				frameBuffer->Y = group.Y;
+				frameBuffer->Width = fwidth;
+				frameBuffer->Height = group.Height;
+
+				for(auto item : group.Controls)
+				{
+					if(item->DoesOverlapRegion(x0, group.Y, fwidth, group.Height))
+						// the control inside frame buffer region
+						// write data to the frame buffer
+						DrawUIControlGElements(frameBuffer, item);
+				}
+
+				// send data to lcd
+				// TODO
+
+				x0 += fwidth;
+				fullWidth -= fwidth;
+				if(fullWidth < fwidth)
+					fwidth = fullWidth;
+
+				_frameIndex++;
+				if(_frameIndex == GFrameNumber)
+					_frameIndex = 0;
+			}
 		}
 
 	private:
-		lcd_driver & _lcd;
-		TColor _gdata[GBufferSize];
-		GFrame _frame[GFrameNumber];
-		uint16_t _frameIndex = 0;
+		// methods
 
 		/*----------------------------------------------------------------//
 		//
 		//----------------------------------------------------------------*/
-		void DrawToGFrame(GFrame & dstFrame, const UIControlDecorator & control)
+		void DrawUIControlGElements(GFrame * frame, IUIControl * control)
+		{
+			IGElement * gel = control->GetGraphicElement();
+			while(gel)
+			{
+				Frame2D frame2d;
+				uint16_t dx = 
+				frame2d.GData = 
+				frame2d.SkippedLines
+				DrawGElement(Frame2D & frame, Picture2D * gel)
+				gel = gel->GetChild();
+			}
+		}
+
+		/*----------------------------------------------------------------//
+		//
+		//----------------------------------------------------------------*/
+		void DrawGElement(Frame2D & frame, Picture2D * gel)
 		{
 
 		}
+
+		/*----------------------------------------------------------------//
+		//
+		//----------------------------------------------------------------*/
+		// fields
+		lcd_driver & _lcd;
+		GFrame _frame[GFrameNumber];
+		uint16_t _frameIndex = 0;
+
+
 
 	};
 }

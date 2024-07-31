@@ -48,7 +48,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IUIControl::Draw()
 	{
-		_context.Renderer.Draw(this);
+		// _context.Renderer.Draw(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -57,5 +57,20 @@ namespace gui
 	bool IUIControl::IsPositionInsideControl(uint16_t x, uint16_t y) const
 	{
 		return ((X < x)&&((X + Width) > x))&&((Y < y)&&((Y + Height) > y));
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	bool IUIControl::DoesOverlapRegion(uint16_t xi0, uint16_t yi0, uint16_t w, uint16_t h) const
+	{
+		uint16_t xi1 = xi0 + w;
+		uint16_t yi1 = yi0 + h;
+
+		uint16_t x1 = X + Width;
+		uint16_t y1 = Y + Height;
+
+		return ((((X >= xi0)&&(X <= xi1))&&((Y >= yi0)&&(Y <= yi1)))||
+		(((x1 >= xi0)&&(x1 <= xi1))&&((y1 >= yi0)&&(y1 <= yi1))));
 	}
 }
