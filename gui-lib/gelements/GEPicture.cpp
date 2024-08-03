@@ -59,11 +59,10 @@ namespace gui
 	}
 
 	/*------------------------------------------------------------//
-	// Sets new parameters for next drawing
+	//
 	//------------------------------------------------------------*/
-	void GEPicture::SetDrawingRegion(uint16_t skippedLines, uint16_t skippedRows,
-		uint16_t width,uint16_t height)
+	void GEPicture::DecoderWithDecoder(IGElementDecoder & decoder)
 	{
-
+		decoder.Decode(this);
 	}
 }

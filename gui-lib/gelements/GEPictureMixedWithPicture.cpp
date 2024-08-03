@@ -10,7 +10,7 @@ namespace gui
 		uint16_t bskippedLines, uint16_t bskippedRows, const PictureObject * bbitmap,
 		IGElement * nextElement)
 		:GEPicture(x, y, width, height, fskippedLines, fskippedRows, fbitmap, nextElement),
-		BackgroundPicture{bskippedLines, bskippedRows, 0xff00'0000, bbitmap}
+		Background{bskippedLines, bskippedRows, 0xff00'0000, bbitmap}
 	{
 	}
 
@@ -19,7 +19,7 @@ namespace gui
 	//------------------------------------------------------------*/
 	GEPictureMixedWithPicture::GEPictureMixedWithPicture(const PictureObject * fbitmap, const PictureObject * bbitmap,
 		IGElement * nextElement)
-		:GEPicture(fbitmap, nextElement), BackgroundPicture{0, 0, 0xff00'0000, bbitmap}
+		:GEPicture(fbitmap, nextElement), Background{0, 0, 0xff00'0000, bbitmap}
 	{
 	}
 
@@ -31,7 +31,7 @@ namespace gui
 		uint16_t bskippedLines, uint16_t bskippedRows, uint32_t bcolor, const PictureObject * bbitmap,
 		IGElement * nextElement)
 		:GEPicture(x, y, width, height, fskippedLines, fskippedRows, fcolor, fbitmap, nextElement),
-		BackgroundPicture{bskippedLines, bskippedRows, bcolor, bbitmap}
+		Background{bskippedLines, bskippedRows, bcolor, bbitmap}
 	{
 	}
 
@@ -40,16 +40,15 @@ namespace gui
 	//------------------------------------------------------------*/
 	GEPictureMixedWithPicture::GEPictureMixedWithPicture(uint32_t fcolor, const PictureObject * fbitmap,
 		uint32_t bcolor, const PictureObject * bbitmap, IGElement * nextElement)
-		:GEPicture(fcolor, fbitmap, nextElement), BackgroundPicture{0, 0, bcolor, bbitmap}
+		:GEPicture(fcolor, fbitmap, nextElement), Background{0, 0, bcolor, bbitmap}
 	{
 	}
 
 	/*------------------------------------------------------------//
-	// Sets new parameters for next drawing
+	//
 	//------------------------------------------------------------*/
-	void GEPictureMixedWithPicture::SetDrawingRegion(uint16_t skippedLines, uint16_t skippedRows,
-		uint16_t width,uint16_t height)
+	void GEPictureMixedWithPicture::DecoderWithDecoder(IGElementDecoder & decoder)
 	{
-
+		decoder.Decode(this);
 	}
 } // namespace gui

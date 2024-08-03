@@ -12,8 +12,8 @@ namespace gui
 		virtual ~IUIControlRenderer() = default;
 
 		// methods
-		virtual void Draw(const IUIControl * control) = 0;
-		virtual void Draw(const Group * group) = 0;
+		virtual void DrawUIControl(IUIControl * control) = 0;
+		virtual void DrawGroup(Group * group) = 0;
 	};
 }
 

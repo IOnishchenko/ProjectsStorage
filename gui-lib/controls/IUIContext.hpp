@@ -1,8 +1,6 @@
 #ifndef GUI_IUICONTEXT_HPP
 #define GUI_IUICONTEXT_HPP
 
-#include "UIControlEvents.hpp"
-
 namespace gui
 {
 	class IUIControlRenderer;

@@ -18,7 +18,7 @@ namespace gui
 			IGElement * gelement);
 
 		Group(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			IGElement * gelement);
+			const std::initializer_list<IUIControl *> & controls, IGElement * gelement);
 
 		// destructor
 		~Group() override = default;

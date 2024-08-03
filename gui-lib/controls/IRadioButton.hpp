@@ -21,9 +21,6 @@ namespace gui
 		IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			const std::initializer_list<IUIControl *> & items, IGElement * gelement);
 
-		IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			const std::forward_list<IUIControl *> & items, IGElement * gelement);
-
 		// destructor
 		~IRadioButton() override;
 		

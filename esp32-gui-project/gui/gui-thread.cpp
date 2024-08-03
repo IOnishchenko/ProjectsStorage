@@ -1,6 +1,12 @@
 #include "configuration.h"
 #include "lcd-driver.h"
 #include "IUIContext.hpp"
+#include "GElementDecoderRGB565.hpp"
+#include "ControlRenderer.hpp"
+
+#include "GEPicture.hpp"
+#include "Picture.hpp"
+#include "Group.hpp"
 
 /*-----------------------------------------------------------------//
 //
@@ -18,7 +24,23 @@ extern "C"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-gui::IUIContext ColorScreen;
+//gui::IUIContext ColorScreen;
+static gui::GElementDecoderRGB565 DecoderRGB565;
+//template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
+//ControlRenderer(IGElementDecoder & decoder, lcd_driver & lcd)
+static gui::ControlRenderer<uint16_t, LCD_BUFFER_SIZE_IN_BYTES/sizeof(uint16_t),
+	LCD_BUFFER_NUMBER> Renderer(DecoderRGB565, st7789);
+static gui::IUIContext ColorScreen =
+{
+	.Renderer = Renderer,
+	.EncoderEventObserver = nullptr,
+	.FocusManager = nullptr,
+	.TouchScreenObserver = nullptr
+};
+
+static gui::GEPicture _gpic(&sdr_320x240_V2, nullptr);
+static gui::Picture _cpic(0, 0, 320, 240, ColorScreen, &_gpic);
+static gui::Group _group(100, 100, 150, 100, ColorScreen, {&_cpic}, nullptr);
 
 /*-----------------------------------------------------------------//
 //
@@ -42,54 +64,58 @@ extern "C" void gui_thread(void * args)
 	};
 	sh1106.write_gdata(&gdata0[0], sizeof(gdata0));
 
-	// draw picture
-	uint16_t * gdata[BUFFER_COUNT];
-	for(int i = 0; i < BUFFER_COUNT; i++)
-	{
-		gdata[i] = (uint16_t *)malloc(VSPI_MAX_BUFFER_SIZE);
-	}
+	_group.Draw();
 
-	uint32_t full_size = LCD_VERTICAL_SIZE * LCD_HORIZONTAL_SIZE; // in pixel;
-	uint16_t buff_index = 0;
-	const uint8_t * l8_data = ((const PictureGData*)sdr_320x240_V2.gdata)->data;
-	const uint16_t * lut = (const uint16_t*)((const PictureGData*)sdr_320x240_V2.gdata)->lut;
+	// // draw picture
+	// uint16_t * gdata[BUFFER_COUNT];
+	// for(int i = 0; i < BUFFER_COUNT; i++)
+	// {
+	// 	gdata[i] = (uint16_t *)malloc(VSPI_MAX_BUFFER_SIZE);
+	// }
 
-	int16_t scount = 0;
-	uint8_t lut_index = 0;
-	st7789.set_region(0, 0, LCD_HORIZONTAL_SIZE, LCD_VERTICAL_SIZE);
-	st7789.start_writing_gdata();
-	while(full_size)
-	{
-		uint16_t * buffer = gdata[buff_index];
-		uint16_t size;
-		for(size = 0; (size < (VSPI_MAX_BUFFER_SIZE/2)) && full_size; size++)
-		{
-			if(!scount)
-			{
-				scount = *l8_data;
-				l8_data++;
-				lut_index = *l8_data;
-				l8_data++;
-			}
-			else
-				scount--;
+	// uint32_t full_size = LCD_VERTICAL_SIZE * LCD_HORIZONTAL_SIZE; // in pixel;
+	// uint16_t buff_index = 0;
+	// const uint8_t * l8_data = ((const PictureGData*)sdr_320x240_V2.gdata)->data;
+	// const uint16_t * lut = (const uint16_t*)((const PictureGData*)sdr_320x240_V2.gdata)->lut;
+
+	// int16_t scount = 0;
+	// uint8_t lut_index = 0;
+	// st7789.set_region(0, 0, LCD_HORIZONTAL_SIZE, LCD_VERTICAL_SIZE);
+	// st7789.start_writing_gdata();
+	// while(full_size)
+	// {
+	// 	uint16_t * buffer = gdata[buff_index];
+	// 	uint16_t size;
+	// 	for(size = 0; (size < (VSPI_MAX_BUFFER_SIZE/2)) && full_size; size++)
+	// 	{
+	// 		if(!scount)
+	// 		{
+	// 			scount = *l8_data;
+	// 			l8_data++;
+	// 			lut_index = *l8_data;
+	// 			l8_data++;
+	// 		}
+	// 		else
+	// 			scount--;
 			
-			*buffer++ = lut[lut_index];
-			full_size--;
-		}
-		st7789.write_gdata((uint8_t*)gdata[buff_index], size*2);
+	// 		*buffer++ = lut[lut_index];
+	// 		full_size--;
+	// 	}
+	// 	st7789.write_gdata((uint8_t*)gdata[buff_index], size*2);
 
-		buff_index++;
-		if(buff_index == BUFFER_COUNT)
-			buff_index = 0;
-	}
+	// 	buff_index++;
+	// 	if(buff_index == BUFFER_COUNT)
+	// 		buff_index = 0;
+	// }
 
-	st7789.wait_and_delay(0);
-	for(int i = 0; i < BUFFER_COUNT; i++)
-	{
-		free(gdata[i]);
-	}
+	// st7789.wait_and_delay(0);
+	// for(int i = 0; i < BUFFER_COUNT; i++)
+	// {
+	// 	free(gdata[i]);
+	// }
 
+	uint16_t steps = 0;
+	bool left = 0;
 
 	while(1)
 	{
@@ -97,5 +123,29 @@ extern "C" void gui_thread(void * args)
 		scroll += 1;
 		scroll &= 0b00111111;
 		sh1106_vertical_scroll(scroll);
+
+		if(left)
+		{
+			_cpic.X -= 2;
+			_cpic.Y -= 2;
+			steps++;
+			if(steps == 40)
+			{
+				steps = 0;
+				left = false;
+			}
+		}
+		else
+		{
+			_cpic.X += 2;
+			_cpic.Y += 2;
+			steps++;
+			if(steps == 40)
+			{
+				steps = 0;
+				left = true;
+			}
+		}
+		_group.Draw();
 	}
 }

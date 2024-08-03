@@ -43,4 +43,12 @@ namespace gui
 	{
 		_height = height;
 	}
+
+	/*------------------------------------------------------------//
+	//
+	//------------------------------------------------------------*/
+	void GERectangle::DecoderWithDecoder(IGElementDecoder & decoder)
+	{
+		decoder.Decode(this);
+	}
 }

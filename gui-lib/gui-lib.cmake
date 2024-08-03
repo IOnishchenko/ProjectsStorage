@@ -15,4 +15,5 @@ set(GUI_LIB_DIRS
 	"${GUI_CONTROLS_INCS}"
 	"${GUI_RENDERERS_INCS}"
 	"${GUI_EVENTS_INCS}"
+	"${project_dir}/gui-lib"
 )

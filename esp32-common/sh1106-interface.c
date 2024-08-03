@@ -15,18 +15,13 @@ static uint16_t bindex = 0x00;
 //-----------------------------------------------------------------*/
 void sh1106_set_interface(i2c_device_t device)
 {
-	printf("SH1106 device detected successfully\n");
 	i2c_device_config_t dev_cfg =
 	{
 		.dev_addr_length = SH1106_I2C_ADDRESS_SIZE,
 		.device_address = SH1106_I2C_ADDRESS,
 		.scl_speed_hz = 400000u,
 	};
-	esp_err_t err = i2c_master_bus_add_device(device, &dev_cfg, &sh1106_port);
-	if(err != ESP_OK)
-		printf("i2c_master_bus_add_device failed. error = 0x%X\n", err);
-	else
-		printf("i2c_master_bus_add_device success. error = 0x%X\n", err);
+	i2c_master_bus_add_device(device, &dev_cfg, &sh1106_port);
 }
 
 /*-----------------------------------------------------------------//

@@ -14,10 +14,6 @@ namespace gui
 	public:
 		// constructor
 		Screen(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			IUIControl * dynamicContent, const std::forward_list<IUIControl *> & statisContent,
-			IGElement * gelement);
-
-		Screen(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			IUIControl * dynamicContent, const std::initializer_list<IUIControl *> & statisContent,
 			IGElement * gelement);
 

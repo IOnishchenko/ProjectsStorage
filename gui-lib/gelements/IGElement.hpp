@@ -2,6 +2,7 @@
 #define GUI_GRAPHIC_ELEMENT_BASE_H
 
 #include "stdint.h"
+#include "IGElementDecoder.hpp"
 
 namespace gui
 {	
@@ -26,6 +27,7 @@ namespace gui
 		// public methods
 		virtual uint16_t GetWidth() = 0;
 		virtual uint16_t GetHeight() = 0;
+		virtual void DecoderWithDecoder(IGElementDecoder & decoder) = 0;
 
 		virtual IGElement * GetChild();
 		virtual void SetChild(IGElement * child);

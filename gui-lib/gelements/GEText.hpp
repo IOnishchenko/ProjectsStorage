@@ -28,7 +28,7 @@ namespace gui
 		uint16_t GetWidth() override;
 		uint16_t GetHeight() override;
 		IGElement * GetChild() override;
-		void DecodeGData(IPictureDecoder & decoder) override;
+		void DecoderWithDecoder(IGElementDecoder & decoder) override;
 
 		// methods
 		uint16_t GetCurrentCharacterIndex() const;

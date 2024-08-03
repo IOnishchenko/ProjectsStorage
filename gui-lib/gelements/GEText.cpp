@@ -46,11 +46,10 @@ namespace gui
 	}
 
 	/*------------------------------------------------------------//
-	// Draws the graphic element by hardware features
+	//
 	//------------------------------------------------------------*/
-	void GEText::DecodeGData(IPictureDecoder & decoder)
+	void GEText::DecoderWithDecoder(IGElementDecoder & decoder)
 	{
-		_currectIndex = 0;
 		decoder.Decode(this);
 	}
 

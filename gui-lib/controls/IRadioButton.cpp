@@ -7,13 +7,6 @@ namespace gui
 	// Constructor
 	//--------------------------------------------------------------------------*/
 	IRadioButton::IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		const std::forward_list<IUIControl *> & items, IGElement * gelement)
-		:Group(x, y, w, h, context, items, gelement)
-	{
-		context.TouchScreenObserver->Subscribe(this);
-	}
-
-	IRadioButton::IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		const std::initializer_list<IUIControl *> & items, IGElement * gelement)
 		:Group(x, y, w, h, context, items, gelement)
 	{
@@ -161,7 +154,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	IRadioButtonItem * IRadioButton::FindItemWithState(IRadioButtonItem::State state) const
 	{
-		for(auto cntr : _content)
+		for(auto cntr : Controls)
 		{
 			auto item = static_cast<IRadioButtonItem *>(cntr);
 			if(item->_state == state)

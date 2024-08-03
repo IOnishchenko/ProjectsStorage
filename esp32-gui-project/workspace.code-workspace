@@ -103,7 +103,8 @@
 			"thread": "cpp",
 			"cinttypes": "cpp",
 			"typeinfo": "cpp",
-			"esp_vfs_fat.h": "c"
+			"esp_vfs_fat.h": "c",
+			"gui_resource_types.h": "c"
 		}
 	}
 }

@@ -36,8 +36,7 @@ namespace gui
 		~GEPictureMixedWithColor() override = default;
 
 		// methods
-		void SetDrawingRegion(uint16_t skippedLines, uint16_t skippedRows,
-			uint16_t width,uint16_t height) override;
+		void DecoderWithDecoder(IGElementDecoder & decoder) override;
 	};
 } // namespace gui
 

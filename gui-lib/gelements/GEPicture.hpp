@@ -46,8 +46,7 @@ namespace gui
 		// IGElement methods
 		uint16_t GetWidth() override;
 		uint16_t GetHeight() override;
-		// methods
-		virtual void SetDrawingRegion(uint16_t skippedLines, uint16_t skippedRows, uint16_t width,uint16_t height);
+		void DecoderWithDecoder(IGElementDecoder & decoder) override;
 	};
 }
 
