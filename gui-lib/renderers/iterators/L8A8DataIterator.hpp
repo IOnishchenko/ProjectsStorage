@@ -11,13 +11,15 @@ namespace gui
 	{
 	public:
 		// constructor
-		L8A8DataIterator(uint16_t srow, uint16_t slines0, uint16_t slines1,
-			const PictureObject * object);
+		// L8A8DataIterator(uint16_t srow, uint16_t slines0, uint16_t slines1,
+		// 	const PictureObject * object);
 
 		// destructor
 		~L8A8DataIterator() override = default;
 
 		// IDataIterator methods
+		void Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
+			const PictureObject * object) override;
 		uint32_t GetValue() override;
 		void JumpToNextRow() override;
 	

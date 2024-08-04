@@ -19,6 +19,12 @@ namespace gui
 			TColor GRam[GBufferSize];
 		};
 
+		enum class State
+		{
+			Ready,
+			Busy
+		};
+
 	public:
 		// constructor
 		ControlRenderer(IGElementDecoder & decoder, lcd_driver & lcd);
@@ -35,10 +41,16 @@ namespace gui
 		lcd_driver & _lcd;
 		GFrame _frame[GFrameNumber];
 		uint16_t _frameIndex = 0;
+		uint16_t _widthToDraw = 0;
 		IGElementDecoder & _decoder;
+		State _state = State::Ready;
 
 		// methods
 		void DrawUIControlGElements(GFrame * frame, IUIControl * control);
+		void InitializeAndDraw(IUIControl * control);
+		void Draw(IUIControl * control);
+		void InitializeAndDraw(Group * control);
+		void Draw(Group * control);
 	};
 }
 

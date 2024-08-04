@@ -5,13 +5,16 @@
 #include "ControlRenderer.hpp"
 
 #include "GEPicture.hpp"
+#include "GERectangle.hpp"
 #include "Picture.hpp"
 #include "Group.hpp"
+#include "Label.hpp"
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
 #include "sdr_dumy_picture.h"
+#include "button64x24.h"
 #define BUFFER_COUNT (VSPI_QUEUE_SIZE + 1)
 
 /*-----------------------------------------------------------------//
@@ -39,8 +42,14 @@ static gui::IUIContext ColorScreen =
 };
 
 static gui::GEPicture _gpic(&sdr_320x240_V2, nullptr);
-static gui::Picture _cpic(0, 0, 320, 240, ColorScreen, &_gpic);
-static gui::Group _group(100, 100, 150, 100, ColorScreen, {&_cpic}, nullptr);
+static gui::GEPicture _gpicButton(&button64x24_focused, nullptr);
+
+static gui::Picture _cpic(110, 110, 64, 24, ColorScreen, &_gpicButton);
+static gui::GERectangle _rec(0, 0, 150, 100, 0xDEBA, nullptr);
+static gui::Group _group(115, 114, 150, 100, ColorScreen, {&_cpic}, &_rec);
+
+static gui::GERectangle _recFullScreen(0, 0, 320, 240, 0xBD55, nullptr);
+static gui::Group _groupFullScreen(0, 0, 320, 240, ColorScreen, {&_group}, &_gpic);
 
 /*-----------------------------------------------------------------//
 //
@@ -146,6 +155,6 @@ extern "C" void gui_thread(void * args)
 				left = true;
 			}
 		}
-		_group.Draw();
+		// _group.Draw();
 	}
 }

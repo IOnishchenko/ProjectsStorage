@@ -10,9 +10,12 @@ namespace gui
 	{
 	public:
 		// constructor
-		BitDataIterator(uint16_t srow, uint16_t slines0, uint16_t slines1, const PictureObject * object);
+		// BitDataIterator(uint16_t srow, uint16_t slines0, uint16_t slines1,
+		// 	const PictureObject * object);
 
 		// IDataIterator methods
+		void Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
+			const PictureObject * object) override;
 		uint32_t GetValue() override;
 		void JumpToNextRow() override;
 

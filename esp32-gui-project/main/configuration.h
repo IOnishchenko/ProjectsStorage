@@ -2,7 +2,7 @@
 #define CONFIGURATION_H
 
 #include "driver/gpio.h"
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "driver/spi_master.h"
 
 /*-----------------------------------------------------------------//

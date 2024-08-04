@@ -26,6 +26,7 @@ set(PROJET_SRCS
 	"${GUI_LIB_SRCS}"
 	"../gui/gui-thread.cpp"
 	"../gui/sdr_dumy_picture_sdr_320x240_V2.c"
+	"../gui/button64x24_button64x24_focused.c"
 	"../gui/MainScreen.cpp"
 )
 

@@ -25,37 +25,18 @@ namespace gui
 	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
 	void ControlRenderer<TColor, GBufferSize, GFrameNumber>::DrawUIControl(IUIControl * control)
 	{
-		uint16_t fwidth = GBufferSize/control->Height;
-		uint16_t fullWidth = control->Width;
-		if(fullWidth < fwidth)
-			fwidth = fullWidth;
-		uint16_t x0 = control->X;
-
-		// send command to lcd to start gram data writing
-		_lcd.set_region(control->X, control->Y, control->Width, control->Height);
-		_lcd.start_writing_gdata();
-
-		while(fullWidth)
+		if(_state == State::Ready)
 		{
-			GFrame * frameBuffer = &_frame[_frameIndex];
-			frameBuffer->X = x0;
-			frameBuffer->Y = control->Y;
-			frameBuffer->Width = fwidth;
-			frameBuffer->Height = control->Height;
-			DrawUIControlGElements(frameBuffer, control);
+			// switch to busy state
+			_state = State::Busy;
 
-			// send data to lcd
-			_lcd.write_gdata((const uint8_t *)frameBuffer->GRam, fwidth * control->Height * sizeof(TColor));
-
-			x0 += fwidth;
-			fullWidth -= fwidth;
-			if(fullWidth < fwidth)
-				fwidth = fullWidth;
-
-			_frameIndex++;
-			if(_frameIndex == GFrameNumber)
-				_frameIndex = 0;
+			InitializeAndDraw(control);
+			
+			// switch to ready state
+			_state = State::Ready;
 		}
+		else
+			Draw(control);
 	}
 	
 	/*----------------------------------------------------------------//
@@ -64,46 +45,18 @@ namespace gui
 	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
 	void ControlRenderer<TColor, GBufferSize, GFrameNumber>::DrawGroup(Group * group)
 	{
-		uint16_t fwidth = GBufferSize/group->Height;
-		uint16_t fullWidth = group->Width;
-		if(fullWidth < fwidth)
-			fwidth = fullWidth;
-		uint16_t x0 = group->X;
-
-		// send command to lcd to start gram data writing
-		_lcd.set_region(x0, group->Y, group->Width, group->Height);
-		_lcd.start_writing_gdata();
-
-		// uint16_t frameNumber = 0;
-
-		while(fullWidth)
+		if(_state == State::Ready)
 		{
-			GFrame * frameBuffer = &_frame[_frameIndex];
-			frameBuffer->X = x0;
-			frameBuffer->Y = group->Y;
-			frameBuffer->Width = fwidth;
-			frameBuffer->Height = group->Height;
+			// switch to busy state
+			_state = State::Busy;
 
-			for(auto item : group->Controls)
-			{
-				if(item->DoesOverlapRegion(x0, group->Y, fwidth, group->Height))
-					// the control inside frame buffer region
-					// write data to the frame buffer
-					DrawUIControlGElements(frameBuffer, item);
-			}
+			InitializeAndDraw(group);
 
-			// send data to lcd
-			_lcd.write_gdata((uint8_t *)frameBuffer->GRam, fwidth * group->Height * sizeof(TColor));
-
-			x0 += fwidth;
-			fullWidth -= fwidth;
-			if(fullWidth < fwidth)
-				fwidth = fullWidth;
-
-			_frameIndex++;
-			if(_frameIndex == GFrameNumber)
-				_frameIndex = 0;
+			// switch to ready state
+			_state = State::Ready;
 		}
+		else
+			Draw(group);
 	}
 
 	/*----------------------------------------------------------------//
@@ -122,11 +75,11 @@ namespace gui
 			uint16_t gelX0 = control->X + gel->X;
 			uint16_t gelWidth = gel->GetWidth();
 			uint16_t gelX1 = gelX0 + gelWidth;
-
-			uint16_t gelY0 = control->Y + gel->X;
+			
+			uint16_t gelY0 = control->Y + gel->Y;
 			uint16_t gelHeight = gel->GetHeight();
 			uint16_t gelY1 = gelY0 + gelHeight;
-
+			
 			uint16_t fx0 = frame->X;
 			uint16_t fx1 = fx0 + frame->Width;
 			uint16_t fy0 = frame->Y;
@@ -173,7 +126,7 @@ namespace gui
 				pdy1 = gelHeight - pdy0 - ph;
 
 				// config decoder
-				_decoder.Frame.gdata = frame->GRam + fdy0 + fdx0 * frame->Width;
+				_decoder.Frame.gdata = frame->GRam + fdy0 + fdx0 * frame->Height;
 				_decoder.Frame.skippedLines = frame->Height - ph;
 
 				_decoder.Picture.skippedLinesOnBottom = pdy1;
@@ -184,6 +137,131 @@ namespace gui
 
 				// decode GElement to frame
 				gel->DecoderWithDecoder(_decoder);
+			}
+		}
+	}
+
+	/*----------------------------------------------------------------//
+	//
+	//----------------------------------------------------------------*/
+	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
+	inline void ControlRenderer<TColor, GBufferSize, GFrameNumber>::InitializeAndDraw(IUIControl * control)
+	{
+		// initialization
+		uint16_t fwidth = GBufferSize/control->Height;
+		uint16_t fullWidth = control->Width;
+		if(fullWidth < fwidth)
+			fwidth = fullWidth;
+		uint16_t x0 = control->X;
+
+		// send command to lcd to start gram data writing
+		_lcd.set_region(control->X, control->Y, control->Width, control->Height);
+		_lcd.start_writing_gdata();
+
+		while(fullWidth)
+		{
+			GFrame * frameBuffer = &_frame[_frameIndex];
+			frameBuffer->X = x0;
+			frameBuffer->Y = control->Y;
+			frameBuffer->Width = fwidth;
+			frameBuffer->Height = control->Height;
+			DrawUIControlGElements(frameBuffer, control);
+
+			// send data to lcd
+			_lcd.write_gdata((const uint8_t *)frameBuffer->GRam, fwidth * control->Height * sizeof(TColor));
+
+			x0 += fwidth;
+			fullWidth -= fwidth;
+			if(fullWidth < fwidth)
+				fwidth = fullWidth;
+
+			_frameIndex++;
+			if(_frameIndex == GFrameNumber)
+				_frameIndex = 0;
+		}
+	}
+
+	/*----------------------------------------------------------------//
+	//
+	//----------------------------------------------------------------*/
+	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
+	inline void ControlRenderer<TColor, GBufferSize, GFrameNumber>::Draw(IUIControl * control)
+	{
+		GFrame * frameBuffer = &_frame[_frameIndex];
+		// draw base group
+		DrawUIControlGElements(frameBuffer, control);
+	}
+
+	/*----------------------------------------------------------------//
+	//
+	//----------------------------------------------------------------*/
+	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
+	inline void ControlRenderer<TColor, GBufferSize, GFrameNumber>::InitializeAndDraw(Group * group)
+	{
+		// initialization
+		uint16_t fwidth = GBufferSize/group->Height;
+		_widthToDraw = group->Width;
+		if(_widthToDraw < fwidth)
+			fwidth = _widthToDraw;
+		uint16_t x0 = group->X;
+
+		// send command to lcd to start gram data writing
+		_lcd.set_region(group->X, group->Y, group->Width, group->Height);
+		_lcd.start_writing_gdata();
+
+		while(_widthToDraw)
+		{
+			GFrame * frameBuffer = &_frame[_frameIndex];
+			frameBuffer->X = x0;
+			frameBuffer->Y = group->Y;
+			frameBuffer->Width = fwidth;
+			frameBuffer->Height = group->Height;
+
+			// draw base group
+			DrawUIControlGElements(frameBuffer, group);
+
+			// draw children
+			for(auto item : group->Controls)
+			{
+				if(item->DoesOverlapRegion(x0, group->Y, fwidth, group->Height))
+					// the control inside frame buffer region
+					// write data to the frame buffer
+					item->Draw();
+			}
+
+			// send data to lcd
+			_lcd.write_gdata((uint8_t *)frameBuffer->GRam, fwidth * group->Height * sizeof(TColor));
+
+			x0 += fwidth;
+			_widthToDraw -= fwidth;
+			if(_widthToDraw < fwidth)
+				fwidth = _widthToDraw;
+
+			_frameIndex++;
+			if(_frameIndex == GFrameNumber)
+				_frameIndex = 0;
+		}
+	}
+
+	/*----------------------------------------------------------------//
+	//
+	//----------------------------------------------------------------*/
+	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
+	inline void ControlRenderer<TColor, GBufferSize, GFrameNumber>::Draw(Group * group)
+	{
+		GFrame * frameBuffer = &_frame[_frameIndex];
+		// draw base group
+		DrawUIControlGElements(frameBuffer, group);
+
+		// draw children
+		for(auto item : group->Controls)
+		{
+			if(item->DoesOverlapRegion(frameBuffer->X, frameBuffer->Y,
+				frameBuffer->Width, frameBuffer->Height))
+			{
+				// the control inside frame buffer region
+				// write data to the frame buffer
+				item->Draw();
 			}
 		}
 	}

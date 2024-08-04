@@ -10,10 +10,10 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	L8A8CompresedDataIterator<TLut>::L8A8CompresedDataIterator(uint16_t srow, uint16_t slines0,
+	void L8A8CompresedDataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0,
 		uint16_t slines1, const PictureObject * object)
-		:_skipedLines(slines0 + slines1)
 	{
+		_skipedLines =slines0 + slines1;
 		const PictureGData * pic = (PictureGData *)object->gdata;
 		
 		uint32_t skipped = srow;

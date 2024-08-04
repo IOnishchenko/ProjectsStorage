@@ -104,7 +104,9 @@
 			"cinttypes": "cpp",
 			"typeinfo": "cpp",
 			"esp_vfs_fat.h": "c",
-			"gui_resource_types.h": "c"
+			"gui_resource_types.h": "c",
+			"picture_types.h": "c",
+			"spi_master.h": "c"
 		}
 	}
 }

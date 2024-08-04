@@ -11,9 +11,10 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	BitDataIterator::BitDataIterator(uint16_t srow, uint16_t slines0, uint16_t slines1, const PictureObject * object)
-		:_skipedLines{(uint16_t)(slines0 + slines1)}
+	void BitDataIterator::Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
+		const PictureObject * object)
 	{
+		_skipedLines = slines0 + slines1;
 		// position for riading
 		_bitIndex = srow * object->height + slines0;
 		_current = ((PictureGData *)object->gdata)->data;
