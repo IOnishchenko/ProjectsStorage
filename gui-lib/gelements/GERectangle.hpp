@@ -24,7 +24,7 @@ namespace gui
 		uint16_t GetHeight() override;
 		void SetWidth(uint16_t width);
 		void SetHeight(uint16_t height);
-		void DecoderWithDecoder(IGElementDecoder & decoder) override;
+		void DecodeWithDecoder(IGElementDecoder & decoder) override;
 
 	private:
 		int _width;

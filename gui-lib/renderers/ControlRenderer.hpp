@@ -16,13 +16,14 @@ namespace gui
 			uint16_t Y;
 			uint16_t Width;
 			uint16_t Height;
-			TColor GRam[GBufferSize];
+			uint16_t SkippedLines;
+			TColor * GRam;
 		};
 
 		enum class State
 		{
 			Ready,
-			Busy
+			Drawing
 		};
 
 	public:
@@ -39,6 +40,7 @@ namespace gui
 	private:
 		// fields
 		lcd_driver & _lcd;
+		TColor _gdata[GFrameNumber][GBufferSize];
 		GFrame _frame[GFrameNumber];
 		uint16_t _frameIndex = 0;
 		uint16_t _widthToDraw = 0;

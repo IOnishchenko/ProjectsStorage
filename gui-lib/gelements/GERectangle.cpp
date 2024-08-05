@@ -47,7 +47,7 @@ namespace gui
 	/*------------------------------------------------------------//
 	//
 	//------------------------------------------------------------*/
-	void GERectangle::DecoderWithDecoder(IGElementDecoder & decoder)
+	void GERectangle::DecodeWithDecoder(IGElementDecoder & decoder)
 	{
 		decoder.Decode(this);
 	}

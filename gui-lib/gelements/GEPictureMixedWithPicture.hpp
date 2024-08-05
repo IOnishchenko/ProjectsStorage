@@ -38,7 +38,7 @@ namespace gui
 		~GEPictureMixedWithPicture() override = default;
 
 		// methods
-		void DecoderWithDecoder(IGElementDecoder & decoder) override;
+		void DecodeWithDecoder(IGElementDecoder & decoder) override;
 	};
 }
 

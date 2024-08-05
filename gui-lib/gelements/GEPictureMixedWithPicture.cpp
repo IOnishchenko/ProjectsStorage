@@ -47,7 +47,7 @@ namespace gui
 	/*------------------------------------------------------------//
 	//
 	//------------------------------------------------------------*/
-	void GEPictureMixedWithPicture::DecoderWithDecoder(IGElementDecoder & decoder)
+	void GEPictureMixedWithPicture::DecodeWithDecoder(IGElementDecoder & decoder)
 	{
 		decoder.Decode(this);
 	}

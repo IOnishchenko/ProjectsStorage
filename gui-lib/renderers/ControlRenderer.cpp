@@ -7,7 +7,6 @@
 
 namespace gui
 {
-	
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
@@ -16,8 +15,13 @@ namespace gui
 		IGElementDecoder & decoder, lcd_driver & lcd)
 		:_lcd{lcd}, _decoder{decoder}
 	{
+		// init frame structures
+		for(int i = 0; i < GFrameNumber; i++)
+		{
+			_frame[i].GRam = _gdata[i];
+		}
 	}
-	
+
 	// IUIControlRenderer methods
 	/*----------------------------------------------------------------//
 	//
@@ -28,7 +32,7 @@ namespace gui
 		if(_state == State::Ready)
 		{
 			// switch to busy state
-			_state = State::Busy;
+			_state = State::Drawing;
 
 			InitializeAndDraw(control);
 			
@@ -38,7 +42,7 @@ namespace gui
 		else
 			Draw(control);
 	}
-	
+
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
@@ -48,7 +52,7 @@ namespace gui
 		if(_state == State::Ready)
 		{
 			// switch to busy state
-			_state = State::Busy;
+			_state = State::Drawing;
 
 			InitializeAndDraw(group);
 
@@ -126,8 +130,8 @@ namespace gui
 				pdy1 = gelHeight - pdy0 - ph;
 
 				// config decoder
-				_decoder.Frame.gdata = frame->GRam + fdy0 + fdx0 * frame->Height;
-				_decoder.Frame.skippedLines = frame->Height - ph;
+				_decoder.Frame.gdata = frame->GRam + fdy0 + fdx0 * (frame->Height + frame->SkippedLines);
+				_decoder.Frame.skippedLines = frame->Height - ph + frame->SkippedLines;
 
 				_decoder.Picture.skippedLinesOnBottom = pdy1;
 				_decoder.Picture.skippedLinesOnTop = pdy0;
@@ -136,7 +140,7 @@ namespace gui
 				_decoder.Picture.height = ph;
 
 				// decode GElement to frame
-				gel->DecoderWithDecoder(_decoder);
+				gel->DecodeWithDecoder(_decoder);
 			}
 		}
 	}
@@ -165,6 +169,8 @@ namespace gui
 			frameBuffer->Y = control->Y;
 			frameBuffer->Width = fwidth;
 			frameBuffer->Height = control->Height;
+			frameBuffer->SkippedLines = 0;
+
 			DrawUIControlGElements(frameBuffer, control);
 
 			// send data to lcd
@@ -187,9 +193,8 @@ namespace gui
 	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
 	inline void ControlRenderer<TColor, GBufferSize, GFrameNumber>::Draw(IUIControl * control)
 	{
-		GFrame * frameBuffer = &_frame[_frameIndex];
 		// draw base group
-		DrawUIControlGElements(frameBuffer, control);
+		DrawUIControlGElements(&_frame[_frameIndex], control);
 	}
 
 	/*----------------------------------------------------------------//
@@ -216,6 +221,7 @@ namespace gui
 			frameBuffer->Y = group->Y;
 			frameBuffer->Width = fwidth;
 			frameBuffer->Height = group->Height;
+			frameBuffer->SkippedLines = 0;
 
 			// draw base group
 			DrawUIControlGElements(frameBuffer, group);
@@ -249,10 +255,29 @@ namespace gui
 	template<typename TColor, uint16_t GBufferSize, uint16_t GFrameNumber>
 	inline void ControlRenderer<TColor, GBufferSize, GFrameNumber>::Draw(Group * group)
 	{
+		// save origin frame settings
 		GFrame * frameBuffer = &_frame[_frameIndex];
+		GFrame origin = *frameBuffer;
+
+		// updata frame according to current group size
+		frameBuffer->GRam += group->Y - frameBuffer->Y;
+		frameBuffer->Y = group->Y;
+		frameBuffer->SkippedLines += frameBuffer->Height - group->Height;
+		if(frameBuffer->X < group->X)
+		{
+			uint16_t dx = group->X - frameBuffer->X;
+			frameBuffer->Width -= dx;
+			frameBuffer->X = group->X;
+			frameBuffer->GRam += frameBuffer->Height * dx;
+		}
+		uint16_t groupXend = group->X + group->Width;
+		uint16_t frameXend = frameBuffer->X + frameBuffer->Width;
+		if(groupXend < frameXend)
+			frameBuffer->Width -= frameXend - groupXend;
+		frameBuffer->Height = group->Height;
+
 		// draw base group
 		DrawUIControlGElements(frameBuffer, group);
-
 		// draw children
 		for(auto item : group->Controls)
 		{
@@ -264,6 +289,8 @@ namespace gui
 				item->Draw();
 			}
 		}
+		// restore origin frame settings
+		*frameBuffer = origin;
 	}
 
 	/*----------------------------------------------------------------//

@@ -27,7 +27,7 @@ namespace gui
 		// public methods
 		virtual uint16_t GetWidth() = 0;
 		virtual uint16_t GetHeight() = 0;
-		virtual void DecoderWithDecoder(IGElementDecoder & decoder) = 0;
+		virtual void DecodeWithDecoder(IGElementDecoder & decoder) = 0;
 
 		virtual IGElement * GetChild();
 		virtual void SetChild(IGElement * child);

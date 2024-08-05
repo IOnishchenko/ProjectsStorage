@@ -46,7 +46,7 @@ namespace gui
 		// IGElement methods
 		uint16_t GetWidth() override;
 		uint16_t GetHeight() override;
-		void DecoderWithDecoder(IGElementDecoder & decoder) override;
+		void DecodeWithDecoder(IGElementDecoder & decoder) override;
 	};
 }
 

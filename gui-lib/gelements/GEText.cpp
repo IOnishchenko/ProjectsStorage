@@ -48,7 +48,7 @@ namespace gui
 	/*------------------------------------------------------------//
 	//
 	//------------------------------------------------------------*/
-	void GEText::DecoderWithDecoder(IGElementDecoder & decoder)
+	void GEText::DecodeWithDecoder(IGElementDecoder & decoder)
 	{
 		decoder.Decode(this);
 	}

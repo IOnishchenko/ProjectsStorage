@@ -44,12 +44,18 @@ static gui::IUIContext ColorScreen =
 static gui::GEPicture _gpic(&sdr_320x240_V2, nullptr);
 static gui::GEPicture _gpicButton(&button64x24_focused, nullptr);
 
-static gui::Picture _cpic(110, 110, 64, 24, ColorScreen, &_gpicButton);
+static gui::Picture _cpic0(90, 40, 64, 24, ColorScreen, &_gpicButton);
+static gui::Picture _cpic1(90, 138, 64, 24, ColorScreen, &_gpicButton);
+static gui::Picture _cpic2(225, 40, 64, 24, ColorScreen, &_gpicButton);
+static gui::Picture _cpic3(225, 138, 64, 24, ColorScreen, &_gpicButton);
+static gui::Picture _cpic4(150, 100, 64, 24, ColorScreen, &_gpicButton);
 static gui::GERectangle _rec(0, 0, 150, 100, 0xDEBA, nullptr);
-static gui::Group _group(115, 114, 150, 100, ColorScreen, {&_cpic}, &_rec);
+static gui::Group _group(100, 50, 150, 100, ColorScreen,
+	{&_cpic0, &_cpic1, &_cpic2, &_cpic3, &_cpic4}, &_rec);
 
 static gui::GERectangle _recFullScreen(0, 0, 320, 240, 0xBD55, nullptr);
-static gui::Group _groupFullScreen(0, 0, 320, 240, ColorScreen, {&_group}, &_gpic);
+static gui::Group _groupInter(20, 20, 280, 200, ColorScreen, {&_group}, &_recFullScreen);
+static gui::Group _groupFullScreen(0, 0, 320, 240, ColorScreen, {}, &_gpic);
 
 /*-----------------------------------------------------------------//
 //
@@ -73,7 +79,7 @@ extern "C" void gui_thread(void * args)
 	};
 	sh1106.write_gdata(&gdata0[0], sizeof(gdata0));
 
-	_group.Draw();
+	_groupFullScreen.Draw();
 
 	// // draw picture
 	// uint16_t * gdata[BUFFER_COUNT];
@@ -133,28 +139,28 @@ extern "C" void gui_thread(void * args)
 		scroll &= 0b00111111;
 		sh1106_vertical_scroll(scroll);
 
-		if(left)
-		{
-			_cpic.X -= 2;
-			_cpic.Y -= 2;
-			steps++;
-			if(steps == 40)
-			{
-				steps = 0;
-				left = false;
-			}
-		}
-		else
-		{
-			_cpic.X += 2;
-			_cpic.Y += 2;
-			steps++;
-			if(steps == 40)
-			{
-				steps = 0;
-				left = true;
-			}
-		}
+		// if(left)
+		// {
+		// 	_cpic.X -= 2;
+		// 	_cpic.Y -= 2;
+		// 	steps++;
+		// 	if(steps == 40)
+		// 	{
+		// 		steps = 0;
+		// 		left = false;
+		// 	}
+		// }
+		// else
+		// {
+		// 	_cpic.X += 2;
+		// 	_cpic.Y += 2;
+		// 	steps++;
+		// 	if(steps == 40)
+		// 	{
+		// 		steps = 0;
+		// 		left = true;
+		// 	}
+		// }
 		// _group.Draw();
 	}
 }
