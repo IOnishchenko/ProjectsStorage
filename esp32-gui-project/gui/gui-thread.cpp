@@ -6,15 +6,21 @@
 
 #include "GEPicture.hpp"
 #include "GERectangle.hpp"
+#include "GEText.hpp"
 #include "Picture.hpp"
 #include "Group.hpp"
 #include "Label.hpp"
 
+#include "Font.hpp"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
 #include "sdr_dumy_picture.h"
 #include "button64x24.h"
+#include "font12.h"
+#include "font16.h"
+#include "font20.h"
+#include "font24.h"
 #define BUFFER_COUNT (VSPI_QUEUE_SIZE + 1)
 
 /*-----------------------------------------------------------------//
@@ -44,18 +50,27 @@ static gui::IUIContext ColorScreen =
 static gui::GEPicture _gpic(&sdr_320x240_V2, nullptr);
 static gui::GEPicture _gpicButton(&button64x24_focused, nullptr);
 
+static gui::Font guiFont12(font12);
+static gui::GEText _txt1(10, 10, 0, 12, "Test 12 bold", 0x447E, /*0xBD55*/0xDEBA, guiFont12, nullptr);
+static gui::Font guiFont16(font16);
+static gui::GEText _txt2(10, 25, 0, 16, "Test 16 bold", 0x447E, /*0xBD55*/0xDEBA, guiFont16, &_txt1);
+static gui::Font guiFont20(font20);
+static gui::GEText _txt3(10, 40, 0, 20, "Test 20 regular", 0x447E, /*0xBD55*/0xDEBA, guiFont20, &_txt2);
+static gui::Font guiFont24(font24);
+static gui::GEText _txt0(10, 62, 0, 20, "Test 20 regular", 0x447E, /*0xBD55*/0xDEBA, guiFont24, &_txt3);
+
 static gui::Picture _cpic0(90, 40, 64, 24, ColorScreen, &_gpicButton);
 static gui::Picture _cpic1(90, 138, 64, 24, ColorScreen, &_gpicButton);
 static gui::Picture _cpic2(225, 40, 64, 24, ColorScreen, &_gpicButton);
 static gui::Picture _cpic3(225, 138, 64, 24, ColorScreen, &_gpicButton);
 static gui::Picture _cpic4(150, 100, 64, 24, ColorScreen, &_gpicButton);
-static gui::GERectangle _rec(0, 0, 150, 100, 0xDEBA, nullptr);
+static gui::GERectangle _rec(0, 0, 150, 100, 0xDEBA, &_txt0);
 static gui::Group _group(100, 50, 150, 100, ColorScreen,
-	{&_cpic0, &_cpic1, &_cpic2, &_cpic3, &_cpic4}, &_rec);
+	{/*&_cpic0, &_cpic1, &_cpic2, &_cpic3, &_cpic4*/}, &_rec);
 
 static gui::GERectangle _recFullScreen(0, 0, 320, 240, 0xBD55, nullptr);
 static gui::Group _groupInter(20, 20, 280, 200, ColorScreen, {&_group}, &_recFullScreen);
-static gui::Group _groupFullScreen(0, 0, 320, 240, ColorScreen, {}, &_gpic);
+static gui::Group _groupFullScreen(0, 0, 320, 240, ColorScreen, {&_groupInter}, &_gpic);
 
 /*-----------------------------------------------------------------//
 //

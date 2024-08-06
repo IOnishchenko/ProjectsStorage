@@ -2,7 +2,6 @@
 #include "attributes.h"
 #include "gui_resource_types.h"
 
-#define GUI_USE_PICTUREGDATA
 
 //-------------------------------------------------------
 // Picture LUT

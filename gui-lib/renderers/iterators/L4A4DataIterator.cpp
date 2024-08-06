@@ -14,11 +14,10 @@ namespace gui
 		uint16_t slines1, const PictureObject * object)
 	{
 		_skipedLines = slines0 + slines1;
-		_index = slines0;
+		_index = slines0 + srow * object->height;
 		const PictureGData * pic = (PictureGData *)object->gdata;
 		_lut = (TLut *)pic->lut;
 		_gdata = pic->data;
-		_gdata += (slines0 + srow * object->height) >> 1;
 	}
 
 	// IDataIterator methods
@@ -28,14 +27,10 @@ namespace gui
 	template<typename TLut>
 	uint32_t L4A4DataIterator<TLut>::GetValue()
 	{
-		uint8_t value = *_gdata;
-		value = (_index & 0x0001) ? (value >> 4) : (value & 0x0f);
+		uint8_t value = _gdata[_index >> 1];
+		value = (_index & 0x01) ? (value >> 4) : (value & 0x0f);
 		uint32_t res = _lut[value];
-
 		_index++;
-		if(!(_index & 0x01))
-			_gdata++;
-
 		return res;
 	}
 
@@ -46,7 +41,6 @@ namespace gui
 	void L4A4DataIterator<TLut>::JumpToNextRow()
 	{
 		_index += _skipedLines;
-		_gdata += _skipedLines >> 1;
 	}
 
 	/*----------------------------------------------------------------//

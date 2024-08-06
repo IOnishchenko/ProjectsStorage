@@ -22,8 +22,8 @@ namespace gui
 	private:
 		// fields
 		uint16_t _skipedLines;
-		const uint8_t * _current;
-		uint16_t _bitIndex;
+		const uint8_t * _gdata;
+		uint16_t _index;
 	};
 }
 

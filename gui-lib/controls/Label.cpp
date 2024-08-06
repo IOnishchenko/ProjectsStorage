@@ -112,10 +112,12 @@ namespace gui
 	{
 		if((_background.GetHeight() > _textGelement.GetHeight()) || (_background.GetWidth() > _textGelement.GetWidth()))
 		{
+			for(IGElement * itm = &_background; itm; itm = itm->PrepareForDrawing());
 			return &_background;
 		}
 		else
 		{
+			for(IGElement * itm = &_textGelement; itm; itm = itm->PrepareForDrawing());
 			return &_textGelement;
 		}
 	}

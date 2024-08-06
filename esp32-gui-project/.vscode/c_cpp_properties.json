@@ -19,7 +19,11 @@
                     "${workspaceFolder}/../**"
                 ],
                 "limitSymbolsToIncludedHeaders": true
-            }
+            },
+            "defines": [
+                "GUI_USE_PICTUREGDATA",
+                "GMT020_02_DISPLAY_IS_USED"
+            ]
         }
     ],
     "version": 4

@@ -33,10 +33,13 @@ namespace gui
 		switch(_visualState)
 		{
 			case CheckBoxState::Unchecked:
+				for(auto itm = _uncheckedGEl; itm; itm = itm->PrepareForDrawing());
 				return _uncheckedGEl;
 			case CheckBoxState::Pressed:
+				for(auto itm = _pressedGEl; itm; itm = itm->PrepareForDrawing());
 				return _pressedGEl;
 			case CheckBoxState::Checked:
+				for(auto itm = _checkedGEl; itm; itm = itm->PrepareForDrawing());
 				return _checkedGEl;
 		}
 		return nullptr;

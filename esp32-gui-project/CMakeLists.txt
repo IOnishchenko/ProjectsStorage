@@ -8,7 +8,9 @@ set(root_dir "./..")
 set(project_dir "./../..")
 
 # add_compile_definitions(GUI_TOUCH_SCREEN_ENABLED)
-add_compile_definitions(GUI_FOCUSABLE_CONTROLS_ENABLE)
+# add_compile_definitions(GUI_FOCUSABLE_CONTROLS_ENABLE)
+add_compile_definitions(GUI_USE_PICTUREGDATA)
+add_compile_definitions(GMT020_02_DISPLAY_IS_USED)
 
 include("${root_dir}/command/command.cmake")
 include("${root_dir}/common/common.cmake")
@@ -27,6 +29,10 @@ set(PROJET_SRCS
 	"../gui/gui-thread.cpp"
 	"../gui/sdr_dumy_picture_sdr_320x240_V2.c"
 	"../gui/button64x24_button64x24_focused.c"
+	"../gui/font12.c"
+	"../gui/font16.c"
+	"../gui/font20.c"
+	"../gui/font24.c"
 	"../gui/MainScreen.cpp"
 )
 

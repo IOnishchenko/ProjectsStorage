@@ -21,10 +21,13 @@ namespace gui
 		switch(_state)
 		{
 			case IRadioButtonItem::State::Selected:
+				for(auto itm = _selectedGEl; itm; itm = itm->PrepareForDrawing());
 				return _selectedGEl;
 			case IRadioButtonItem::State::Normal:
+				for(auto itm = _normalGEl; itm; itm = itm->PrepareForDrawing());
 				return _normalGEl;
 			case IRadioButtonItem::State::Pressed:
+				for(auto itm = _pressedGEl; itm; itm = itm->PrepareForDrawing());
 				return _pressedGEl;
 			default:
 				return nullptr;

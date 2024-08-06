@@ -8,9 +8,9 @@ namespace gui
 	GEText::GEText(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
 		const std::string_view & txt, uint32_t foreground, uint32_t background,
 		const Font & font, IGElement * nextElement)
-		:GEPictureMixedWithColor(x, y, width, height, 0, 0,
-		&Font::GetFirstCharacterGraphicData(font), background, nextElement),
-		_font{font}, _currectIndex{0}
+		:GEPictureMixedWithColor(x, y, width, height, 0, 0, nullptr,
+		foreground, background, nextElement),
+		Text{txt}, _font{font}, _currectIndex{0}, _baseX{x}
 	{
 	}
 
@@ -19,7 +19,7 @@ namespace gui
 	//------------------------------------------------------------*/
 	uint16_t GEText::GetWidth()
 	{
-		return Font::GetTextLineWidthInPixels(_font, Text);
+		return Foreground.Bitmap->width;
 	}
 
 	/*------------------------------------------------------------//
@@ -38,7 +38,8 @@ namespace gui
 		if((Text.length() - 1) > _currectIndex)
 		{
 			++_currectIndex;
-			Foreground.Bitmap = &Font::GetCharacterGraphicData(_font, Text[_currectIndex]);
+			X += Foreground.Bitmap->width;
+			Foreground.Bitmap = Font::GetCharacterGraphicData(_font, Text[_currectIndex]);
 			return this;
 		}
 		_currectIndex = 0;
@@ -59,6 +60,18 @@ namespace gui
 	uint16_t GEText::GetCurrentCharacterIndex() const
 	{
 		return _currectIndex;
+	}
+
+	/*------------------------------------------------------------//
+	//
+	//------------------------------------------------------------*/
+	IGElement * GEText::PrepareForDrawing()
+	{
+		// restore default settings
+		X = _baseX;
+		_currectIndex = 0;
+		Foreground.Bitmap = Font::GetCharacterGraphicData(_font, Text[_currectIndex]);
+		return _gelement;
 	}
 
 	/*------------------------------------------------------------//

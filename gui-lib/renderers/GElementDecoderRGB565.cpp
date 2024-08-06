@@ -260,6 +260,13 @@ namespace gui
 	//----------------------------------------------------------------*/
 	uint16_t GElementDecoderRGB565::CalculateColorWithAlpha(uint8_t alpha, uint16_t foreground, uint16_t background)
 	{
+#ifdef GMT020_02_DISPLAY_IS_USED
+		// GMT020-02 LCD display requires inverted bits for RGB value
+		// Should be removed for other displays
+		foreground = ~foreground;
+		background = ~background;
+#endif // GMT020_02_DISPLAY_IS_USED
+
 		uint16_t fr = (foreground >> 8) & 0xf8U;
 		fr |= fr >> 5;
 		uint16_t fg = (foreground >> 3) & 0xfcU;
@@ -282,7 +289,12 @@ namespace gui
 		uint16_t rgb = (r << 8) & 0xf800u;
 		rgb |= (g << 3) & 0x03e0u;
 		rgb |= (b >> 3);
-
+#ifdef GMT020_02_DISPLAY_IS_USED
+		// GMT020-02 LCD display requires inverted bits for RGB value
+		// Should be removed for other displays
+		return ~rgb;
+#else
 		return rgb;
+#endif // GMT020_02_DISPLAY_IS_USED
 	}
 }

@@ -30,8 +30,10 @@ namespace gui
 		switch(_state)
 		{
 			case ButtonState::Normal:
+				for(auto itm = _normalBG; itm; itm = itm->PrepareForDrawing());
 				return _normalBG;
 			case ButtonState::Pressed:
+				for(auto itm = _pressedBG; itm; itm = itm->PrepareForDrawing());
 				return _pressedBG;
 			default:
 				return nullptr;

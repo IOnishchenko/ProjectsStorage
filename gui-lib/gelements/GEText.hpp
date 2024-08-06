@@ -32,12 +32,14 @@ namespace gui
 
 		// methods
 		uint16_t GetCurrentCharacterIndex() const;
+		IGElement * PrepareForDrawing() override;
 
 		GEText& operator=(const std::string_view & txt);
 
 	private:
 		const Font & _font;
 		uint16_t _currectIndex;
+		uint16_t _baseX;
 	};
 }
 

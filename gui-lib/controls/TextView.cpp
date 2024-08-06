@@ -12,6 +12,7 @@ namespace gui
 //----------------------------------------------------------------*/
 IGElement * TextView::GetGraphicElement()
 {
+	for(IGElement * itm = &_background; itm; itm = itm->PrepareForDrawing());
 	return &_background;
 }
 

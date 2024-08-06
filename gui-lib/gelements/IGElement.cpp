@@ -25,4 +25,12 @@ namespace gui
 	{
 		_gelement = child;
 	}
+
+	/*----------------------------------------------------------------//
+	// Called from UIControl
+	//----------------------------------------------------------------*/
+	IGElement * IGElement::PrepareForDrawing()
+	{
+		return _gelement;
+	}
 }

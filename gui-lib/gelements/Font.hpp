@@ -16,11 +16,11 @@ namespace gui
 		static uint16_t GetCharacterWidthInPixels(const Font & font, uint8_t c);
 		static uint16_t GetCharacterHeightInPixels(const Font & font);
 		static uint16_t GetTextLineWidthInPixels(const Font & font, const std::string_view & text);
-		static const PictureObject & GetCharacterGraphicData(const Font & font, uint8_t scode);
-		static const PictureObject & GetFirstCharacterGraphicData(const Font & font);
+		static const PictureObject * GetCharacterGraphicData(const Font & font, uint8_t scode);
+		static const PictureObject * GetFirstCharacterGraphicData(const Font & font);
 
 		// constructor
-		Font(const PictureObject * const * fontGraphicData);
+		explicit Font(const PictureObject * const * fontGraphicData);
 
 	private:
 		// fields

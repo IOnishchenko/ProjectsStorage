@@ -31,6 +31,7 @@ namespace gui
 
 		virtual IGElement * GetChild();
 		virtual void SetChild(IGElement * child);
+		virtual IGElement * PrepareForDrawing();
 			
 	protected:
 

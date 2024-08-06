@@ -50,6 +50,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	IGElement * Group::GetGraphicElement()
 	{
+		for(auto itm = _background; itm; itm = itm->PrepareForDrawing());
 		return _background;
 	}
 	
