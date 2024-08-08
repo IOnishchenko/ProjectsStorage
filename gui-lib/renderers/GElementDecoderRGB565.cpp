@@ -287,7 +287,7 @@ namespace gui
 		uint16_t b = (fb * alpha + bb * 255u - bb * alpha)/255u;
 
 		uint16_t rgb = (r << 8) & 0xf800u;
-		rgb |= (g << 3) & 0x03e0u;
+		rgb |= (g << 3) & 0x07e0u;
 		rgb |= (b >> 3);
 #ifdef GMT020_02_DISPLAY_IS_USED
 		// GMT020-02 LCD display requires inverted bits for RGB value

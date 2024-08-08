@@ -47,29 +47,42 @@ static gui::IUIContext ColorScreen =
 	.TouchScreenObserver = nullptr
 };
 
+constexpr uint16_t fontColor = ~(((0xff9302 >> 8) & 0xf800) | ((0xff9302 >> 5) & 0x07e0) | ((0xff9302 >> 3) & 0x001f));
+constexpr uint16_t backColor = ~(((0x3d5a68 >> 8) & 0xf800) | ((0x3d5a68 >> 5) & 0x07e0) | ((0x3d5a68 >> 3) & 0x001f));
+
 static gui::GEPicture _gpic(&sdr_320x240_V2, nullptr);
-static gui::GEPicture _gpicButton(&button64x24_focused, nullptr);
 
 static gui::Font guiFont12(font12);
-static gui::GEText _txt1(10, 10, 0, 12, "Test 12 bold", 0x447E, /*0xBD55*/0xDEBA, guiFont12, nullptr);
 static gui::Font guiFont16(font16);
-static gui::GEText _txt2(10, 25, 0, 16, "Test 16 bold", 0x447E, /*0xBD55*/0xDEBA, guiFont16, &_txt1);
 static gui::Font guiFont20(font20);
-static gui::GEText _txt3(10, 40, 0, 20, "Test 20 regular", 0x447E, /*0xBD55*/0xDEBA, guiFont20, &_txt2);
 static gui::Font guiFont24(font24);
-static gui::GEText _txt0(10, 62, 0, 20, "Test 20 regular", 0x447E, /*0xBD55*/0xDEBA, guiFont24, &_txt3);
 
-static gui::Picture _cpic0(90, 40, 64, 24, ColorScreen, &_gpicButton);
-static gui::Picture _cpic1(90, 138, 64, 24, ColorScreen, &_gpicButton);
-static gui::Picture _cpic2(225, 40, 64, 24, ColorScreen, &_gpicButton);
-static gui::Picture _cpic3(225, 138, 64, 24, ColorScreen, &_gpicButton);
-static gui::Picture _cpic4(150, 100, 64, 24, ColorScreen, &_gpicButton);
-static gui::GERectangle _rec(0, 0, 150, 100, 0xDEBA, &_txt0);
-static gui::Group _group(100, 50, 150, 100, ColorScreen,
-	{/*&_cpic0, &_cpic1, &_cpic2, &_cpic3, &_cpic4*/}, &_rec);
+static gui::GEText _txt0(10, 7, 0, 20, "Test", fontColor, backColor/*0xDEBA*/, guiFont12, nullptr);
+static gui::GEPicture _gpicButton0(&button64x24_focused, &_txt0);
+
+static gui::GEText _txt1(10, 7, 0, 12, "Test", fontColor, backColor/*0xDEBA*/, guiFont12, nullptr);
+static gui::GEPicture _gpicButton1(&button64x24_focused, &_txt1);
+
+static gui::GEText _txt2(5, 5, 0, 16, "Test", fontColor, backColor/*0xDEBA*/, guiFont16, nullptr);
+static gui::GEPicture _gpicButton2(&button64x24_focused, &_txt2);
+
+static gui::GEText _txt3(10, 2, 0, 20, "Test", fontColor, backColor/*0xDEBA*/, guiFont20, nullptr);
+static gui::GEPicture _gpicButton3(&button64x24_focused, &_txt3);
+
+static gui::Picture _cpic0(110, 55, 64, 24, ColorScreen, &_gpicButton0);
+static gui::Picture _cpic1(110, 80, 64, 24, ColorScreen, &_gpicButton1);
+static gui::Picture _cpic2(110, 105, 64, 24, ColorScreen, &_gpicButton2);
+static gui::Picture _cpic3(110, 130, 64, 24, ColorScreen, &_gpicButton3);
+static gui::Picture _cpic4(110, 155, 64, 24, ColorScreen, &_gpicButton3);
+static gui::Picture _cpic5(110, 180, 64, 24, ColorScreen, &_gpicButton3);
+
+static gui::GERectangle _rec(0, 0, 150, 110, 0xDEBA, nullptr);
+static gui::Group _group0(100, 50, 150, 110, ColorScreen,
+	{&_cpic0, &_cpic1, &_cpic2, &_cpic3, &_cpic4, &_cpic5}, &_rec);
+//static gui::Group _group1(100, 50, 150, 110, ColorScreen, {&_group0}, &_rec);
 
 static gui::GERectangle _recFullScreen(0, 0, 320, 240, 0xBD55, nullptr);
-static gui::Group _groupInter(20, 20, 280, 200, ColorScreen, {&_group}, &_recFullScreen);
+static gui::Group _groupInter(20, 20, 280, 200, ColorScreen, {&_group0}, &_recFullScreen);
 static gui::Group _groupFullScreen(0, 0, 320, 240, ColorScreen, {&_groupInter}, &_gpic);
 
 /*-----------------------------------------------------------------//
@@ -145,7 +158,7 @@ extern "C" void gui_thread(void * args)
 	// }
 
 	uint16_t steps = 0;
-	bool left = 0;
+	bool left = 1;
 
 	while(1)
 	{
@@ -154,28 +167,34 @@ extern "C" void gui_thread(void * args)
 		scroll &= 0b00111111;
 		sh1106_vertical_scroll(scroll);
 
-		// if(left)
-		// {
-		// 	_cpic.X -= 2;
-		// 	_cpic.Y -= 2;
-		// 	steps++;
-		// 	if(steps == 40)
-		// 	{
-		// 		steps = 0;
-		// 		left = false;
-		// 	}
-		// }
-		// else
-		// {
-		// 	_cpic.X += 2;
-		// 	_cpic.Y += 2;
-		// 	steps++;
-		// 	if(steps == 40)
-		// 	{
-		// 		steps = 0;
-		// 		left = true;
-		// 	}
-		// }
-		// _group.Draw();
+		if(left)
+		{
+			//_group0.Y -= 2;
+			for(auto itm : _group0.Controls)
+			{
+				itm->Y -= 2;
+			}
+			steps++;
+			if(steps == 40)
+			{
+				steps = 0;
+				left = false;
+			}
+		}
+		else
+		{
+			//_group0.Y += 2;
+			for(auto itm : _group0.Controls)
+			{
+				itm->Y += 2;
+			}
+			steps++;
+			if(steps == 40)
+			{
+				steps = 0;
+				left = true;
+			}
+		}
+		_group0.Draw();
 	}
 }

@@ -16,6 +16,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	IGElement * Picture::GetGraphicElement()
 	{
+		for(auto itm = _gelement; itm; itm = itm->PrepareForDrawing());
 		return _gelement;
 	}
 	

@@ -21,7 +21,8 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "defines": [
-                "GUI_FOCUSABLE_CONTROLS_ENABLE"
+                "GUI_FOCUSABLE_CONTROLS_ENABLE",
+                "GMT020_02_DISPLAY_IS_USED"
             ]
         }
     ],
