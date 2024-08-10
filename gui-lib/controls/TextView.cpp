@@ -21,85 +21,114 @@ IGElement * TextView::GetGraphicElement()
 //----------------------------------------------------------------*/
 void TextView::AddLine(const std::string_view &line)
 {
+	uint16_t lineLength = line.size();
+	uint16_t startIndex = 0, spaceIndex = 0, endIndex = 0;
+	uint16_t substringWidth = 0, spaceSubstingWidth = 0;
+
 	bool updateGraphic = false;
-	volatile uint16_t h = Font::GetCharacterHeightInPixels(_font) + _margin;
-	volatile uint16_t y = _lineElements.empty() ? 0 : _lineElements.back().Y + h;
-	volatile uint16_t fullLength = Font::GetTextLineWidthInPixels(_font, line);
-	volatile uint16_t index = 0;
-	volatile uint16_t spIndex = 0;
-
-	// parse string into string lines according to graphic width
-	while(fullLength > Width)
+	for(; endIndex < lineLength; endIndex++)
 	{
-		uint16_t len = 0, spLength = 0;
-		for(uint16_t i = index; len < Width; i++)
+		uint8_t c = line[endIndex];
+		// if new line
+		if(c == '\n')
 		{
-			char c = line[i];
-			if(c == '\n')
+			if(startIndex != endIndex)
 			{
-				spIndex = i;
-				spLength = len;
-				break;
-			}
+				// create line text item for curren substring
+				if(_textLines.size() == _maxLineNumber)
+					_textLines.pop_front();
 
-			uint16_t w = Font::GetCharacterWidthInPixels(_font, c);
-			
-			if(c == ' ')
-			{
-				spIndex = i;
-				spLength = len;
+				_textLines.push_back(std::string(line.substr(startIndex, endIndex - startIndex)));
+				startIndex = endIndex + 1;
+				spaceIndex = startIndex;
+				substringWidth = 0;
+				updateGraphic = true;
+
+				// redraw 
+				if(RedrawEachLine)
+					UpdateGElementsAndRedraw();
 			}
-			len += w;
+			continue;
 		}
 
-		if(spIndex != index)
+		substringWidth += Font::GetCharacterWidthInPixels(_font, c);
+
+		if(c <= ' ')
 		{
-			if(_maxLineNumber == _textLines.size())
+			spaceIndex = endIndex;
+			spaceSubstingWidth = substringWidth;
+		}
+
+		if(substringWidth > _textWidth)
+		{
+			if(_textLines.size() == _maxLineNumber)
 				_textLines.pop_front();
 			
-			_textLines.push_back(std::string(line.substr(index, spIndex - index)));
+			_textLines.push_back(std::string(line.substr(startIndex, spaceIndex - startIndex)));
+			
+			substringWidth -= spaceSubstingWidth;
+			spaceSubstingWidth = substringWidth;
+			startIndex = spaceIndex + 1;
+			spaceIndex = endIndex;
 			updateGraphic = true;
+
+			// redraw 
+			if(RedrawEachLine)
+				UpdateGElementsAndRedraw();
 		}
-		index = spIndex + 1;
-		fullLength -= spLength;
 	}
 
-	if(fullLength)
+	if(substringWidth)
 	{
-		if(_maxLineNumber == _textLines.size())
+		if(_textLines.size() == _maxLineNumber)
 			_textLines.pop_front();
 		
-		_textLines.push_back(std::string(line.substr(index)));
+		_textLines.push_back(std::string(line.substr(startIndex)));
 		updateGraphic = true;
+
+		// redraw 
+		if(RedrawEachLine)
+			UpdateGElementsAndRedraw();
 	}
 
 	// update GEText elements
-	if(updateGraphic)
-	{
-		uint16_t newElementsCount = _textLines.size() - _lineElements.size();
-		// create new GEText if needed
-		while(newElementsCount)
-		{
-			if(_lineElements.empty())
-				_lineElements.push_back({0, y, 0, Font::GetCharacterHeightInPixels(_font),
-					"", Foreground, Background, _font, nullptr});
-			else
-				_lineElements.push_back({0, y, 0, Font::GetCharacterHeightInPixels(_font),
-					"", Foreground, Background, _font, &_lineElements.back()});
-			--newElementsCount;
-			y += h;
-		}
+	if((!RedrawEachLine) && updateGraphic)
+		UpdateGElementsAndRedraw();
+}
 
-		_background.SetChild(&_lineElements.back());
-		// update text in the GEText elements
-		auto gelent = _lineElements.begin();
-		for(std::string & txt : _textLines)
-		{
-			auto & g = *gelent;
-			g.Text = txt;
-			gelent++;
-		}
+/*----------------------------------------------------------------//
+//
+//----------------------------------------------------------------*/
+inline void TextView::UpdateGElementsAndRedraw()
+{
+	uint16_t newElementsCount = _textLines.size() - _lineElements.size();
+	uint16_t fontHeight = Font::GetCharacterHeightInPixels(_font);
+	uint16_t h = fontHeight + _margin;
+	uint16_t y = _lineElements.empty() ? 0 : _lineElements.back().Y + h;
+	// create new GEText if needed
+	while(newElementsCount)
+	{
+		if(_lineElements.empty())
+			_lineElements.push_back({_margin, y, _textWidth, fontHeight,
+				"", Foreground, Background, _font, nullptr});
+		else
+			_lineElements.push_back({_margin, y, _textWidth, fontHeight,
+				"", Foreground, Background, _font, &_lineElements.back()});
+		--newElementsCount;
+		y += h;
 	}
+
+	_background.SetChild(&_lineElements.back());
+	// update text in the GEText elements
+	auto gelent = _lineElements.begin();
+	for(std::string & txt : _textLines)
+	{
+		auto & g = *gelent;
+		g.Text = txt;
+		gelent++;
+	}
+
+	Draw();
 }
 
 /*----------------------------------------------------------------//
@@ -119,7 +148,7 @@ TextView::TextView(uint16_t x, uint16_t y, uint16_t width, uint16_t height, cons
 	uint16_t margin, uint32_t foreground, uint32_t background, const std::string_view & line,
 	const Font & font)
 	:IUIControl(x, y, width, height, context),
-	Foreground{foreground}, Background{background},_font{font}, _margin{margin},
+	Foreground{foreground}, Background{background},_font{font}, _margin{margin}, _textWidth(width - 2 * margin),
 	_background(0, 0, width, height, background, nullptr)
 {
 	// calculate max number of lines
@@ -134,7 +163,7 @@ TextView::TextView(uint16_t x, uint16_t y, uint16_t width, uint16_t height, cons
 TextView::TextView(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const IUIContext & context,
 	uint16_t margin, uint32_t foreground, uint32_t background, const Font & font)
 	:IUIControl(x, y, width, height, context),
-	Foreground{foreground}, Background{background}, _font{font}, _margin{margin},
+	Foreground{foreground}, Background{background}, _font{font}, _margin{margin}, _textWidth(width - 2 * margin),
 	_background(0, 0, width, height, background, nullptr)
 {
 	// calculate max number of lines

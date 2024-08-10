@@ -32,6 +32,10 @@ public:
 	uint32_t Foreground;
 	uint32_t Background;
 
+	// If true the object will be redrawn when each new line is added
+	// If false all new lines will be created then the object will be redrawn
+	bool RedrawEachLine = false;
+
 	// methods
 	IGElement * GetGraphicElement() override;
 	
@@ -40,6 +44,7 @@ public:
 
 private:
 	// methods
+	void UpdateGElementsAndRedraw();
 
 	// fields
 	uint16_t _maxLineNumber;
@@ -47,6 +52,7 @@ private:
 	std::list<GEText> _lineElements;
 	const Font & _font;
 	uint16_t _margin;
+	uint16_t _textWidth;
 
 	//background
 	GERectangle _background;

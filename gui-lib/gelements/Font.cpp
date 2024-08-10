@@ -1,4 +1,5 @@
 #include "Font.hpp"
+#include <cstdio>
 
 namespace gui
 {
@@ -7,7 +8,9 @@ namespace gui
 	//------------------------------------------------------------*/
 	uint16_t Font::GetCharacterWidthInPixels(const Font & font, uint8_t c)
 	{
-		return Font::GetCharacterGraphicData(font, c)->width;
+		return (c < CHARACTER_FIRST_CODE) ?
+			Font::GetCharacterGraphicData(font, CHARACTER_FIRST_CODE)->width :
+			Font::GetCharacterGraphicData(font, c)->width;
 	}
 
 	/*------------------------------------------------------------//
@@ -36,6 +39,9 @@ namespace gui
 	//------------------------------------------------------------*/
 	const PictureObject * Font::GetCharacterGraphicData(const Font & font, uint8_t scode)
 	{
+		if((scode < CHARACTER_FIRST_CODE) || (scode > CHARACTER_LAST_CODE))
+			return font._fontGraphicData[0];
+
 		return font._fontGraphicData[scode - CHARACTER_FIRST_CODE];
 	}
 
