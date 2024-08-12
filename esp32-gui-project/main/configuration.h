@@ -5,6 +5,10 @@
 #include "driver/i2c_master.h"
 #include "driver/spi_master.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*-----------------------------------------------------------------//
 // I2C configuration
 //-----------------------------------------------------------------*/
@@ -52,7 +56,7 @@
 #define LCD_BUFFER_NUMBER			(VSPI_QUEUE_SIZE + 1)
 
 /*-----------------------------------------------------------------//
-// SPI configuration
+// SPI (CD card) configuration
 // GPIO configuration
 //-----------------------------------------------------------------*/
 #define SD_SPI	(HSPI_HOST)
@@ -62,7 +66,6 @@
 #define SD_CS	(GPIO_NUM_33)
 
 #define SD_MAX_BUFFER_SIZE		4000
-
 #define MOUNT_POINT "/sdcard"
 
 /*-----------------------------------------------------------------//
@@ -72,35 +75,15 @@
 #define LCD_SH1106_X_OFFSET	2
 
 /*-----------------------------------------------------------------//
-// Receiver data flow parameters
+// EXTI configuration (encoder)
+// GPIO configuration
 //-----------------------------------------------------------------*/
-#define RX_IQ_BUFFER_SIZE	256
-#define RX_REAL_DATA_SIZE	(RX_IQ_BUFFER_SIZE/2)
-
-/*-----------------------------------------------------------------//
-// DSP parameters
-//-----------------------------------------------------------------*/
-#define DSP_IQ_CORRECTION_CHUNK_PER_BUFFER	16
-#define DSP_IQ_CORRECTION_CHUNK_SIZE (RX_IQ_BUFFER_SIZE/DSP_IQ_CORRECTION_CHUNK_PER_BUFFER)
-#if RX_IQ_BUFFER_SIZE % (2 * DSP_IQ_CORRECTION_CHUNK_PER_BUFFER) != 0
-	#error "Wrong IQ correction buffer size. Condition should be false!"
-#endif
-
-/*-----------------------------------------------------------------//
-// Transmitter data flow parameters
-//-----------------------------------------------------------------*/
-
-struct iq_measurement
-{
-	float teta1;
-	float teta2;
-	float teta3;
-
-	float t1;
-	float t2;
-	float t3;
-
-	float psi;
-};
+#define ENC_CLK		GPIO_NUM_35
+#define ENC_DATA	GPIO_NUM_34
+#define ENC_BUTTON	GPIO_NUM_32
 
 #endif // CONFIGURATION_H
+
+#ifdef __cplusplus
+}
+#endif

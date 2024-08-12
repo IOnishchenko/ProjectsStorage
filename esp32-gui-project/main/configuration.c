@@ -8,15 +8,18 @@
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-extern void st7789_pre_transaction_cb(spi_transaction_t *trans);
+#include "esp_intr_alloc.h"
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static esp_err_t i2c0_initialize()
+extern void st7789_pre_transaction_cb(spi_transaction_t *trans);
+extern void timer_initialization();
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+static inline esp_err_t i2c0_initialize()
 {
 	i2c_master_bus_config_t bus_config =
 	{
@@ -45,7 +48,7 @@ static esp_err_t i2c0_initialize()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static esp_err_t spi_initialize()
+static inline esp_err_t spi_initialize()
 {
 	// ----- VSPI CONFIGURATION ------
 	spi_bus_config_t buscfgv =
@@ -147,15 +150,24 @@ esp_err_t vfs_initialize()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static esp_err_t gpio_initialize()
+static inline esp_err_t gpio_initialize()
 {
 	gpio_config_t io_conf =
 	{
 		.pin_bit_mask = ((1ULL << LCD_RST) | (1ULL << LCD_C_D)),
 		.mode = GPIO_MODE_OUTPUT,
-		.pull_up_en = true
+		.pull_down_en = false,
+		.pull_up_en = true,
+		.intr_type = GPIO_INTR_DISABLE
 	};
-	return gpio_config(&io_conf);
+	esp_err_t res = gpio_config(&io_conf);
+
+	io_conf.pin_bit_mask = ((1ULL << ENC_CLK) | (1ULL << ENC_DATA) | (1ULL << ENC_BUTTON));
+	io_conf.mode = GPIO_MODE_INPUT;
+	io_conf.pull_up_en = false;
+	io_conf.intr_type = GPIO_INTR_DISABLE;
+	res |= gpio_config(&io_conf);
+	return res;
 }
 
 /*-----------------------------------------------------------------//
@@ -163,6 +175,8 @@ static esp_err_t gpio_initialize()
 //-----------------------------------------------------------------*/
 esp_err_t hw_initialize()
 {
+	// encoder exti config
+	timer_initialization();
 	// i2c configuration
 	esp_err_t res = i2c0_initialize();
 	// hspi config
