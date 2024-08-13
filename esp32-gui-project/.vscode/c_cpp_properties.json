@@ -22,7 +22,8 @@
             },
             "defines": [
                 "GUI_USE_PICTUREGDATA",
-                "GMT020_02_DISPLAY_IS_USED"
+                "GMT020_02_DISPLAY_IS_USED",
+                "configSUPPORT_DYNAMIC_ALLOCATION=1"
             ]
         }
     ],

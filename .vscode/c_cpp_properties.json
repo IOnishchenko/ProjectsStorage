@@ -22,7 +22,9 @@
             "cppStandard": "c++17",
             "defines": [
                 "GUI_FOCUSABLE_CONTROLS_ENABLE",
-                "GMT020_02_DISPLAY_IS_USED"
+                "GMT020_02_DISPLAY_IS_USED",
+                "configSUPPORT_DYNAMIC_ALLOCATION=1",
+                "ESP_PLATFORM"
             ]
         }
     ],

@@ -18,6 +18,7 @@ include("${root_dir}/esp32-common/esp32-common.cmake")
 include("${root_dir}/lcd-drivers/st7789-driver.cmake")
 include("${root_dir}/lcd-drivers/sh1106-driver.cmake")
 include("${root_dir}/gui-lib/gui-lib.cmake")
+include("${root_dir}/freeRTOS/free-rtos.cmake")
 include("${root_dir}/gui-resources/gui-resources.cmake")
 
 set(PROJET_SRCS
@@ -33,6 +34,12 @@ set(PROJET_SRCS
 	"../gui/font16.c"
 	"../gui/font20.c"
 	"../gui/font24.c"
+	"../gui/font/font17_tahoma.c"
+	"../gui/font/font17_tahoma_comp.c"
+	"../gui/font/font21_tahoma.c"
+	"../gui/font/font21_tahoma_comp.c"
+	"../gui/font/font32_tahoma.c"
+	"../gui/font/font32_tahoma_comp.c"
 	"../gui/MainScreen.cpp"
 )
 
@@ -43,7 +50,8 @@ set(INCLUDE_DIRS
 	"${ESP32_COMMON_INCS}"
 	"${LCD_ST7789_DRIVER_INCS}"
 	"${LCD_SH1106_DRIVER_INCS}"
-	"${GUI_LIB_DIRS}"
+	"${GUI_LIB_INCS}"
+	"${FREE_RTOS_COMMON_INCS}"
 	"${GUI_RESOURCES_INCS}"
 	"../gui/"
 )

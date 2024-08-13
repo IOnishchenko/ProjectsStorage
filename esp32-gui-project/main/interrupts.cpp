@@ -2,6 +2,9 @@
 #include "driver/gptimer.h"
 #include "freertos/FreeRTOS.h"
 
+#include "CommandQueue.hpp"
+extern CommandQueue<uint32_t, 10> Queue;
+
 QueueHandle_t gpio_evt_queue = NULL;
 
 static uint32_t _A0 = 0;
@@ -38,7 +41,15 @@ static bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer, const gptimer_al
 	if((!_lockA) && _oldA && (!_currentA))
 	{
 		uint32_t gpio_num = (_B0 & _B1) | (_B1 & _B2) | (_B0 & _B2);
-		xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+		//xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+
+		uint32_t * message =  static_cast<uint32_t *>(Queue.TryMemoryAllocate());
+		if(!message)
+			return true;
+
+		*message = gpio_num;
+		Queue.TryPushToQueue(message);
+
 		_lockA = true;
 	}
 
@@ -55,8 +66,14 @@ static bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer, const gptimer_al
 	if(_currentKeyState != keyState)
 	{
 		_currentKeyState = keyState;
-		uint32_t gpio_num = 200U + keyState;
-		xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+		// uint32_t gpio_num = 200U + keyState;
+		// xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+		uint32_t * message =  static_cast<uint32_t *>(Queue.TryMemoryAllocate());
+		if(!message)
+			return true;
+
+		*message = 1000 + keyState;
+		Queue.TryPushToQueue(message);
 	}
 
 	return true;
@@ -98,6 +115,24 @@ extern "C" void timer_initialization()
 
 	gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
 }
+
+
+extern "C" void test_thread(void * args)
+{
+	while(1)
+	{
+		vTaskDelay(100);
+
+		uint32_t * message =  static_cast<uint32_t *>(Queue.MemoryAllocate());
+		if(!message)
+			return;
+
+		*message = 1024;
+		Queue.PushToQueue(message);
+	}
+}
+
+
 
 // static uint32_t _encoderA = 0;
 // static uint32_t _encoderB = 0;

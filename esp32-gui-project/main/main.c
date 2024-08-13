@@ -13,6 +13,8 @@ extern void gui_thread(void *args);
 extern void gpio_task_example(void* arg);
 extern QueueHandle_t gpio_evt_queue;
 
+extern void test_thread(void * args);
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -30,4 +32,6 @@ void app_main(void)
 
 	BaseType_t ret1 = xTaskCreate(gui_thread, "guithread", 1024 * 4, (void *)0, 10, NULL);
 	printf("gui_thread was created with code %d\n", ret1);
+
+	ret1 = xTaskCreate(test_thread, "testthread", 1024 * 4, (void *)0, 10, NULL);
 }

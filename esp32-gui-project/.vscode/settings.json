@@ -16,5 +16,5 @@
     "idf.pythonBinPathWin": "C:\\Users\\Iurii\\.espressif\\python_env\\idf5.3_py3.11_env\\Scripts\\python.exe",
     "idf.toolsPathWin": "C:\\Users\\Iurii\\.espressif",
     "idf.gitPathWin": "C:\\Users\\Iurii\\.espressif\\tools\\idf-git\\2.39.2\\cmd\\git.exe",
-    "idf.flashType": "JTAG"
+    "idf.flashType": "UART"
 }

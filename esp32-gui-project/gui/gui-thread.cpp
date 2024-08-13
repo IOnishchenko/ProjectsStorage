@@ -10,6 +10,7 @@
 #include "Picture.hpp"
 #include "Group.hpp"
 #include "Label.hpp"
+#include "TextView.hpp"
 
 #include "Font.hpp"
 /*-----------------------------------------------------------------//
@@ -21,8 +22,16 @@
 #include "font16.h"
 #include "font20.h"
 #include "font24.h"
+
+#include "font/font17_tahoma.h"
+#include "font/font17_tahoma_comp.h"
+#include "font/font21_tahoma.h"
+#include "font/font21_tahoma_comp.h"
+#include "font/font32_tahoma.h"
+#include "font/font32_tahoma_comp.h"
 #define BUFFER_COUNT (VSPI_QUEUE_SIZE + 1)
 
+#include <cstring>
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -30,6 +39,7 @@ extern "C"
 {
 	void sh1106_vertical_scroll(uint8_t value);
 }
+extern QueueHandle_t gpio_evt_queue;
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -85,6 +95,27 @@ static gui::GERectangle _recFullScreen(0, 0, 320, 240, 0xBD55, nullptr);
 static gui::Group _groupInter(20, 20, 280, 200, ColorScreen, {&_group0}, &_recFullScreen);
 static gui::Group _groupFullScreen(0, 0, 320, 240, ColorScreen, {&_groupInter}, &_gpic);
 
+char txt[256] = {0};
+const char * ggg[] = 
+{
+	"It should be noted that it is incorrect to say that this is different from Java.",
+	"Printf stands for print format, if you do a formatted print in Java, this is exactly the same usage.",
+	"This may allow you to solve interesting and new problems in both C and Java!",
+	"If you're certain the type would never change, this is fine. A big advantage to inttypes.h is that if you change the data type but forget to change the format string, the compiler will warn you.",
+	"With the above, if x is changed to a uint64_t, the high order bits would not be printed.",
+	"Admittedly, such a big change isn't common, but it happens, for example when the value is a key that changes from a serial number to a UUID.",
+	"When taking shortcuts like this, context is important.",
+	"Continue text drawing test...."
+};
+// const char * ggg = "0123 4567 891 0123 4567 891 01231";
+static gui::Font newFont(font17_tahoma_comp);
+static gui::TextView _text(10, 10, 300, 220, ColorScreen, 3, fontColor, backColor, newFont);
+static gui::Group _groupTextScreen(0, 0, 320, 240, ColorScreen, {&_text}, &_gpic);
+
+#include "CommandQueue.hpp"
+
+CommandQueue<uint32_t, 10> Queue;
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -107,94 +138,76 @@ extern "C" void gui_thread(void * args)
 	};
 	sh1106.write_gdata(&gdata0[0], sizeof(gdata0));
 
-	_groupFullScreen.Draw();
-
-	// // draw picture
-	// uint16_t * gdata[BUFFER_COUNT];
-	// for(int i = 0; i < BUFFER_COUNT; i++)
-	// {
-	// 	gdata[i] = (uint16_t *)malloc(VSPI_MAX_BUFFER_SIZE);
-	// }
-
-	// uint32_t full_size = LCD_VERTICAL_SIZE * LCD_HORIZONTAL_SIZE; // in pixel;
-	// uint16_t buff_index = 0;
-	// const uint8_t * l8_data = ((const PictureGData*)sdr_320x240_V2.gdata)->data;
-	// const uint16_t * lut = (const uint16_t*)((const PictureGData*)sdr_320x240_V2.gdata)->lut;
-
-	// int16_t scount = 0;
-	// uint8_t lut_index = 0;
-	// st7789.set_region(0, 0, LCD_HORIZONTAL_SIZE, LCD_VERTICAL_SIZE);
-	// st7789.start_writing_gdata();
-	// while(full_size)
-	// {
-	// 	uint16_t * buffer = gdata[buff_index];
-	// 	uint16_t size;
-	// 	for(size = 0; (size < (VSPI_MAX_BUFFER_SIZE/2)) && full_size; size++)
-	// 	{
-	// 		if(!scount)
-	// 		{
-	// 			scount = *l8_data;
-	// 			l8_data++;
-	// 			lut_index = *l8_data;
-	// 			l8_data++;
-	// 		}
-	// 		else
-	// 			scount--;
-			
-	// 		*buffer++ = lut[lut_index];
-	// 		full_size--;
-	// 	}
-	// 	st7789.write_gdata((uint8_t*)gdata[buff_index], size*2);
-
-	// 	buff_index++;
-	// 	if(buff_index == BUFFER_COUNT)
-	// 		buff_index = 0;
-	// }
-
-	// st7789.wait_and_delay(0);
-	// for(int i = 0; i < BUFFER_COUNT; i++)
-	// {
-	// 	free(gdata[i]);
-	// }
+	_text.RedrawEachLine = true;
+	_text.Draw();
 
 	uint16_t steps = 0;
 	bool left = 1;
 
+	memset(txt, 0, 256);
+
+	// sprintf(txt, ggg, steps);
+	// _text.AddLine(txt);
+	// _text.Draw();
+
 	while(1)
 	{
-		vTaskDelay(3);
-		scroll += 1;
-		scroll &= 0b00111111;
-		sh1106_vertical_scroll(scroll);
+		// uint32_t io_num = 0;
+		// if(xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY))
+		// {
+		// 	//sprintf(txt, "Button event recieved, num = %d!\n", io_num) :
+		// 	sprintf(txt, "Encode event recieved, num = %d, code = %lu!\n", steps, io_num);
+		// 	_text.AddLine(txt);
+		// }
 
-		if(left)
-		{
-			//_group0.Y -= 2;
-			for(auto itm : _group0.Controls)
-			{
-				itm->Y -= 2;
-			}
-			steps++;
-			if(steps == 40)
-			{
-				steps = 0;
-				left = false;
-			}
-		}
-		else
-		{
-			//_group0.Y += 2;
-			for(auto itm : _group0.Controls)
-			{
-				itm->Y += 2;
-			}
-			steps++;
-			if(steps == 40)
-			{
-				steps = 0;
-				left = true;
-			}
-		}
-		_group0.Draw();
+		void * message = Queue.PullFromQueue();
+		uint32_t res =  *(uint32_t *)message;
+		Queue.MemoryFree(message);
+		
+		sprintf(txt, "Encode event recieved, num = %d, code = %lu!\n", steps, res);
+		_text.AddLine(txt);
+
+		// vTaskDelay(25);
+		// scroll += 1;
+		// scroll &= 0b00111111;
+		// sh1106_vertical_scroll(scroll);
+
+		// if(left)
+		// {
+		// 	//_group0.Y -= 2;
+		// 	for(auto itm : _group0.Controls)
+		// 	{
+		// 		itm->Y -= 2;
+		// 	}
+		// 	steps++;
+		// 	if(steps == 40)
+		// 	{
+		// 		steps = 0;
+		// 		left = false;
+		// 	}
+		// }
+		// else
+		// {
+		// 	//_group0.Y += 2;
+		// 	for(auto itm : _group0.Controls)
+		// 	{
+		// 		itm->Y += 2;
+		// 	}
+		// 	steps++;
+		// 	if(steps == 40)
+		// 	{
+		// 		steps = 0;
+		// 		left = true;
+		// 	}
+		// }
+		// _group0.Draw();
+
+
+		steps++;
+		// //sprintf(txt, "Line number %d was added. Line overflow test. ggg - gggg - ggg, mmm - mmmm - mmm ggg - gggg - ggg, mmm - mmmm - mm", steps);
+
+		//sprintf(txt, ggg, steps);
+		//_text.AddLine(ggg[steps & 0x07]);
+		//_text.Draw();
 	}
 }
