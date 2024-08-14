@@ -1,6 +1,7 @@
 
 #include "configuration.h"
 #include "driver/gpio.h"
+#include "driver/gptimer.h"
 #include "driver/i2c_master.h"
 #include "sh1106-interface.h"
 #include "st7789-interface.h"
@@ -8,13 +9,12 @@
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 
-#include "esp_intr_alloc.h"
-
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
 extern void st7789_pre_transaction_cb(spi_transaction_t *trans);
-extern void timer_initialization();
+extern bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer,
+	const gptimer_alarm_event_data_t *edata, void *user_data);
 
 /*-----------------------------------------------------------------//
 //
@@ -117,6 +117,47 @@ static inline esp_err_t spi_initialize()
 	ret |= spi_bus_initialize(SD_SPI, &buscfgh, SPI_DMA_CH_AUTO);
 	ESP_ERROR_CHECK(ret);
 	return ret;
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+static void timer_initialization()
+{
+	gptimer_handle_t gptimer = NULL;
+	gptimer_config_t timer_config =
+	{
+		.clk_src = GPTIMER_CLK_SRC_DEFAULT,
+		.direction = GPTIMER_COUNT_UP,
+		.resolution_hz = 1000000, // 1MHz, 1 tick=1us
+		.intr_priority = 0,
+		.flags =
+		{
+			.intr_shared = false,
+			.backup_before_sleep = false,
+		}
+	};
+	ESP_ERROR_CHECK(gptimer_new_timer(&timer_config, &gptimer));
+
+	gptimer_event_callbacks_t cbs =
+	{
+		.on_alarm = timer_key_scan_cb,
+	};
+	ESP_ERROR_CHECK(gptimer_register_event_callbacks(gptimer, &cbs, NULL));
+
+	ESP_ERROR_CHECK(gptimer_enable(gptimer));
+
+	gptimer_alarm_config_t alarm_config =
+	{
+		.alarm_count = 5000, // period = 5ms
+		.reload_count = 0,
+		.flags =
+		{
+			.auto_reload_on_alarm = true,
+		}, // enable auto-reload
+	};
+	ESP_ERROR_CHECK(gptimer_set_alarm_action(gptimer, &alarm_config));
+	ESP_ERROR_CHECK(gptimer_start(gptimer));
 }
 
 /*-----------------------------------------------------------------//

@@ -27,7 +27,7 @@ set(PROJET_SRCS
 	"${LCD_ST7789_DRIVER_SRCS}"
 	"${LCD_SH1106_DRIVER_SRCS}"
 	"${GUI_LIB_SRCS}"
-	"../gui/gui-thread.cpp"
+	"../gui/GUIThread.cpp"
 	"../gui/sdr_dumy_picture_sdr_320x240_V2.c"
 	"../gui/button64x24_button64x24_focused.c"
 	"../gui/font12.c"

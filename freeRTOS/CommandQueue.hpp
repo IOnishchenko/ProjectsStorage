@@ -21,7 +21,7 @@ public:
 		:_indexToWrite{0}
 	{
 		_spinlock = portMUX_INITIALIZER_UNLOCKED;
-		_queueHandle = xQueueCreateStatic(QLength, sizeof(TMessage),
+		_queueHandle = xQueueCreateStatic(QLength, sizeof(void *),
 			_queueMessageBuffer, &_queueBuffer);
 		_semaphoreHandle = xSemaphoreCreateCountingStatic(QLength, QLength, &_semaphoreBuffer);
 	}
@@ -137,7 +137,7 @@ private:
 	SemaphoreHandle_t _semaphoreHandle;
 
 	portMUX_TYPE _spinlock;
-	TMessage _memoryPool[QLength];
+	uint8_t _memoryPool[QLength][sizeof(TMessage)];
 	uint32_t _indexToWrite;
 	uint32_t _indexToRead;
 };
