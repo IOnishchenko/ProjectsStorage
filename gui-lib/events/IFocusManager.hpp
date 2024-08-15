@@ -3,8 +3,6 @@
 
 #include "IFocusEventHandler.hpp"
 #include "UIControlEvents.hpp"
-#include "AsyncCommand.hpp"
-#include "AsyncCommandDispatcher.hpp"
 
 namespace gui
 {

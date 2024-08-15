@@ -4,10 +4,10 @@
 namespace gui
 {
 	class IUIControlRenderer;
-	class IRenderer;
 	class IEncoderEventObserver;
-	class IFocusManager;
+	class IKeyboardEventObserver;
 	class ITouchScreenEventObserver;
+	class IFocusManager;
 
 	struct IUIContext
 	{
@@ -15,9 +15,13 @@ namespace gui
 
 		IEncoderEventObserver * EncoderEventObserver;
 
-		IFocusManager * FocusManager;
+		IKeyboardEventObserver * KeyboardEventObserver;
 
 		ITouchScreenEventObserver * TouchScreenObserver;
+
+		IFocusManager * FocusManager;
+
+		
 	};
 }
 

@@ -1,8 +1,4 @@
 #include "configuration.h"
-#include "lcd-driver.h"
-#include "IUIContext.hpp"
-#include "GElementDecoderRGB565.hpp"
-#include "ControlRenderer.hpp"
 
 #include "GEPicture.hpp"
 #include "GERectangle.hpp"
@@ -33,8 +29,6 @@
 //
 //-----------------------------------------------------------------*/
 #include "GUIThread.hpp"
-#include "CommandQueue.hpp"
-#include "AsyncCommandDispatcher.hpp"
 #include <cstring>
 
 /*-----------------------------------------------------------------//
@@ -48,17 +42,6 @@ extern "C"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static gui::GElementDecoderRGB565 DecoderRGB565;
-static gui::ControlRenderer<uint16_t, LCD_BUFFER_SIZE_IN_BYTES/sizeof(uint16_t),
-	LCD_BUFFER_NUMBER> Renderer(DecoderRGB565, st7789);
-static gui::IUIContext ColorScreen =
-{
-	.Renderer = Renderer,
-	.EncoderEventObserver = nullptr,
-	.FocusManager = nullptr,
-	.TouchScreenObserver = nullptr
-};
-
 static gui::Font newFont(font17_tahoma_comp);
 
 constexpr uint16_t fontColor = (uint16_t)~(((0xff9302 >> 8) & 0xf800) |
@@ -69,10 +52,7 @@ constexpr uint16_t backColor = (uint16_t)~(((0x3d5a68 >> 8) & 0xf800) |
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static CommandQueue<gui::GUIThreadEventsContaner, 10> Queue;
-static AsyncCommandDispatcher GUIThreadCommandDispatcher(Queue);
-gui::GUIThread UIThread(GUIThreadCommandDispatcher);
-
+gui::GUIThread UIThread(st7789);
 char txt[256] = {0};
 
 /*-----------------------------------------------------------------//
@@ -87,13 +67,15 @@ extern "C" void gui_thread(void * args)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-gui::GUIThread::GUIThread(AsyncCommandDispatcher & dispatcher)
-	:OnEncoderRotatedAsync(this, &gui::GUIThread::OnEncoderRotated, dispatcher),
-	OnKeyPressedAsync(this, &gui::GUIThread::OnKeyPressed, dispatcher),
-	OnKeyReleasedAsync(this, &gui::GUIThread::OnKeyReleased, dispatcher),
-	OnTimerTikedAsync(this, &gui::GUIThread::OnTimerTiked, dispatcher),
-	_dispatcher{dispatcher},
-	_text(10, 10, 300, 220, ColorScreen, 3, fontColor, backColor, newFont)
+gui::GUIThread::GUIThread(lcd_driver & lcdDriver)
+	:HandleEncoderEventAsync(this, &gui::GUIThread::HandleEncoderEvent, _asyncCommandDispatcher),
+	OnKeyPressedAsync(this, &gui::GUIThread::OnKeyPressed, _asyncCommandDispatcher),
+	OnKeyReleasedAsync(this, &gui::GUIThread::OnKeyReleased, _asyncCommandDispatcher),
+	OnTimerTikedAsync(this, &gui::GUIThread::OnTimerTiked, _asyncCommandDispatcher),
+	_encoderObserver(), _keyboardObserver(), _queue(), _asyncCommandDispatcher(_queue),
+	_decoder(), _renderer(_decoder, lcdDriver),
+	_context{_renderer, &_encoderObserver, &_keyboardObserver, nullptr, nullptr},
+	_text(10, 10, 300, 220, _context, 3, fontColor, backColor, newFont)
 {
 	_text.RedrawEachLine = true;
 }
@@ -105,7 +87,7 @@ void gui::GUIThread::Run()
 {
 	while(true)
 	{
-		_dispatcher.HandleAsyncCall();
+		_asyncCommandDispatcher.HandleAsyncCall();
 	}
 }
 
@@ -134,27 +116,27 @@ void gui::GUIThread::Initialize()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void gui::GUIThread::OnEncoderRotated(uint32_t value)
+void gui::GUIThread::HandleEncoderEvent(EncoderEvent event)
 {
-	sprintf(txt, "Encode event, code = %lu!\n", value);
+	sprintf(txt, "Encode event, code = %lu!\n", (uint32_t)event.Direction);
 	_text.AddLine(txt);
 }
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void gui::GUIThread::OnKeyPressed(uint32_t value)
+void gui::GUIThread::OnKeyPressed(KeyCode key)
 {
-	sprintf(txt, "Key pressed event, code = %lu!\n", value);
+	sprintf(txt, "Key pressed event, code = %lu!\n", (uint32_t)key);
 	_text.AddLine(txt);
 }
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void gui::GUIThread::OnKeyReleased(uint32_t value)
+void gui::GUIThread::OnKeyReleased(KeyCode key)
 {
-	sprintf(txt, "Key released event, code = %lu!\n", value);
+	sprintf(txt, "Key released event, code = %lu!\n", (uint32_t)key);
 	_text.AddLine(txt);
 }
 

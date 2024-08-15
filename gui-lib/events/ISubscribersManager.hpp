@@ -1,17 +1,17 @@
-#ifndef GUI_ISUBSCRIBER_MANAGER_HPP
-#define GUI_ISUBSCRIBER_MANAGER_HPP
+#ifndef GUI_ISUBSCRIBERS_MANAGER_HPP
+#define GUI_ISUBSCRIBERS_MANAGER_HPP
 
 #include <forward_list>
 
 namespace gui
 {
 	template<typename TSubscriber>
-	class ISubscriberManager
+	class ISubscribersManager
 	{
 	public:
 
 		// destructor
-		virtual ~ISubscriberManager() = default;
+		virtual ~ISubscribersManager() = default;
 
 		// methods
 		void Subscribe(TSubscriber * subscriber)

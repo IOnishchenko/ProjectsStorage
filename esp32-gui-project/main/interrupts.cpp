@@ -1,8 +1,8 @@
 #include "configuration.h"
 #include "driver/gptimer.h"
 #include "freertos/FreeRTOS.h"
-
 #include "GUIThread.hpp"
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -46,7 +46,13 @@ extern "C" bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer, const gptime
 	if((!_lockA) && _oldA && (!_currentA))
 	{
 		uint32_t gpio_num = (_B0 & _B1) | (_B1 & _B2) | (_B0 & _B2);
-		UIThread.OnEncoderRotatedAsync.TryExecute(gpio_num);
+		gui::EncoderEvent event =
+		{
+			.Id = gui::EncoderId::MAIN_ENCODER,
+			.Direction = gpio_num ? gui::EncoderDirection::ENC_INCREASE :
+				gui::EncoderDirection::ENC_DECREASE,
+		};
+		UIThread.HandleEncoderEventAsync.TryExecute(event);
 		_lockA = true;
 	}
 
@@ -64,9 +70,9 @@ extern "C" bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer, const gptime
 	{
 		_currentKeyState = keyState;
 		if(_currentKeyState)
-			UIThread.OnKeyReleasedAsync.TryExecute(_currentKeyState);
+			UIThread.OnKeyReleasedAsync.TryExecute(gui::KeyCode::ENCODER_KEY);
 		else
-			UIThread.OnKeyPressedAsync.TryExecute(_currentKeyState);
+			UIThread.OnKeyPressedAsync.TryExecute(gui::KeyCode::ENCODER_KEY);
 	}
 
 	return true;

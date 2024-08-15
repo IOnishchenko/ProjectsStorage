@@ -1,30 +1,16 @@
 #ifndef GUI_IKEYBOARD_EVENT_OBSERVER_HPP
 #define GUI_IKEYBOARD_EVENT_OBSERVER_HPP
 
-#include "ISubscriberManager.hpp"
+#include "ISubscribersManager.hpp"
 #include "IKeyboardEventHandler.hpp"
-#include "UIControlEvents.hpp"
-#include "AsyncCommand.hpp"
-#include "AsyncCommandDispatcher.hpp"
 
 namespace gui
 {
-	class IKeyboardEventObserver : public ISubscriberManager<IKeyboardEventHandler>
+	class IKeyboardEventObserver : public ISubscribersManager<IKeyboardEventHandler>
 	{
 	public:
-		// constructor
-		IKeyboardEventObserver(AsyncCommandDispatcher & asyncDispatcher);
-
 		// destructor
-		virtual ~IKeyboardEventObserver() = default;
-
-		// fields
-		// called in another thread or interrupt handler
-		AsyncCommand<IKeyboardEventObserver, KeyEvent> HandleEventCmd;
-
-	private:
-		// methods
-		void HandleTouchPanelEvent(KeyEvent event);
+		~IKeyboardEventObserver() override = default;
 	};
 }
 
