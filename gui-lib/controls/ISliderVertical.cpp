@@ -27,7 +27,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnPress(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISliderVertical::OnPress(TouchScreenEven & event)
 	{
 		uint16_t ypen = event.y - Y;
 		uint16_t ythumb = Thumb.Y;
@@ -35,13 +35,13 @@ namespace gui
 		if((ypen > ythumb)&&(ypen < (ythumb + Thumb.GetHeight())))
 			return;
 
-		OnPenMove(handler, event);
+		OnPenMove(event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ISliderVertical::OnRelease(TouchScreenEven & event)
 	{
 		SyncThumbPositionWithValue();
 		Draw();
@@ -50,23 +50,23 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnPenEnter(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISliderVertical::OnPenEnter(TouchScreenEven & event)
 	{
-		OnPenMove(handler, event);
+		OnPenMove(event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnPenLeave(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISliderVertical::OnPenLeave(TouchScreenEven & event)
 	{
-		OnRelease(handler, event);
+		OnRelease(event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ISliderVertical::OnPenMove(TouchScreenEven & event)
 	{
 		auto ypen = event.y - Y;
 		if(!((ypen >= _borderSize) && (ypen <= (Height - _borderSize))))
@@ -94,21 +94,21 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnFocused(IFocusEventHandler *)
+	void ISliderVertical::OnFocused()
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnFocusLost(IFocusEventHandler *)
+	void ISliderVertical::OnFocusLost()
 	{
 	}
 
 		/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	void ISliderVertical::OnKeyPress(KeyEvent & event)
 	{
 
 	}
@@ -116,7 +116,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void ISliderVertical::OnKeyRelease(KeyEvent & event)
 	{
 
 	}
@@ -124,7 +124,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event)
+	void ISliderVertical::OnKeyLongPress(KeyEvent & event)
 	{
 
 	}
@@ -132,7 +132,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event)
+	void ISliderVertical::OnEncoderMoved(EncoderEvent & event)
 	{
 		switch(event.Direction)
 		{

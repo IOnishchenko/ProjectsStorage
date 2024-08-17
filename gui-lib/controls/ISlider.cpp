@@ -27,7 +27,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnPress(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISlider::OnPress(TouchScreenEven & event)
 	{
 		uint16_t xpen = event.x - X;
 		uint16_t xthumb = Thumb.X;
@@ -35,13 +35,13 @@ namespace gui
 		if((xpen > xthumb)&&(xpen < (xthumb + Thumb.GetWidth())))
 			return;
 
-		OnPenMove(handler, event);
+		OnPenMove(event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ISlider::OnRelease(TouchScreenEven & event)
 	{
 		SyncThumbPositionWithValue();
 		Draw();
@@ -50,23 +50,23 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnPenEnter(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISlider::OnPenEnter(TouchScreenEven & event)
 	{
-		OnPenMove(handler, event);
+		OnPenMove(event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnPenLeave(ITouchScreenEventHandler * handler, TouchScreenEven & event)
+	void ISlider::OnPenLeave(TouchScreenEven & event)
 	{
-		OnRelease(handler, event);
+		OnRelease(event);
 	}
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ISlider::OnPenMove(TouchScreenEven & event)
 	{
 		auto xpen = event.x - X;
 		if(!((xpen >= _borderSize) && (xpen <= (Width - _borderSize))))
@@ -94,7 +94,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event)
+	void ISlider::OnEncoderMoved(EncoderEvent & event)
 	{
 		switch(event.Direction)
 		{
@@ -116,7 +116,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	void ISlider::OnKeyPress(KeyEvent & event)
 	{
 
 	}
@@ -124,7 +124,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void ISlider::OnKeyRelease(KeyEvent & event)
 	{
 
 	}
@@ -132,7 +132,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event)
+	void ISlider::OnKeyLongPress(KeyEvent & event)
 	{
 
 	}

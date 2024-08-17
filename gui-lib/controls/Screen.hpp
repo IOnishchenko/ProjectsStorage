@@ -14,22 +14,22 @@ namespace gui
 	public:
 		// constructor
 		Screen(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			IUIControl * dynamicContent, const std::initializer_list<IUIControl *> & statisContent,
+			Group * subGroup, const std::initializer_list<IUIControl *> & statisContent,
 			IGElement * gelement);
 
 		Screen(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-			IUIControl * dynamicContent, IUIControl * statisContent, IGElement * gelement);
+			Group * subGroup, IUIControl * statisContent, IGElement * gelement);
 
 		// destructor
 		~Screen() override = default;
 
 	protected:
 		// methods
-		void SetScreen(IUIControl *);
-		void ReplaceDynamicUIControl(IUIControl * screen);
+		void SetSubGroup(Group *);
+		void ReplaceSubGroup(Group * screen);
 
 		template<typename TScreen>
-		void ReplaceCurrentScreen(std::unique_ptr<IUIControl> & screenOwner)
+		void ReplaceGroup(std::unique_ptr<IUIControl> & screenOwner)
 		{
 			// // need to wait because ui control that is being drawing can be destructed
 			// // and it will cause unexpected issue
@@ -48,7 +48,7 @@ namespace gui
 		}
 
 		template<typename TScreen, typename... Args>
-		void ReplaceCurrentScreen(std::unique_ptr<IUIContext> & screenOwner, Args... args)
+		void ReplaceGroup(std::unique_ptr<IUIContext> & screenOwner, Args... args)
 		{
 			// // need to wait because ui control that is being drawing can be destructed
 			// // and it will cause unexpected issue

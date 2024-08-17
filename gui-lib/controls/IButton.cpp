@@ -43,7 +43,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IButton::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IButton::OnPress(TouchScreenEven & event)
 	{
 		_state = ButtonState::Pressed;
 		Draw();
@@ -52,7 +52,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IButton::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IButton::OnRelease(TouchScreenEven & event)
 	{
 		_state = ButtonState::Normal;
 		Draw();
@@ -62,7 +62,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IButton::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IButton::OnPenLeave(TouchScreenEven & event)
 	{
 		if(_state == ButtonState::Normal)
 			return;
@@ -81,21 +81,21 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IButton::OnFocused(IFocusEventHandler *)
+	void IButton::OnFocused()
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IButton::OnFocusLost(IFocusEventHandler *)
+	void IButton::OnFocusLost()
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IButton::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	void IButton::OnKeyPress(KeyEvent & event)
 	{
 
 	}
@@ -103,7 +103,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IButton::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void IButton::OnKeyRelease(KeyEvent & event)
 	{
 
 	}

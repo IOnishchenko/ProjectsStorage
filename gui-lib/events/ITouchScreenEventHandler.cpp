@@ -5,7 +5,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ITouchScreenEventHandler::OnPress(TouchScreenEven & event)
 	{
 
 	}
@@ -13,7 +13,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ITouchScreenEventHandler::OnRelease(TouchScreenEven & event)
 	{
 
 	}
@@ -21,7 +21,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnLongPress(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ITouchScreenEventHandler::OnLongPress(TouchScreenEven & event)
 	{
 
 	}
@@ -29,7 +29,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnPenEnter(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ITouchScreenEventHandler::OnPenEnter(TouchScreenEven & event)
 	{
 
 	}
@@ -37,7 +37,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ITouchScreenEventHandler::OnPenLeave(TouchScreenEven & event)
 	{
 
 	}
@@ -45,7 +45,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void ITouchScreenEventHandler::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ITouchScreenEventHandler::OnPenMove(TouchScreenEven & event)
 	{
 
 	}

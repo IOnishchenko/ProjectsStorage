@@ -1,7 +1,7 @@
 #ifndef GUI_IENCODER_EVENT_HANDLER_HPP
 #define GUI_IENCODER_EVENT_HANDLER_HPP
 
-#include "UIControlEvents.hpp"
+#include "UIEvents.hpp"
 
 namespace gui
 {
@@ -13,7 +13,7 @@ namespace gui
 		virtual ~IEncoderEventHandler() = default;
 
 		// methods
-		virtual void OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event) = 0;
+		virtual void OnEncoderMoved(EncoderEvent & event) = 0;
 	};
 }
 

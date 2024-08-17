@@ -69,10 +69,15 @@ extern "C" bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer, const gptime
 	if(_currentKeyState != keyState)
 	{
 		_currentKeyState = keyState;
+		gui::KeyEvent event =
+		{
+			.Code = gui::KeyCode::ENCODER_KEY,
+			.Type = (keyState) ? gui::KeyEventType::Released : gui::KeyEventType::Pressed,
+		};
 		if(_currentKeyState)
-			UIThread.OnKeyReleasedAsync.TryExecute(gui::KeyCode::ENCODER_KEY);
+			UIThread.HandleKeyboardEventAsync.TryExecute(event);
 		else
-			UIThread.OnKeyPressedAsync.TryExecute(gui::KeyCode::ENCODER_KEY);
+			UIThread.HandleKeyboardEventAsync.TryExecute(event);
 	}
 
 	return true;
@@ -87,6 +92,6 @@ extern "C" void test_thread(void * args)
 	{
 		vTaskDelay(100);
 		uint32_t time = xTaskGetTickCount();
-		UIThread.OnTimerTikedAsync(time);
+		//UIThread.OnTimerTikedAsync(time);
 	}
 }

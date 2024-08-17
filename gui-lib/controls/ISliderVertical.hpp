@@ -33,24 +33,24 @@ namespace gui
 		~ISliderVertical() override;
 
 		// ITouchScreenEventHandler methods
-		void OnPress(ITouchScreenEventHandler *, TouchScreenEven & event) override;
-		void OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event) override;
-		void OnPenEnter(ITouchScreenEventHandler *, TouchScreenEven & event) override;
-		void OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event) override;
-		void OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPress( TouchScreenEven & event) override;
+		void OnRelease(TouchScreenEven & event) override;
+		void OnPenEnter(TouchScreenEven & event) override;
+		void OnPenLeave(TouchScreenEven & event) override;
+		void OnPenMove(TouchScreenEven & event) override;
 		bool IsUnderTouch(uint16_t x, uint16_t y) override;
 
 		// IFocusManager methods
-		void OnFocused(IFocusEventHandler *) override;
-		void OnFocusLost(IFocusEventHandler *) override;
+		void OnFocused() override;
+		void OnFocusLost() override;
 
 		// IEncoderEventHandler methods
-		void OnEncoderMoved(IEncoderEventHandler *, EncoderEvent & event) override;
+		void OnEncoderMoved(EncoderEvent & event) override;
 
 		// IKeyboardEventHandler methods
-		void OnKeyPress(IKeyboardEventHandler *, KeyEvent & event) override;
-		void OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event) override;
-		void OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event) override;
+		void OnKeyPress(KeyEvent & event) override;
+		void OnKeyRelease(KeyEvent & event) override;
+		void OnKeyLongPress(KeyEvent & event) override;
 
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;

@@ -1,7 +1,7 @@
 #ifndef GUI_ITOUCH_SCREEN_EVENT_HANDLER_HPP
 #define GUI_ITOUCH_SCREEN_EVENT_HANDLER_HPP
 
-#include "UIControlEvents.hpp"
+#include "UIEvents.hpp"
 
 namespace gui
 {
@@ -13,12 +13,12 @@ namespace gui
 		virtual ~ITouchScreenEventHandler() = default;
 
 		// methods
-		virtual void OnPress(ITouchScreenEventHandler *, TouchScreenEven & event);
-		virtual void OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event);
-		virtual void OnLongPress(ITouchScreenEventHandler *, TouchScreenEven & event);
-		virtual void OnPenEnter(ITouchScreenEventHandler *, TouchScreenEven & event);
-		virtual void OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event);
-		virtual void OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event);
+		virtual void OnPress(TouchScreenEven & event);
+		virtual void OnRelease(TouchScreenEven & event);
+		virtual void OnLongPress(TouchScreenEven & event);
+		virtual void OnPenEnter(TouchScreenEven & event);
+		virtual void OnPenLeave(TouchScreenEven & event);
+		virtual void OnPenMove(TouchScreenEven & event);
 		virtual bool IsUnderTouch(uint16_t x, uint16_t y) = 0;
 	};
 }

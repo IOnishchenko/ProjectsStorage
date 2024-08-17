@@ -10,8 +10,12 @@ namespace gui
 		virtual ~IFocusEventHandler() = default;
 
 		// methods
-		virtual void OnFocused(IFocusEventHandler *) = 0;
-		virtual void OnFocusLost(IFocusEventHandler *) = 0;
+		virtual void OnFocused() = 0;
+		virtual void OnFocusLost() = 0;
+
+		// field
+		IFocusEventHandler * Previous = this;
+		IFocusEventHandler * Next = this;
 	};
 }
 

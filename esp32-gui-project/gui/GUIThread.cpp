@@ -68,13 +68,10 @@ extern "C" void gui_thread(void * args)
 //
 //-----------------------------------------------------------------*/
 gui::GUIThread::GUIThread(lcd_driver & lcdDriver)
-	:HandleEncoderEventAsync(this, &gui::GUIThread::HandleEncoderEvent, _asyncCommandDispatcher),
-	OnKeyPressedAsync(this, &gui::GUIThread::OnKeyPressed, _asyncCommandDispatcher),
-	OnKeyReleasedAsync(this, &gui::GUIThread::OnKeyReleased, _asyncCommandDispatcher),
-	OnTimerTikedAsync(this, &gui::GUIThread::OnTimerTiked, _asyncCommandDispatcher),
-	_encoderObserver(), _keyboardObserver(), _queue(), _asyncCommandDispatcher(_queue),
-	_decoder(), _renderer(_decoder, lcdDriver),
-	_context{_renderer, &_encoderObserver, &_keyboardObserver, nullptr, nullptr},
+	:IFocusManager(), IEncoderEventManager(this, _asyncCommandDispatcher),
+	IKeyboardEventManager(this, _asyncCommandDispatcher),
+	_queue(), _asyncCommandDispatcher(_queue), _decoder(), _renderer(_decoder, lcdDriver),
+	_context{_renderer, this, this, nullptr, this},
 	_text(10, 10, 300, 220, _context, 3, fontColor, backColor, newFont)
 {
 	_text.RedrawEachLine = true;
@@ -111,40 +108,4 @@ void gui::GUIThread::Initialize()
 
 	memset(txt, 0, 256);
 	_text.Draw();
-}
-
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-void gui::GUIThread::HandleEncoderEvent(EncoderEvent event)
-{
-	sprintf(txt, "Encode event, code = %lu!\n", (uint32_t)event.Direction);
-	_text.AddLine(txt);
-}
-
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-void gui::GUIThread::OnKeyPressed(KeyCode key)
-{
-	sprintf(txt, "Key pressed event, code = %lu!\n", (uint32_t)key);
-	_text.AddLine(txt);
-}
-
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-void gui::GUIThread::OnKeyReleased(KeyCode key)
-{
-	sprintf(txt, "Key released event, code = %lu!\n", (uint32_t)key);
-	_text.AddLine(txt);
-}
-
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-void gui::GUIThread::OnTimerTiked(uint32_t value)
-{
-	sprintf(txt, "Timer tiked, code = %lu!\n", value);
-	_text.AddLine(txt);
 }

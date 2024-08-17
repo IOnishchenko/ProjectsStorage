@@ -24,7 +24,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IRadioButton::OnPress(TouchScreenEven & event)
 	{
 		// IRadioButtonItem * cntr = static_cast<IRadioButtonItem *>(GetEnabledControlByCoordinate(penInfo.x, penInfo.y));
 		// if(cntr && (cntr != _activeControl))
@@ -37,7 +37,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IRadioButton::OnRelease(TouchScreenEven & event)
 	{
 		// auto pressedControl = FindItemWithState(IRadioButtonItem::State::Pressed);
 		
@@ -59,7 +59,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IRadioButton::OnPenLeave(TouchScreenEven & event)
 	{
 		auto cntr = FindItemWithState(IRadioButtonItem::State::Pressed);
 		if(cntr)
@@ -72,7 +72,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnPenMove(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void IRadioButton::OnPenMove(TouchScreenEven & event)
 	{
 		// auto cntr = FindItemWithState(IRadioButtonItem::State::Pressed);
 		// if(cntr && !cntr->IsPositionInsideControl(penInfo.x, penInfo.y))
@@ -93,21 +93,21 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnFocused(IFocusEventHandler *)
+	void IRadioButton::OnFocused()
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnFocusLost(IFocusEventHandler *)
+	void IRadioButton::OnFocusLost()
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	void IRadioButton::OnKeyPress(KeyEvent & event)
 	{
 
 	}
@@ -115,7 +115,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void IRadioButton::OnKeyRelease(KeyEvent & event)
 	{
 
 	}

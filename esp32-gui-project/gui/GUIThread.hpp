@@ -3,17 +3,17 @@
 
 #include "stdint.h"
 #include "lcd-driver.h"
-#include "IEncoderEventObserver.hpp"
-#include "IKeyboardEventObserver.hpp"
+#include "IEncoderEventManager.hpp"
+#include "IKeyboardEventManager.hpp"
+#include "IFocusManager.hpp"
 #include "GElementDecoderRGB565.hpp"
 #include "ControlRenderer.hpp"
 #include "IUIContext.hpp"
 
-#include "AsyncCommand.hpp"
 #include "AsyncCallMessage.hpp"
 #include "AsyncCommandDispatcher.hpp"
 #include "CommandQueue.hpp"
-#include "UIControlEvents.hpp"
+#include "UIEvents.hpp"
 
 #include "TextView.hpp"
 
@@ -47,15 +47,18 @@ namespace gui
 	/*-----------------------------------------------------------------//
 	//
 	//-----------------------------------------------------------------*/
-	class GUIThread
+	class GUIThread :
+		public IFocusManager,
+		public IEncoderEventManager,
+		public IKeyboardEventManager
 	{
 		// it is used for memeory size calculation when 
 		// memory pool is created 
 		union GUIThreadEventsContaner
 		{
 			AsyncCallMessage<uint32_t> OnTimerTikedMessage;
-			AsyncCallMessage<KeyCode> OnKeyPressedMessage;
-			AsyncCallMessage<KeyCode> OnKeyReleasedMessage;
+			AsyncCallMessage<TouchScreenEven> OnTouchScreenMessage;
+			AsyncCallMessage<KeyEvent> OnKeyboardMessage;
 			AsyncCallMessage<EncoderEvent> OnEncoderRotatedMessage; 
 		};
 
@@ -70,16 +73,10 @@ namespace gui
 		void Run();
 		void Initialize();
 
-		// async commands
-		AsyncCommand<GUIThread, EncoderEvent> HandleEncoderEventAsync;
-		AsyncCommand<GUIThread, KeyCode> OnKeyPressedAsync;
-		AsyncCommand<GUIThread, KeyCode> OnKeyReleasedAsync;
-		AsyncCommand<GUIThread, uint32_t> OnTimerTikedAsync;
+		// field
 
 	private:
 		// field
-		IEncoderEventObserver _encoderObserver;
-		IKeyboardEventObserver _keyboardObserver;
 		CommandQueue<GUIThreadEventsContaner, GUI_THREAD_MESSAGE_NUMBER> _queue;
 		AsyncCommandDispatcher _asyncCommandDispatcher;
 		GElementDecoderRGB565 _decoder;
@@ -89,10 +86,7 @@ namespace gui
 		TextView _text;
 
 		// method
-		void HandleEncoderEvent(EncoderEvent event);
-		void OnKeyPressed(KeyCode key);
-		void OnKeyReleased(KeyCode key);
-		void OnTimerTiked(uint32_t value);
+		
 	};
 }
 

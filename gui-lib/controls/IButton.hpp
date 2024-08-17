@@ -33,18 +33,18 @@ namespace gui
 		// methods
 		// ITouchScreenEventHandler methods
 		IGElement * GetGraphicElement() override;
-		void OnPress(ITouchScreenEventHandler *, TouchScreenEven & event) override;
-		void OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event) override;
-		void OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event) override;
+		void OnPress(TouchScreenEven & event) override;
+		void OnRelease(TouchScreenEven & event) override;
+		void OnPenLeave(TouchScreenEven & event) override;
 		bool IsUnderTouch(uint16_t x, uint16_t y) override;
 
 		// IFocusEventHandler methods
-		void OnFocused(IFocusEventHandler *) override;
-		void OnFocusLost(IFocusEventHandler *) override;
+		void OnFocused() override;
+		void OnFocusLost() override;
 
 		// IKeyboardEventHandler methods
-		void OnKeyPress(IKeyboardEventHandler *, KeyEvent & event) override;
-		void OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event) override;
+		void OnKeyPress(KeyEvent & event) override;
+		void OnKeyRelease(KeyEvent & event) override;
 	
 	protected:
 		bool _isDrawn = false;

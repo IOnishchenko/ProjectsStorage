@@ -5,7 +5,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void IKeyboardEventHandler::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	void IKeyboardEventHandler::OnKeyPress(KeyEvent & event)
 	{
 
 	}
@@ -13,7 +13,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void IKeyboardEventHandler::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void IKeyboardEventHandler::OnKeyRelease(KeyEvent & event)
 	{
 
 	}
@@ -21,7 +21,7 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void IKeyboardEventHandler::OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event)
+	void IKeyboardEventHandler::OnKeyLongPress(KeyEvent & event)
 	{
 
 	}

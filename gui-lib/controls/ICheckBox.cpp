@@ -48,7 +48,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ICheckBox::OnPress(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ICheckBox::OnPress(TouchScreenEven & event)
 	{
 		_visualState = CheckBoxState::Pressed;
 		Draw();
@@ -57,7 +57,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ICheckBox::OnRelease(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ICheckBox::OnRelease(TouchScreenEven & event)
 	{ 
 		if(_visualState != CheckBoxState::Pressed)
 			return;
@@ -80,7 +80,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ICheckBox::OnPenLeave(ITouchScreenEventHandler *, TouchScreenEven & event)
+	void ICheckBox::OnPenLeave(TouchScreenEven & event)
 	{
 		if(_visualState != CheckBoxState::Pressed)
 			return;
@@ -100,21 +100,21 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ICheckBox::OnFocused(IFocusEventHandler *)
+	void ICheckBox::OnFocused()
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ICheckBox::OnFocusLost(IFocusEventHandler *)
+	void ICheckBox::OnFocusLost()
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ICheckBox::OnKeyPress(IKeyboardEventHandler *, KeyEvent & event)
+	void ICheckBox::OnKeyPress(KeyEvent & event)
 	{
 
 	}
@@ -122,7 +122,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void ICheckBox::OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event)
+	void ICheckBox::OnKeyRelease(KeyEvent & event)
 	{
 
 	}

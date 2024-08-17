@@ -3,7 +3,7 @@
 
 #include "IGElement.hpp"
 #include "IUIContext.hpp"
-#include "UIControlEvents.hpp"
+#include "UIEvents.hpp"
 
 namespace gui
 {	

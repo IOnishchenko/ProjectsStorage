@@ -1,7 +1,7 @@
 #ifndef GUI_IKEYBOARD_EVENT_HANDLER_HPP
 #define GUI_IKEYBOARD_EVENT_HANDLER_HPP
 
-#include "UIControlEvents.hpp"
+#include "UIEvents.hpp"
 
 namespace gui
 {
@@ -13,9 +13,9 @@ namespace gui
 		virtual ~IKeyboardEventHandler() = default;
 
 		// methods
-		virtual void OnKeyPress(IKeyboardEventHandler *, KeyEvent & event);
-		virtual void OnKeyRelease(IKeyboardEventHandler *, KeyEvent & event);
-		virtual void OnKeyLongPress(IKeyboardEventHandler *, KeyEvent & event);
+		virtual void OnKeyPress(KeyEvent & event);
+		virtual void OnKeyRelease(KeyEvent & event);
+		virtual void OnKeyLongPress(KeyEvent & event);
 	};
 }
 
