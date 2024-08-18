@@ -1,33 +1,4 @@
 #include "configuration.h"
-
-#include "GEPicture.hpp"
-#include "GERectangle.hpp"
-#include "GEText.hpp"
-#include "Picture.hpp"
-#include "Group.hpp"
-#include "Label.hpp"
-#include "TextView.hpp"
-#include "Font.hpp"
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
-#include "sdr_dumy_picture.h"
-#include "button64x24.h"
-#include "font12.h"
-#include "font16.h"
-#include "font20.h"
-#include "font24.h"
-
-#include "font/font17_tahoma.h"
-#include "font/font17_tahoma_comp.h"
-#include "font/font21_tahoma.h"
-#include "font/font21_tahoma_comp.h"
-#include "font/font32_tahoma.h"
-#include "font/font32_tahoma_comp.h"
-
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
 #include "GUIThread.hpp"
 #include <cstring>
 
@@ -42,7 +13,9 @@ extern "C"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static gui::Font newFont(font17_tahoma_comp);
+#include "dumy_picture.h"
+#include "font18.h"
+static gui::Font newFont(font18);
 
 constexpr uint16_t fontColor = (uint16_t)~(((0xff9302 >> 8) & 0xf800) |
 	((0xff9302 >> 5) & 0x07e0) | ((0xff9302 >> 3) & 0x001f));
@@ -72,7 +45,9 @@ gui::GUIThread::GUIThread(lcd_driver & lcdDriver)
 	IKeyboardEventManager(this, _asyncCommandDispatcher),
 	_queue(), _asyncCommandDispatcher(_queue), _decoder(), _renderer(_decoder, lcdDriver),
 	_context{_renderer, this, this, nullptr, this},
-	_text(10, 10, 300, 220, _context, 3, fontColor, backColor, newFont)
+	_text(10, 10, 300, 220, _context, 3, fontColor, backColor, newFont),
+	_gelPicture(&gui320x240, nullptr),
+	_picture(0, 0, 320, 240, _context, &_gelPicture)
 {
 	_text.RedrawEachLine = true;
 }
@@ -107,5 +82,5 @@ void gui::GUIThread::Initialize()
 	sh1106.write_gdata(&gdata0[0], sizeof(gdata0));
 
 	memset(txt, 0, 256);
-	_text.Draw();
+	_picture.Draw();
 }

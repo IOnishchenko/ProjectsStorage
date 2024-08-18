@@ -41,7 +41,7 @@ namespace gui
 		bool IsUnderTouch(uint16_t x, uint16_t y) override;
 
 		// IFocusEventHandler method
-		void OnFocused() override;
+		bool OnFocused() override;
 		void OnFocusLost() override;
 
 		// IEncoderEventHandler methods

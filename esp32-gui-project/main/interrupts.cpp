@@ -91,7 +91,7 @@ extern "C" void test_thread(void * args)
 	while(true)
 	{
 		vTaskDelay(100);
-		uint32_t time = xTaskGetTickCount();
+		//uint32_t time = xTaskGetTickCount();
 		//UIThread.OnTimerTikedAsync(time);
 	}
 }

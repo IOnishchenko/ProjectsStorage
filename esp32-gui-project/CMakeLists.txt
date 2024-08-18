@@ -13,13 +13,12 @@ add_compile_definitions(GUI_USE_PICTUREGDATA)
 add_compile_definitions(GMT020_02_DISPLAY_IS_USED)
 
 include("${root_dir}/command/command.cmake")
-include("${root_dir}/common/common.cmake")
 include("${root_dir}/esp32-common/esp32-common.cmake")
 include("${root_dir}/lcd-drivers/st7789-driver.cmake")
 include("${root_dir}/lcd-drivers/sh1106-driver.cmake")
 include("${root_dir}/gui-lib/gui-lib.cmake")
 include("${root_dir}/freeRTOS/free-rtos.cmake")
-include("${root_dir}/gui-resources/gui-resources.cmake")
+include("${root_dir}/gui-orange-gray/gui-orange-gray.cmake")
 
 set(PROJET_SRCS
 	"main.c"
@@ -27,20 +26,10 @@ set(PROJET_SRCS
 	"${LCD_ST7789_DRIVER_SRCS}"
 	"${LCD_SH1106_DRIVER_SRCS}"
 	"${GUI_LIB_SRCS}"
+	"${GUI_ORANGE_GRAY_SRCS}"
 	"../gui/GUIThread.cpp"
-	"../gui/sdr_dumy_picture_sdr_320x240_V2.c"
-	"../gui/button64x24_button64x24_focused.c"
-	"../gui/font12.c"
-	"../gui/font16.c"
-	"../gui/font20.c"
-	"../gui/font24.c"
-	"../gui/font/font17_tahoma.c"
-	"../gui/font/font17_tahoma_comp.c"
-	"../gui/font/font21_tahoma.c"
-	"../gui/font/font21_tahoma_comp.c"
-	"../gui/font/font32_tahoma.c"
-	"../gui/font/font32_tahoma_comp.c"
 	"../gui/MainScreen.cpp"
+	"../gui/dumy_picture_gui320x240.c"
 )
 
 set(INCLUDE_DIRS
@@ -52,7 +41,7 @@ set(INCLUDE_DIRS
 	"${LCD_SH1106_DRIVER_INCS}"
 	"${GUI_LIB_INCS}"
 	"${FREE_RTOS_COMMON_INCS}"
-	"${GUI_RESOURCES_INCS}"
+	"${GUI_ORANGE_GRAY_INCS}"
 	"../gui/"
 )
 

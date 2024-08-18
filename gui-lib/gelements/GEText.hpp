@@ -40,6 +40,19 @@ namespace gui
 		const Font & _font;
 		uint16_t _currectIndex;
 		uint16_t _baseX;
+
+	public:
+		constexpr static uint16_t Center_Y(uint16_t height, const Font & font)
+		{
+			return (height - Font::GetCharacterHeightInPixels(font))/2;
+		}
+
+		constexpr static uint16_t Center_X(uint16_t regionWidth, const std::string_view & txt,
+			const Font & font)
+		{
+			uint16_t length = Font::GetTextLineWidthInPixels(font, txt);
+			return (regionWidth - length)/2;
+		}
 	};
 }
 

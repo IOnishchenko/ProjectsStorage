@@ -1,17 +1,20 @@
 #include "IButton.hpp"
+#include "IFocusManager.hpp"
 #include "ITouchScreenEventObserver.hpp"
+#include "IKeyboardEventManager.hpp"
 
 namespace gui
 {
 	/*--------------------------------------------------------------------------//
 	// constructor
 	//--------------------------------------------------------------------------*/
-	IButton::IButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		IGElement & normalGEl, IGElement & pressedGEl, const Action<void(IButton*)>& clickCmd)
-		:IUIControl(x, y, w, h, context), _state{ButtonState::Normal}, _clickCmd{clickCmd},
-		_normalBG{&normalGEl}, _pressedBG{&pressedGEl}
+	IButton::IButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h,
+		const IUIContext & context, IGElement & disabledGEl, IGElement & enabledGEl,
+		IGElement & focusedGEl, IGElement & pressedGEl,
+		const Action<void(IButton*)> & clickCmd)
+		:IUIControl(x, y, w, h, context), _state{ButtonState::Enabled}, _clickCmd{clickCmd},
+		_disabledGEl{disabledGEl}, _enabledGEl{enabledGEl}, _focusedGEl{focusedGEl}, _pressedGEl{pressedGEl}
 	{
-		context.TouchScreenObserver->Subscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -19,7 +22,6 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	IButton::~IButton()
 	{
-		_context.TouchScreenObserver->Unsubscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -29,15 +31,30 @@ namespace gui
 	{
 		switch(_state)
 		{
-			case ButtonState::Normal:
-				for(auto itm = _normalBG; itm; itm = itm->PrepareForDrawing());
-				return _normalBG;
+			case ButtonState::Disabled:
+				for(auto itm = &_disabledGEl; itm; itm = itm->PrepareForDrawing());
+				return &_disabledGEl;
+			case ButtonState::Enabled:
+				for(auto itm = &_enabledGEl; itm; itm = itm->PrepareForDrawing());
+				return &_enabledGEl;
+			case ButtonState::Focused:
+				for(auto itm = &_focusedGEl; itm; itm = itm->PrepareForDrawing());
+				return &_focusedGEl;
 			case ButtonState::Pressed:
-				for(auto itm = _pressedBG; itm; itm = itm->PrepareForDrawing());
-				return _pressedBG;
+				for(auto itm = &_pressedGEl; itm; itm = itm->PrepareForDrawing());
+				return &_pressedGEl;
 			default:
 				return nullptr;
 		}
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void IButton::SetEnable(bool value)
+	{
+		_state = value ? ButtonState::Enabled : ButtonState::Disabled;
+		IUIControl::SetEnable(value);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -54,7 +71,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnRelease(TouchScreenEven & event)
 	{
-		_state = ButtonState::Normal;
+		_state = ButtonState::Enabled;
 		Draw();
 		_clickCmd(this);
 	}
@@ -64,9 +81,9 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnPenLeave(TouchScreenEven & event)
 	{
-		if(_state == ButtonState::Normal)
+		if(_state == ButtonState::Enabled)
 			return;
-		_state = ButtonState::Normal;
+		_state = ButtonState::Enabled;
 		Draw();
 	}
 
@@ -81,8 +98,12 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IButton::OnFocused()
+	bool IButton::OnFocused()
 	{
+		_context.KeyboardEventManager->RegisterHandler(this);
+		_state = ButtonState::Focused;
+		Draw();
+		return true;
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -90,6 +111,9 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnFocusLost()
 	{
+		_context.KeyboardEventManager->UnregisterHandler();
+		_state = ButtonState::Enabled;
+		Draw();
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -97,7 +121,8 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnKeyPress(KeyEvent & event)
 	{
-
+		_state = ButtonState::Pressed;
+		Draw();
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -105,6 +130,8 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnKeyRelease(KeyEvent & event)
 	{
-
+		_state = ButtonState::Focused;
+		Draw();
+		_clickCmd(this);
 	}
 }

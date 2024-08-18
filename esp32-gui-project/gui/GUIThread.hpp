@@ -16,6 +16,7 @@
 #include "UIEvents.hpp"
 
 #include "TextView.hpp"
+#include "Picture.hpp"
 
 /*-----------------------------------------------------------------//
 //
@@ -84,6 +85,8 @@ namespace gui
 		IUIContext _context;
 		// gui
 		TextView _text;
+		GEPicture _gelPicture;
+		Picture _picture;
 
 		// method
 		
