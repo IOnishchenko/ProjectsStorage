@@ -15,9 +15,7 @@
 #include "CommandQueue.hpp"
 #include "UIEvents.hpp"
 
-#include "TextView.hpp"
-#include "Picture.hpp"
-
+#include "MainScreen.hpp"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -83,10 +81,9 @@ namespace gui
 		GElementDecoderRGB565 _decoder;
 		ControlRenderer<uint16_t, LCD_BUFFER_SIZE_IN_BYTES/sizeof(uint16_t), LCD_BUFFER_NUMBER> _renderer;
 		IUIContext _context;
+
 		// gui
-		TextView _text;
-		GEPicture _gelPicture;
-		Picture _picture;
+		MainScreen _mainScreen;
 
 		// method
 		

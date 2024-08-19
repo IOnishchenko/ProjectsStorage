@@ -44,7 +44,8 @@ namespace gui
 	public:
 		constexpr static uint16_t Center_Y(uint16_t height, const Font & font)
 		{
-			return (height - Font::GetCharacterHeightInPixels(font))/2;
+			uint16_t y = (height - Font::GetCharacterHeightInPixels(font));
+			return (y/2 + (y & 0x01u));
 		}
 
 		constexpr static uint16_t Center_X(uint16_t regionWidth, const std::string_view & txt,

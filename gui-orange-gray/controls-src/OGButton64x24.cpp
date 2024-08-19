@@ -13,7 +13,7 @@ namespace gui
 	OGButton64x24::OGButton64x24(uint16_t x, uint16_t y, const std::string_view & text,
 		const IUIContext & context, const Action<void(IButton*)> & clickCmd)
 		:IButton(x, y, WIDTH, HEIGHT, context, _disabledPic, _enabledPic, _focusedPic, _pressedPic, clickCmd),
-		_text(GEText::Center_X(WIDTH, text, Font18), GEText::Center_Y(HEIGHT, Font18),
+		_text(GEText::Center_X(WIDTH, text, Font18), GEText::Center_Y(HEIGHT, Font18) + 2,
 			Font::GetTextLineWidthInPixels(Font18, text), Font::GetCharacterHeightInPixels(Font18),
 			text, TEXT_COLOR, BACKGROUND_GRAY, Font18, nullptr),
 		_disabledPic(&button64x24disabled, &_text), _enabledPic(&button64x24enabled, &_text),

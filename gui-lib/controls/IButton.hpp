@@ -16,7 +16,7 @@ namespace gui
 		public ITouchScreenEventHandler, public IFocusEventHandler,
 		public IKeyboardEventHandler
 	{
-	protected:
+	public:
 
 		enum class ButtonState
 		{
@@ -33,9 +33,12 @@ namespace gui
 			IGElement & pressedGEl, const Action<void(IButton*)> & clickCmd);
 
 		// destructor
-		~IButton() override;
+		~IButton() override = default;
 		
 		// methods
+		void SetState(ButtonState state);
+		ButtonState GetState();
+
 		// ITouchScreenEventHandler methods
 		IGElement * GetGraphicElement() override;
 		void SetEnable(bool) override;
@@ -51,9 +54,9 @@ namespace gui
 		// IKeyboardEventHandler methods
 		void OnKeyPress(KeyEvent & event) override;
 		void OnKeyRelease(KeyEvent & event) override;
-	
+
 	protected:
-		bool _isDrawn = false;
+		// fields
 		ButtonState _state;
 		const Action<void(IButton *)> &_clickCmd;
 		IGElement & _disabledGEl;

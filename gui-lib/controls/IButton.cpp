@@ -18,10 +18,19 @@ namespace gui
 	}
 
 	/*--------------------------------------------------------------------------//
-	// destructor
+	// 
 	//--------------------------------------------------------------------------*/
-	IButton::~IButton()
+	void IButton::SetState(IButton::ButtonState state)
 	{
+		_state = state;
+	}
+
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	IButton::ButtonState IButton::GetState()
+	{
+		return _state;
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -32,16 +41,16 @@ namespace gui
 		switch(_state)
 		{
 			case ButtonState::Disabled:
-				for(auto itm = &_disabledGEl; itm; itm = itm->PrepareForDrawing());
+				for(auto * itm = &_disabledGEl; itm; itm = itm->PrepareForDrawing());
 				return &_disabledGEl;
 			case ButtonState::Enabled:
-				for(auto itm = &_enabledGEl; itm; itm = itm->PrepareForDrawing());
+				for(auto * itm = &_enabledGEl; itm; itm = itm->PrepareForDrawing());
 				return &_enabledGEl;
 			case ButtonState::Focused:
-				for(auto itm = &_focusedGEl; itm; itm = itm->PrepareForDrawing());
+				for(auto * itm = &_focusedGEl; itm; itm = itm->PrepareForDrawing());
 				return &_focusedGEl;
 			case ButtonState::Pressed:
-				for(auto itm = &_pressedGEl; itm; itm = itm->PrepareForDrawing());
+				for(auto * itm = &_pressedGEl; itm; itm = itm->PrepareForDrawing());
 				return &_pressedGEl;
 			default:
 				return nullptr;
@@ -100,6 +109,9 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	bool IButton::OnFocused()
 	{
+		if(!_enable)
+			return false;
+		
 		_context.KeyboardEventManager->RegisterHandler(this);
 		_state = ButtonState::Focused;
 		Draw();
@@ -130,8 +142,11 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnKeyRelease(KeyEvent & event)
 	{
+		bool onClickEnadled = _state == ButtonState::Pressed;
 		_state = ButtonState::Focused;
 		Draw();
-		_clickCmd(this);
+		
+		if(onClickEnadled)
+			_clickCmd(this);
 	}
 }

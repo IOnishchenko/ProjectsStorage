@@ -1,6 +1,5 @@
 #include "configuration.h"
 #include "GUIThread.hpp"
-#include <cstring>
 
 /*-----------------------------------------------------------------//
 //
@@ -13,20 +12,7 @@ extern "C"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-#include "dumy_picture.h"
-#include "font18.h"
-static gui::Font newFont(font18);
-
-constexpr uint16_t fontColor = (uint16_t)~(((0xff9302 >> 8) & 0xf800) |
-	((0xff9302 >> 5) & 0x07e0) | ((0xff9302 >> 3) & 0x001f));
-constexpr uint16_t backColor = (uint16_t)~(((0x3d5a68 >> 8) & 0xf800) |
-	((0x3d5a68 >> 5) & 0x07e0) | ((0x3d5a68 >> 3) & 0x001f));
-
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
 gui::GUIThread UIThread(st7789);
-char txt[256] = {0};
 
 /*-----------------------------------------------------------------//
 //
@@ -45,11 +31,8 @@ gui::GUIThread::GUIThread(lcd_driver & lcdDriver)
 	IKeyboardEventManager(this, _asyncCommandDispatcher),
 	_queue(), _asyncCommandDispatcher(_queue), _decoder(), _renderer(_decoder, lcdDriver),
 	_context{_renderer, this, this, nullptr, this},
-	_text(10, 10, 300, 220, _context, 3, fontColor, backColor, newFont),
-	_gelPicture(&gui320x240, nullptr),
-	_picture(0, 0, 320, 240, _context, &_gelPicture)
+	_mainScreen(_context)
 {
-	_text.RedrawEachLine = true;
 }
 
 /*-----------------------------------------------------------------//
@@ -81,6 +64,5 @@ void gui::GUIThread::Initialize()
 	};
 	sh1106.write_gdata(&gdata0[0], sizeof(gdata0));
 
-	memset(txt, 0, 256);
-	_picture.Draw();
+	_mainScreen.Draw();
 }
