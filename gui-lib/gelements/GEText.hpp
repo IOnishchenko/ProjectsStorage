@@ -33,6 +33,8 @@ namespace gui
 		// methods
 		uint16_t GetCurrentCharacterIndex() const;
 		IGElement * PrepareForDrawing() override;
+		void SetHorizontalPositionInCenter(uint16_t regionWidth, int16_t offset);
+		void SetVerticalPositionInCenter(uint16_t regionHeight, int16_t offset);
 
 		GEText& operator=(const std::string_view & txt);
 

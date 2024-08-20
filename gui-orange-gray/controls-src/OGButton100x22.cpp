@@ -1,30 +1,30 @@
 #include "OGCommon.hpp"
-#include "OGButton64x24.hpp"
-#include "button64x24.h"
+#include "OGButton100x22.hpp"
+#include "button100x22.h"
 
 namespace gui
 {
-	constexpr uint16_t WIDTH = 64;
-	constexpr uint16_t HEIGHT = 24;
+	constexpr uint16_t WIDTH = 100;
+	constexpr uint16_t HEIGHT = 22;
 
 	/*--------------------------------------------------------------------------//
 	// Constructor
 	//--------------------------------------------------------------------------*/
-	OGButton64x24::OGButton64x24(uint16_t x, uint16_t y, const std::string_view & text,
+	OGButton100x22::OGButton100x22(uint16_t x, uint16_t y, const std::string_view & text,
 		const IUIContext & context, const Action<void(IButton*)> & clickCmd)
 		:IButton(x, y, WIDTH, HEIGHT, context, _disabledPic, _enabledPic, _focusedPic, _pressedPic, clickCmd),
-		_text(GEText::Center_X(WIDTH, text, Font18), GEText::Center_Y(HEIGHT, Font18) + 2,
+		_text(GEText::Center_X(WIDTH, text, Font18), GEText::Center_Y(HEIGHT, Font18) + 1,
 			Font::GetTextLineWidthInPixels(Font18, text), Font::GetCharacterHeightInPixels(Font18),
 			text, TEXT_COLOR, BACKGROUND_GRAY, Font18, nullptr),
-		_disabledPic(&button64x24disabled, &_text), _enabledPic(&button64x24enabled, &_text),
-		_focusedPic(&button64x24focused, &_text), _pressedPic(&button64x24pressed, &_text)
+		_disabledPic(&button100x22disabled, &_text), _enabledPic(&button100x22enabled, &_text),
+		_focusedPic(&button100x22focused, &_text), _pressedPic(&button100x22pressed, &_text)
 	{
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	IGElement * OGButton64x24::GetGraphicElement()
+	IGElement * OGButton100x22::GetGraphicElement()
 	{
 		switch(_state)
 		{

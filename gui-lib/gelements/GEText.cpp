@@ -77,6 +77,22 @@ namespace gui
 	/*------------------------------------------------------------//
 	//
 	//------------------------------------------------------------*/
+	void GEText::SetHorizontalPositionInCenter(uint16_t regionWidth, int16_t offset)
+	{
+		_baseX = GEText::Center_X(regionWidth, Text, _font) + offset;
+	}
+
+	/*------------------------------------------------------------//
+	//
+	//------------------------------------------------------------*/
+	void GEText::SetVerticalPositionInCenter(uint16_t regionHeight, int16_t offset)
+	{
+		Y = GEText::Center_Y(regionHeight, _font) + offset;
+	}
+
+	/*------------------------------------------------------------//
+	//
+	//------------------------------------------------------------*/
 	GEText& GEText::operator=(const std::string_view & txt)
 	{
 		Text = txt;

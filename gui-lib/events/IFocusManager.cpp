@@ -115,7 +115,7 @@ namespace gui
 		if(_focused)
 		{
 			_focused->OnFocusLost();
-			if(event.Direction == EncoderDirection::ENC_INCREASE)
+			if(event.Direction == EncoderDirection::ENC_DECREASE)
 				_focused = _focused->Next;
 			else
 				_focused = _focused->Previous;

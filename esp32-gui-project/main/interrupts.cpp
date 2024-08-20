@@ -49,8 +49,8 @@ extern "C" bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer, const gptime
 		gui::EncoderEvent event =
 		{
 			.Id = gui::EncoderId::MAIN_ENCODER,
-			.Direction = gpio_num ? gui::EncoderDirection::ENC_INCREASE :
-				gui::EncoderDirection::ENC_DECREASE,
+			.Direction = gpio_num ? gui::EncoderDirection::ENC_DECREASE :
+				gui::EncoderDirection::ENC_INCREASE,
 		};
 		UIThread.HandleEncoderEventAsync.TryExecute(event);
 		_lockA = true;

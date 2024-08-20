@@ -9,6 +9,7 @@ set(GUI_CONTROLS_SRCS
 	"${project_dir}/gui-lib/controls/ISliderVertical.cpp"
 	"${project_dir}/gui-lib/controls/IUIControl.cpp"
 	"${project_dir}/gui-lib/controls/Label.cpp"
+	"${project_dir}/gui-lib/controls/NumericUpDown.cpp"
 	"${project_dir}/gui-lib/controls/Picture.cpp"
 	"${project_dir}/gui-lib/controls/Screen.cpp"
 	"${project_dir}/gui-lib/controls/TextView.cpp"

@@ -13,7 +13,8 @@ namespace gui
 	// 
 	//--------------------------------------------------------------------------*/
 	class IButton : public IUIControl,
-		public ITouchScreenEventHandler, public IFocusEventHandler,
+		public ITouchScreenEventHandler,
+		public IFocusEventHandler,
 		public IKeyboardEventHandler
 	{
 	public:
@@ -38,10 +39,10 @@ namespace gui
 		// methods
 		void SetState(ButtonState state);
 		ButtonState GetState();
-
-		// ITouchScreenEventHandler methods
 		IGElement * GetGraphicElement() override;
 		void SetEnable(bool) override;
+
+		// ITouchScreenEventHandler methods
 		void OnPress(TouchScreenEven & event) override;
 		void OnRelease(TouchScreenEven & event) override;
 		void OnPenLeave(TouchScreenEven & event) override;
