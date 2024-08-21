@@ -5,7 +5,8 @@
 #include "Command.hpp"
 #include "GERectangle.hpp"
 #include "GEPicture.hpp"
-#include "OGButton64x24.hpp"
+#include "OGRadioButton64x24.hpp"
+#include "IRadioButtonGroup.hpp"
 #include "OGButton100x22.hpp"
 #include "OGNumericUpDown.hpp"
 
@@ -29,11 +30,11 @@ namespace gui
 		Command<MainScreen, IButton *> _onButton2ClickedCmd;
 		Command<MainScreen, IButton *> _onButton3ClickedCmd;
 
-		Command<MainScreen, IButton *> _onMainButtonClikedCmd;
-		Command<MainScreen, IButton *> _onRadioButtonClikedCmd;
-		Command<MainScreen, IButton *> _onAudioButtonClikedCmd;
-		Command<MainScreen, IButton *> _onDSPButtonClikedCmd;
-		Command<MainScreen, IButton *> _onSettingsButtonClikedCmd;
+		Command<MainScreen, IRadioButton *> _onMainButtonClikedCmd;
+		Command<MainScreen, IRadioButton *> _onRadioButtonClikedCmd;
+		Command<MainScreen, IRadioButton *> _onAudioButtonClikedCmd;
+		Command<MainScreen, IRadioButton *> _onDSPButtonClikedCmd;
+		Command<MainScreen, IRadioButton *> _onSettingsButtonClikedCmd;
 
 		Command<MainScreen, const NumericUpDown::Parameters &> _onFrequencyChangedCmd;
 
@@ -42,11 +43,12 @@ namespace gui
 		OGButton100x22 _button2;
 		OGButton100x22 _button3;
 
-		OGButton64x24 _mainButton;
-		OGButton64x24 _radioButton;
-		OGButton64x24 _audioButton;
-		OGButton64x24 _dspButton;
-		OGButton64x24 _settingsButton;
+		OGRadioButton64x24 _mainButton;
+		OGRadioButton64x24 _radioButton;
+		OGRadioButton64x24 _audioButton;
+		OGRadioButton64x24 _dspButton;
+		OGRadioButton64x24 _settingsButton;
+		IRadioButtonGroup _mainRBGroup;
 
 		OGNumericUpDown _frequencyLabel;
 
@@ -59,11 +61,11 @@ namespace gui
 		void OnButton2Clicked(IButton *);
 		void OnButton3Clicked(IButton *);
 
-		void OnMainButtonClicked(IButton *);
-		void OnRadioButtonClicked(IButton *);
-		void OnAudioButtonClicked(IButton *);
-		void OnDSPButtonClicked(IButton *);
-		void OnSettingsButtonClicked(IButton *);
+		void OnMainButtonClicked(IRadioButton *);
+		void OnRadioButtonClicked(IRadioButton *);
+		void OnAudioButtonClicked(IRadioButton *);
+		void OnDSPButtonClicked(IRadioButton *);
+		void OnSettingsButtonClicked(IRadioButton *);
 
 		void OnFrequencyChanged(const NumericUpDown::Parameters & params);
 	};

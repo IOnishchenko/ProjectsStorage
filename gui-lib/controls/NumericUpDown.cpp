@@ -87,27 +87,27 @@ namespace gui
 		_textGelement.SetHorizontalPositionInCenter(Width, 0);
 		switch(_state)
 		{
-			case NumericUpDownState::Disabled:
+			case State::Disabled:
 				_textGelement.Foreground.Color = _disForeground;
 				_textGelement.BackgroundColor = _disBackground;
 				for(auto * itm = &_disabledGEl; itm; itm = itm->PrepareForDrawing());
 				return &_disabledGEl;
-			case NumericUpDownState::Enabled:
+			case State::Enabled:
 				_textGelement.Foreground.Color = _enaForeground;
 				_textGelement.BackgroundColor = _enaBackground;
 				for(auto * itm = &_enabledGEl; itm; itm = itm->PrepareForDrawing());
 				return &_enabledGEl;
-			case NumericUpDownState::Focused:
+			case State::Focused:
 				_textGelement.Foreground.Color = _focForeground;
 				_textGelement.BackgroundColor = _focBackground;
 				for(auto * itm = &_focusedGEl; itm; itm = itm->PrepareForDrawing());
 				return &_focusedGEl;
-			case NumericUpDownState::Pressed:
+			case State::Pressed:
 				_textGelement.Foreground.Color = _presForeground;
 				_textGelement.BackgroundColor = _presBackground;
 				for(auto * itm = &_pressedGEl; itm; itm = itm->PrepareForDrawing());
 				return &_pressedGEl;
-			case NumericUpDownState::Selected:
+			case State::Selected:
 				_textGelement.Foreground.Color = _selForeground;
 				_textGelement.BackgroundColor = _selBackground;
 				for(auto * itm = &_pressedGEl; itm; itm = itm->PrepareForDrawing());
@@ -122,7 +122,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void NumericUpDown::SetEnable(bool value)
 	{
-		_state = value ? NumericUpDownState::Enabled :NumericUpDownState::Disabled;
+		_state = value ? State::Enabled :State::Disabled;
 		IUIControl::SetEnable(value);
 	}
 
@@ -131,8 +131,8 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void NumericUpDown::OnPress(TouchScreenEven & event)
 	{
-		_lockManagers = _state != NumericUpDownState::Selected;
-		_state = NumericUpDownState::Pressed;
+		_lockManagers = _state != State::Selected;
+		_state = State::Pressed;
 		Draw();
 	}
 
@@ -144,14 +144,12 @@ namespace gui
 		if(_lockManagers)
 		{
 			_context.EncoderEventManager->RegisterHandler(this);
-			_context.KeyboardEventManager->RegisterHandler(this);
-			_state = NumericUpDownState::Selected;
+			_state = State::Selected;
 		}
 		else
 		{
 			_context.EncoderEventManager->UnregisterHandler();
-			_context.KeyboardEventManager->UnregisterHandler();
-			_state = NumericUpDownState::Enabled;
+			_state = State::Enabled;
 		}
 		Draw();
 	}
@@ -162,7 +160,7 @@ namespace gui
 	void NumericUpDown::OnPenLeave(TouchScreenEven & event)
 	{
 		_state = _lockManagers ?
-			NumericUpDownState::Selected : NumericUpDownState::Enabled;
+			State::Selected : State::Enabled;
 		Draw();
 	}
 
@@ -186,7 +184,7 @@ namespace gui
 			return false;
 
 		_context.KeyboardEventManager->RegisterHandler(this);
-		_state = NumericUpDownState::Focused;
+		_state = State::Focused;
 		Draw();
 		return true;
 	}
@@ -198,7 +196,7 @@ namespace gui
 	{
 		_lockManagers = false;
 		_context.KeyboardEventManager->UnregisterHandler();
-		_state = NumericUpDownState::Enabled;
+		_state = State::Enabled;
 		Draw();
 	}
 
@@ -221,8 +219,8 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void NumericUpDown::OnKeyPress(KeyEvent & event)
 	{
-		_lockManagers = _state == NumericUpDownState::Focused;
-		_state = NumericUpDownState::Pressed;
+		_lockManagers = _state == State::Focused;
+		_state = State::Pressed;
 		Draw();
 	}
 
@@ -234,14 +232,12 @@ namespace gui
 		if(_lockManagers)
 		{
 			_context.EncoderEventManager->RegisterHandler(this);
-			_context.KeyboardEventManager->RegisterHandler(this);
-			_state = NumericUpDownState::Selected;
+			_state = State::Selected;
 		}
 		else
 		{
 			_context.EncoderEventManager->UnregisterHandler();
-			_context.KeyboardEventManager->UnregisterHandler();
-			_state = NumericUpDownState::Focused;
+			_state = State::Focused;
 		}
 		Draw();
 	}

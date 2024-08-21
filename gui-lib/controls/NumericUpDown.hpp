@@ -24,7 +24,7 @@ namespace gui
 	{
 	public:
 
-		enum class NumericUpDownState
+		enum class State
 		{
 			Disabled,
 			Enabled,
@@ -95,7 +95,7 @@ namespace gui
 
 	protected:
 		// fields
-		NumericUpDownState _state = NumericUpDownState::Enabled;
+		State _state = State::Enabled;
 		std::string _text;
 		GEText _textGelement;
 		bool _lockManagers = false;

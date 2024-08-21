@@ -1,24 +1,52 @@
 #include "IRadioButton.hpp"
+#include "IFocusManager.hpp"
 #include "ITouchScreenEventObserver.hpp"
+#include "IKeyboardEventManager.hpp"
+#include "IRadioButtonGroup.hpp"
 
 namespace gui
 {
 	/*--------------------------------------------------------------------------//
-	// Constructor
+	//
 	//--------------------------------------------------------------------------*/
 	IRadioButton::IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		const std::initializer_list<IUIControl *> & items, IGElement * gelement)
-		:Group(x, y, w, h, context, items, gelement)
+		IGElement & disabledGEl, IGElement & enabledGEl, IGElement & focusedGEl,
+		IGElement & pressedGEl, IGElement & selectedGEl, IGElement & selectedFocusedGEl,
+		const Action<void(IRadioButton *)> & selCmd)
+		:IUIControl(x, y, w, h, context),
+		_onItemSelected{selCmd}, _disabledGEl{disabledGEl}, _enabledGEl{enabledGEl}, _focusedGEl{focusedGEl},
+		_pressedGEl{pressedGEl}, _selectedGEl{selectedGEl}, _selectedFocusedGEl{selectedFocusedGEl}
 	{
-		context.TouchScreenObserver->Subscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
-	// destructor
+	//
 	//--------------------------------------------------------------------------*/
-	IRadioButton::~IRadioButton()
+	IGElement * IRadioButton::GetGraphicElement()
 	{
-		_context.TouchScreenObserver->Unsubscribe(this);
+		switch(_state)
+		{
+			case State::Disabled:
+				for(auto itm = &_disabledGEl; itm; itm = itm->PrepareForDrawing());
+				return &_disabledGEl;
+			case State::Enabled:
+				for(auto itm = &_enabledGEl; itm; itm = itm->PrepareForDrawing());
+				return &_enabledGEl;
+			case State::Focused:
+				for(auto itm = &_focusedGEl; itm; itm = itm->PrepareForDrawing());
+				return &_focusedGEl;
+			case State::Pressed:
+				for(auto itm = &_pressedGEl; itm; itm = itm->PrepareForDrawing());
+				return &_pressedGEl;
+			case State::Selected:
+				for(auto itm = &_selectedGEl; itm; itm = itm->PrepareForDrawing());
+				return &_selectedGEl;
+			case State::SelectedFocused:
+				for(auto itm = &_selectedFocusedGEl; itm; itm = itm->PrepareForDrawing());
+				return &_selectedFocusedGEl;
+			default:
+				return nullptr;
+		}
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -26,12 +54,9 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IRadioButton::OnPress(TouchScreenEven & event)
 	{
-		// IRadioButtonItem * cntr = static_cast<IRadioButtonItem *>(GetEnabledControlByCoordinate(penInfo.x, penInfo.y));
-		// if(cntr && (cntr != _activeControl))
-		// {
-		// 	cntr->_state = IRadioButtonItem::State::Pressed;
-		// 	cntr->Draw();
-		// }
+		_logicState = _state;
+		_state = State::Pressed;
+		Draw();
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -39,21 +64,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IRadioButton::OnRelease(TouchScreenEven & event)
 	{
-		// auto pressedControl = FindItemWithState(IRadioButtonItem::State::Pressed);
-		
-		// if(!pressedControl)
-		// 	return;
-		
-		// if(_activeControl)
-		// {
-		// 	auto activeControl = static_cast<IRadioButtonItem*>(_activeControl);
-		// 	activeControl->_state = IRadioButtonItem::State::Normal;
-		// 	activeControl->Draw();
-		// }
-		// _activeControl = pressedControl;
-		// pressedControl->_state = IRadioButtonItem::State::Selected;
-		// pressedControl->Draw();
-		// (*pressedControl->OnItemSelected)(pressedControl);
+		HandleOnRelease();
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -61,25 +72,10 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IRadioButton::OnPenLeave(TouchScreenEven & event)
 	{
-		auto cntr = FindItemWithState(IRadioButtonItem::State::Pressed);
-		if(cntr)
-		{
-			cntr->_state = IRadioButtonItem::State::Normal;
-			cntr->Draw();
-		}
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void IRadioButton::OnPenMove(TouchScreenEven & event)
-	{
-		// auto cntr = FindItemWithState(IRadioButtonItem::State::Pressed);
-		// if(cntr && !cntr->IsPositionInsideControl(penInfo.x, penInfo.y))
-		// {
-		// 	cntr->_state = IRadioButtonItem::State::Normal;
-		// 	cntr->Draw();
-		// }
+		if(_state == _logicState)
+			return;
+		_state = _logicState;
+		Draw();
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -95,6 +91,14 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	bool IRadioButton::OnFocused()
 	{
+		if(!_enable)
+			return false;
+
+		_context.KeyboardEventManager->RegisterHandler(this);
+		_state = _state == State::Selected ?
+			State::SelectedFocused : State::Focused;
+		_logicState = _state;
+		Draw();
 		return true;
 	}
 
@@ -103,6 +107,11 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IRadioButton::OnFocusLost()
 	{
+		_context.KeyboardEventManager->UnregisterHandler();
+		_state = _logicState == State::Focused ?
+			State::Enabled : State::Selected;
+		_logicState = _state;
+		Draw();
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -110,7 +119,9 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IRadioButton::OnKeyPress(KeyEvent & event)
 	{
-
+		_logicState = _state;
+		_state = State::Pressed;
+		Draw();
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -118,49 +129,49 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IRadioButton::OnKeyRelease(KeyEvent & event)
 	{
-
+		HandleOnRelease();
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::SetSelected(IRadioButtonItem * selected)
+	void IRadioButton::SetState(State state)
 	{
-		// for(auto item : _content)
-		// {
-		// 	auto rbutton = static_cast<IRadioButtonItem *>(item);
-		// 	rbutton->_state = rbutton == selected
-		// 		? IRadioButtonItem::State::Selected
-		// 		: IRadioButtonItem::State::Normal;
-		// }
-		// _activeControl = selected;
+		_state = state;
+		_logicState = state;
+		Draw();
 	}
 
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	void IRadioButton::ClearSelection()
+	void IRadioButton::HandleOnRelease()
 	{
-		// if(_activeControl)
-		// {
-		// 	auto itm = static_cast<IRadioButtonItem *>(_activeControl);
-		// 	itm->_state = IRadioButtonItem::State::Normal;
-		// 	itm->Draw();
-		// 	_activeControl = nullptr;
-		// }
-	}
+		if(_state != State::Pressed)
+			return;
 
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	IRadioButtonItem * IRadioButton::FindItemWithState(IRadioButtonItem::State state) const
-	{
-		for(auto cntr : Controls)
+		switch(_logicState)
 		{
-			auto item = static_cast<IRadioButtonItem *>(cntr);
-			if(item->_state == state)
-				return item;
+			case State::Enabled:
+				_state = State::Selected;
+				Group->RadioButtonCallBack(this);
+				_onItemSelected(this);
+				break;
+			case State::Focused:
+				_state = State::SelectedFocused;
+				Group->RadioButtonCallBack(this);
+				_onItemSelected(this);
+				break;
+			case State::Selected:
+				_state = State::Selected;
+				break;
+			case State::SelectedFocused:
+				_state = State::SelectedFocused;
+				break;
+			default:
+				return;
 		}
-		return nullptr;
+		_logicState = _state;
+		Draw();
 	}
 }

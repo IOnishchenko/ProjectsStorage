@@ -16,8 +16,7 @@ MainScreen::MainScreen(const IUIContext & context)
 	:Group(0, 0, 320, 240, context,
 	{
 		&_button0, &_button1, &_button2, &_button3,
-		&_mainButton, &_radioButton, &_audioButton,
-		&_dspButton, &_settingsButton, &_frequencyLabel
+		&_mainRBGroup, &_frequencyLabel
 	}, 
 	&_picture),
 
@@ -44,6 +43,11 @@ MainScreen::MainScreen(const IUIContext & context)
 	_audioButton(64*2, 240-24, "AUDIO", context, _onAudioButtonClikedCmd),
 	_dspButton(64*3, 240-24, "DSP", context, _onDSPButtonClikedCmd),
 	_settingsButton(64*4, 240-24, "SETTING", context, _onSettingsButtonClikedCmd),
+	_mainRBGroup(0, 240-24, 320, 24, context,
+	{
+		&_mainButton, &_radioButton, &_audioButton,
+		&_dspButton, &_settingsButton
+	}, nullptr),
 
 	_frequencyLabel(117, 68, context, _onFrequencyChangedCmd),
 
@@ -123,7 +127,7 @@ void MainScreen::OnButton3Clicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnMainButtonClicked(IButton *)
+void MainScreen::OnMainButtonClicked(IRadioButton *)
 {
 	printf("Main button was ckicked\n");
 }
@@ -131,7 +135,7 @@ void MainScreen::OnMainButtonClicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnRadioButtonClicked(IButton *)
+void MainScreen::OnRadioButtonClicked(IRadioButton *)
 {
 	printf("Radio button was ckicked\n");
 }
@@ -139,7 +143,7 @@ void MainScreen::OnRadioButtonClicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnAudioButtonClicked(IButton *)
+void MainScreen::OnAudioButtonClicked(IRadioButton *)
 {
 	printf("Audio button was ckicked\n");
 }
@@ -147,7 +151,7 @@ void MainScreen::OnAudioButtonClicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnDSPButtonClicked(IButton *)
+void MainScreen::OnDSPButtonClicked(IRadioButton *)
 {
 	printf("DSP button was ckicked\n");
 }
@@ -155,7 +159,7 @@ void MainScreen::OnDSPButtonClicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnSettingsButtonClicked(IButton *)
+void MainScreen::OnSettingsButtonClicked(IRadioButton *)
 {
 	printf("Settings button was ckicked\n");
 }

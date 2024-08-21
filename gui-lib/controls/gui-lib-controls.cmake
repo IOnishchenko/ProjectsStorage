@@ -4,7 +4,7 @@ set(GUI_CONTROLS_SRCS
 	"${project_dir}/gui-lib/controls/IButton.cpp"
 	"${project_dir}/gui-lib/controls/ICheckBox.cpp"
 	"${project_dir}/gui-lib/controls/IRadioButton.cpp"
-	"${project_dir}/gui-lib/controls/IRadioButtonItem.cpp"
+	"${project_dir}/gui-lib/controls/IRadioButtonGroup.cpp"
 	"${project_dir}/gui-lib/controls/ISlider.cpp"
 	"${project_dir}/gui-lib/controls/ISliderVertical.cpp"
 	"${project_dir}/gui-lib/controls/IUIControl.cpp"

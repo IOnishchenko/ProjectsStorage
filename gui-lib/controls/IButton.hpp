@@ -59,7 +59,7 @@ namespace gui
 	protected:
 		// fields
 		ButtonState _state;
-		const Action<void(IButton *)> &_clickCmd;
+		const Action<void(IButton *)> & _clickCmd;
 		IGElement & _disabledGEl;
 		IGElement & _enabledGEl;
 		IGElement & _focusedGEl;
