@@ -27,9 +27,11 @@ set(PROJET_SRCS
 	"${LCD_SH1106_DRIVER_SRCS}"
 	"${GUI_LIB_SRCS}"
 	"${GUI_ORANGE_GRAY_SRCS}"
-	"../gui/GUIThread.cpp"
-	"../gui/MainScreen.cpp"
+	"../gui/MainScreen/MainScreen.cpp"
+	"../gui/RadioScreen/RadioScreen.cpp"
 	"../gui/dumy_picture_gui320x240.c"
+	"../gui/GUIThread.cpp"
+	"../gui/ScreenBase.cpp"
 )
 
 set(INCLUDE_DIRS
@@ -43,6 +45,11 @@ set(INCLUDE_DIRS
 	"${FREE_RTOS_COMMON_INCS}"
 	"${GUI_ORANGE_GRAY_INCS}"
 	"../gui/"
+	"../gui/AudioScreen/"
+	"../gui/DSPScreen/"
+	"../gui/MainScreen/"
+	"../gui/RadioScreen/"
+	"../gui/SettingsScreen/"
 )
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)

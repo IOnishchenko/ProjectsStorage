@@ -31,6 +31,7 @@ namespace gui
 		// Group methods
 		void RedrawChildren();
 		void AddChild(IUIControl * child);
+		void RemoveChild(IUIControl * child);
 
 		// fields
 		std::forward_list<IUIControl *> Controls;

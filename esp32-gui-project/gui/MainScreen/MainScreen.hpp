@@ -30,12 +30,6 @@ namespace gui
 		Command<MainScreen, IButton *> _onButton2ClickedCmd;
 		Command<MainScreen, IButton *> _onButton3ClickedCmd;
 
-		Command<MainScreen, IRadioButton *> _onMainButtonClikedCmd;
-		Command<MainScreen, IRadioButton *> _onRadioButtonClikedCmd;
-		Command<MainScreen, IRadioButton *> _onAudioButtonClikedCmd;
-		Command<MainScreen, IRadioButton *> _onDSPButtonClikedCmd;
-		Command<MainScreen, IRadioButton *> _onSettingsButtonClikedCmd;
-
 		Command<MainScreen, const NumericUpDown::Parameters &> _onFrequencyChangedCmd;
 
 		OGButton100x22 _button0;
@@ -43,29 +37,13 @@ namespace gui
 		OGButton100x22 _button2;
 		OGButton100x22 _button3;
 
-		OGRadioButton64x24 _mainButton;
-		OGRadioButton64x24 _radioButton;
-		OGRadioButton64x24 _audioButton;
-		OGRadioButton64x24 _dspButton;
-		OGRadioButton64x24 _settingsButton;
-		IRadioButtonGroup _mainRBGroup;
-
 		OGNumericUpDown _frequencyLabel;
-
-		//GERectangle _background;
-		GEPicture _picture;
 
 		// methods
 		void OnButton0Clicked(IButton *);
 		void OnButton1Clicked(IButton *);
 		void OnButton2Clicked(IButton *);
 		void OnButton3Clicked(IButton *);
-
-		void OnMainButtonClicked(IRadioButton *);
-		void OnRadioButtonClicked(IRadioButton *);
-		void OnAudioButtonClicked(IRadioButton *);
-		void OnDSPButtonClicked(IRadioButton *);
-		void OnSettingsButtonClicked(IRadioButton *);
 
 		void OnFrequencyChanged(const NumericUpDown::Parameters & params);
 	};

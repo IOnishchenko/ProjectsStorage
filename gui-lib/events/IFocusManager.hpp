@@ -14,7 +14,7 @@ namespace gui
 	{
 	public:
 		// constructor
-		IFocusManager();
+		//IFocusManager();
 
 		// destructor
 		~IFocusManager() override = default;

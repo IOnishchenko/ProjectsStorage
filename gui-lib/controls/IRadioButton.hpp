@@ -60,7 +60,8 @@ namespace gui
 		void OnKeyRelease(KeyEvent & event) override;
 		
 		// method
-		IRadioButton::State GetState() {return _state;}
+		IRadioButton::State GetState();
+		void SetAsSelectedInitially();
 		
 	protected:
 		// fields

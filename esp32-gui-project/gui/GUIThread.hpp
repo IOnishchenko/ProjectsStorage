@@ -15,7 +15,7 @@
 #include "CommandQueue.hpp"
 #include "UIEvents.hpp"
 
-#include "MainScreen.hpp"
+#include "ScreenBase.hpp"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -72,8 +72,6 @@ namespace gui
 		void Run();
 		void Initialize();
 
-		// field
-
 	private:
 		// field
 		CommandQueue<GUIThreadEventsContaner, GUI_THREAD_MESSAGE_NUMBER> _queue;
@@ -83,10 +81,7 @@ namespace gui
 		IUIContext _context;
 
 		// gui
-		MainScreen _mainScreen;
-
-		// method
-		
+		ScreenBase _mainScreen;
 	};
 }
 

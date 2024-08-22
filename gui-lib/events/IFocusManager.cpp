@@ -5,10 +5,9 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	IFocusManager::IFocusManager()
-	{
-
-	}
+	// IFocusManager::IFocusManager()
+	// {
+	// }
 
 	/*--------------------------------------------------------------------------//
 	// 
@@ -30,6 +29,9 @@ namespace gui
 				}
 				else
 				{
+					if(itm == _first)
+						_first = subscriber;
+
 					itm->Previous->Next = subscriber;
 					subscriber->Previous = itm->Previous;
 					subscriber->Next = itm;
@@ -68,6 +70,9 @@ namespace gui
 		{
 			if(itm == subscriber)
 			{
+				if(_focused == itm)
+					_focused = nullptr;
+
 				auto * prev = itm->Previous;
 				auto * next = itm->Next;
 				if(itm == _first)
