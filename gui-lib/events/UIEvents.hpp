@@ -48,6 +48,7 @@ namespace gui
 	{
 		EncoderId Id;
 		EncoderDirection Direction;
+		uint32_t Duration;
 	};
 
 	/*------------------------------------------------------------//

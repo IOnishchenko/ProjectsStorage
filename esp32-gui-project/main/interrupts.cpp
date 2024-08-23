@@ -11,55 +11,12 @@ extern gui::GUIThread UIThread;
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static uint32_t _A0 = 0;
-static uint32_t _A1 = 0;
-static uint32_t _A2 = 0;
-static uint32_t _oldA = 0;
-static uint32_t _currentA = 0;
-static uint32_t _lockA = 0;
-
-static uint32_t _B0 = 0;
-static uint32_t _B1 = 0;
-static uint32_t _B2 = 0;
-
-static uint32_t _KEY0 = 0;
-static uint32_t _KEY1 = 0;
-static uint32_t _KEY2 = 0;
-static uint32_t _currentKeyState = 0;
-
-/*-----------------------------------------------------------------//
-//
-//-----------------------------------------------------------------*/
 extern "C" bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)
 {
-	_A0 = _A1;
-	_A1 = _A2;
-	_A2 = gpio_get_level(ENC_CLK);
-
-	_oldA = _currentA;
-	_currentA = (_A0 & _A1) | (_A1 & _A2) | (_A0 & _A2);
-
-	_B0 = _B1;
-	_B1 = _B2;
-	_B2 = gpio_get_level(ENC_DATA);
-
-	if((!_lockA) && _oldA && (!_currentA))
-	{
-		uint32_t gpio_num = (_B0 & _B1) | (_B1 & _B2) | (_B0 & _B2);
-		gui::EncoderEvent event =
-		{
-			.Id = gui::EncoderId::MAIN_ENCODER,
-			.Direction = gpio_num ? gui::EncoderDirection::ENC_DECREASE :
-				gui::EncoderDirection::ENC_INCREASE,
-		};
-		UIThread.HandleEncoderEventAsync.TryExecute(event);
-		_lockA = true;
-	}
-
-	if(_lockA && (!_oldA) && _currentA)
-	{
-		_lockA = false;
-	}
+	static uint32_t _KEY0 = 0;
+	static uint32_t _KEY1 = 0;
+	static uint32_t _KEY2 = 0;
+	static uint32_t _currentKeyState = 0;
 
 	_KEY0 = _KEY1;
 	_KEY1 = _KEY2;
@@ -81,6 +38,97 @@ extern "C" bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer, const gptime
 	}
 
 	return true;
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+constexpr uint32_t ENCODER_TIMEOUT = 2;
+constexpr uint32_t ENCODER_TIME_THRESHOULD = 100;
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+extern "C" void IRAM_ATTR external_gpio_interrup_cb(void * param)
+{
+	/*
+		_________              ________________                _______________
+		a/b      |____________|                |______________|
+		_______________                 _______________                  _______
+		b/a            |_______________|               |________________|
+		|ab      |01   |00    |10      |11     |01     |00    |10       |11
+		|ab      |10   |00    |01      |11     |10     |00    |01       |11
+	*/
+	static uint32_t prevTimeStamp = 0;
+	static uint32_t state = 0b11;
+	uint32_t pins = (gpio_get_level(ENC_A) << 1) | gpio_get_level(ENC_B);
+
+	switch(state)
+	{
+		case 0b11:
+			if((pins == 0b01) || (pins == 0b10))
+				state = pins;
+			break;
+		case 0b10:
+			if(pins == 0b00)
+				state <<= 2;
+			else if(pins == 0b01)
+				state = pins;
+			break;
+		case 0b01:
+			if(pins == 0b00)
+				state <<= 2;
+			else if(pins == 0b10)
+				state = pins;
+			break;
+		case 0b01'00:
+			if(pins == 0b10)
+			{
+				state <<= 2;
+				state |= pins;
+			}
+			break;
+		case 0b10'00:
+			if(pins == 0b01)
+			{
+				state <<= 2;
+				state |= pins;
+			}
+			break;
+		case 0b01'00'10:
+			if(pins == 0b11)
+			{
+				uint32_t time = xTaskGetTickCount();
+				state = pins;
+				gui::EncoderEvent event =
+				{
+					.Id = gui::EncoderId::MAIN_ENCODER,
+					.Direction = gui::EncoderDirection::ENC_DECREASE,
+					.Duration = time - prevTimeStamp,
+				};
+				UIThread.HandleEncoderEventAsync.TryExecute(event);
+				prevTimeStamp = time;
+			}
+			break;
+		case 0b10'00'01:
+			if(pins == 0b11)
+			{
+				uint32_t time = xTaskGetTickCount();
+				state = pins;
+				gui::EncoderEvent event =
+				{
+					.Id = gui::EncoderId::MAIN_ENCODER,
+					.Direction = gui::EncoderDirection::ENC_INCREASE,
+					.Duration = time - prevTimeStamp,
+				};
+				UIThread.HandleEncoderEventAsync.TryExecute(event);
+				prevTimeStamp = time;
+			}
+			break;
+		default:
+			if(pins == 0b11)
+				state = pins;
+	}
 }
 
 /*-----------------------------------------------------------------//

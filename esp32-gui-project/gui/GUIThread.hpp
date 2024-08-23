@@ -24,7 +24,7 @@ namespace gui
 	/*-----------------------------------------------------------------//
 	//
 	//-----------------------------------------------------------------*/
-	constexpr uint32_t GUI_THREAD_MESSAGE_NUMBER = 8;
+	constexpr uint32_t GUI_THREAD_MESSAGE_NUMBER = 16;
 
 	/*-----------------------------------------------------------------//
 	//
@@ -72,6 +72,9 @@ namespace gui
 		void Run();
 		void Initialize();
 
+		// async method
+		AsyncCommand<GUIThread, uint32_t> LogDataAsync;
+
 	private:
 		// field
 		CommandQueue<GUIThreadEventsContaner, GUI_THREAD_MESSAGE_NUMBER> _queue;
@@ -82,6 +85,9 @@ namespace gui
 
 		// gui
 		ScreenBase _mainScreen;
+
+		// method
+		void LogData(uint32_t data);
 	};
 }
 

@@ -78,8 +78,8 @@ extern "C" {
 // EXTI configuration (encoder)
 // GPIO configuration
 //-----------------------------------------------------------------*/
-#define ENC_CLK		GPIO_NUM_35
-#define ENC_DATA	GPIO_NUM_34
+#define ENC_A		GPIO_NUM_35
+#define ENC_B		GPIO_NUM_34
 #define ENC_BUTTON	GPIO_NUM_32
 
 #endif // CONFIGURATION_H

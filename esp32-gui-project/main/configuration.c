@@ -15,6 +15,7 @@
 extern void st7789_pre_transaction_cb(spi_transaction_t *trans);
 extern bool IRAM_ATTR timer_key_scan_cb(gptimer_handle_t timer,
 	const gptimer_alarm_event_data_t *edata, void *user_data);
+extern void IRAM_ATTR external_gpio_interrup_cb(void * param);
 
 /*-----------------------------------------------------------------//
 //
@@ -37,10 +38,7 @@ static inline esp_err_t i2c0_initialize()
 	esp_err_t err = i2c_new_master_bus(&bus_config, &i2c_bus_handler);
 	sh1106_set_interface(i2c_bus_handler);
 	if(err != ESP_OK)
-	{
-		printf("I2C0 cannot be installed. Error code: 0x%X\n", err);
 		return ESP_FAIL;
-	}
 
 	return ESP_OK;
 }
@@ -203,11 +201,18 @@ static inline esp_err_t gpio_initialize()
 	};
 	esp_err_t res = gpio_config(&io_conf);
 
-	io_conf.pin_bit_mask = ((1ULL << ENC_CLK) | (1ULL << ENC_DATA) | (1ULL << ENC_BUTTON));
+	io_conf.pin_bit_mask = (1ULL << ENC_BUTTON);
 	io_conf.mode = GPIO_MODE_INPUT;
-	io_conf.pull_up_en = false;
-	io_conf.intr_type = GPIO_INTR_DISABLE;
 	res |= gpio_config(&io_conf);
+
+	io_conf.pin_bit_mask = ((1ULL << ENC_A) | (1ULL << ENC_B));
+	io_conf.pull_up_en = false;
+	io_conf.intr_type = GPIO_INTR_ANYEDGE;
+	res |= gpio_config(&io_conf);
+
+	res |= gpio_install_isr_service(0x00u);
+	res |= gpio_isr_handler_add(ENC_A, external_gpio_interrup_cb, (void*)ENC_A);
+	res |= gpio_isr_handler_add(ENC_B, external_gpio_interrup_cb, (void*)ENC_B);
 	return res;
 }
 
