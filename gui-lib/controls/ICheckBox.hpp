@@ -27,8 +27,17 @@ namespace gui
 		public ITouchScreenEventHandler, public IFocusEventHandler,
 		public IKeyboardEventHandler
 	{
-		
 	public:
+		enum class State
+		{
+			Disabled,
+			Enabled,
+			Focused,
+			Pressed,
+			Selected,
+			SelectedFocused,
+		};
+
 		// constructor
 		ICheckBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			const Action<void(ICheckBox *)> &checkedCmd, const Action<void(ICheckBox *)> &uncheckedCmd,

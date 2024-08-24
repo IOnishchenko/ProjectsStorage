@@ -50,6 +50,9 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
+	constexpr uint16_t FULL_SCREEN_WIDTH = 320;
+	constexpr uint16_t FULL_SCREEN_HEIGHT = 240;
+	constexpr uint16_t BOTTOM_MENU_HEIGHT = 24;
 }
 
 #endif // GUI_ORANGE_GRAY_COMMON_HPP

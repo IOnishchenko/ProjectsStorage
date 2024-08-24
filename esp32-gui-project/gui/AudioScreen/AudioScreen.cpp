@@ -1,11 +1,10 @@
-#include "RadioScreen.hpp"
+#include "AudioScreen.hpp"
 #include "OGCommon.hpp"
-#include "ReceiverScreen.hpp"
-#include "TransmitterScreen.hpp"
+#include "AudioOutputScreen.hpp"
+#include "AudioInputScreen.hpp"
 
 namespace gui
 {
-
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -14,12 +13,12 @@ constexpr uint16_t SCREEN_HEIGHT = FULL_SCREEN_HEIGHT-BOTTOM_MENU_HEIGHT;
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-RadioScreen::RadioScreen(const IUIContext & context)
-	:OGTabControl2T(0, SCREEN_HEIGHT, context, "RECEIVER", "TRANSMITTER",
-	_onRxButtonClikedCmd, _onTxButtonClikedCmd),
-	_onRxButtonClikedCmd(this, &RadioScreen::OnRxButtonClicked),
-	_onTxButtonClikedCmd(this, &RadioScreen::OnTxButtonClicked),
-	_subGroup{new ReceiverScreen(context)}
+AudioScreen::AudioScreen(const IUIContext & context)
+	:OGTabControl2T(0, SCREEN_HEIGHT, context, "OUTPUT", "INPUT",
+	_onOutputButtonClikedCmd, _onInputButtonClikedCmd),
+	_onOutputButtonClikedCmd(this, &AudioScreen::OnOutputButtonClicked),
+	_onInputButtonClikedCmd(this, &AudioScreen::OnInputButtonClicked),
+	_subGroup{new AudioOutputScreen(context)}
 {
 	AddChild(_subGroup.get());
 }
@@ -27,10 +26,10 @@ RadioScreen::RadioScreen(const IUIContext & context)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void RadioScreen::OnRxButtonClicked(IRadioButton *)
+void AudioScreen::OnOutputButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new ReceiverScreen(_context));
+	_subGroup.reset(new AudioOutputScreen(_context));
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }
@@ -38,10 +37,10 @@ void RadioScreen::OnRxButtonClicked(IRadioButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void RadioScreen::OnTxButtonClicked(IRadioButton *)
+void AudioScreen::OnInputButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new TransmitterScreen(_context));
+	_subGroup.reset(new AudioInputScreen(_context));
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }

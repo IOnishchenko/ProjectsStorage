@@ -54,7 +54,15 @@ namespace gui
 	/*------------------------------------------------------------//
 	// Keyboard event types
 	//------------------------------------------------------------*/
-	enum class KeyCode;
+	enum class KeyCode
+	{
+		KEY_ARROW_UP = 0x001,
+		KEY_ARROW_DOWN,
+		KEY_ARROW_LEFT,
+		KEY_ARROW_RIGHT,
+		KEY_ENTER,
+		ENCODER_KEY = 0x100,
+	};
 
 	/*------------------------------------------------------------//
 	//

@@ -1,17 +1,14 @@
 #ifndef GUI_RADIO_SCREEN_HPP
 #define GUI_RADIO_SCREEN_HPP
 
-#include "Group.hpp"
+#include "OGTabControl2T.hpp"
+#include "IUIContext.hpp"
 #include "Command.hpp"
-#include "OGRadioButton64x24.hpp"
-#include "IRadioButtonGroup.hpp"
 #include <memory>
-
-#include "GERectangle.hpp"
 
 namespace gui
 {
-	class RadioScreen : public Group
+	class RadioScreen : public OGTabControl2T
 	{
 	public:
 		// constructor
@@ -21,7 +18,16 @@ namespace gui
 		~RadioScreen() override = default;
 
 	private:
-		GERectangle _background;
+		// commands
+		Command<RadioScreen, IRadioButton *> _onRxButtonClikedCmd;
+		Command<RadioScreen, IRadioButton *> _onTxButtonClikedCmd;
+
+		// fields
+		std::unique_ptr<IUIControl> _subGroup;
+
+		// methods
+		void OnRxButtonClicked(IRadioButton *);
+		void OnTxButtonClicked(IRadioButton *);
 	};
 }
 

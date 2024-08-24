@@ -19,6 +19,40 @@ set(GUI_ORANGE_GRAY_PICTURES_SRCS
 	"${project_dir}/gui-orange-gray/pictures-src/button193x44_button193x44pressed.c"
 	"${project_dir}/gui-orange-gray/pictures-src/button193x44_button193x44selected_focused.c"
 	"${project_dir}/gui-orange-gray/pictures-src/button193x44_button193x44selected.c"
+
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12disabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12enabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12focused.c"
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12pressed.c"
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12selected.c"
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_lefttrack12x280disabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_lefttrack12x280enabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_righttrack12x280disabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/hslider_righttrack12x280enabled.c"
+
+	"${project_dir}/gui-orange-gray/pictures-src/tab2_tab160x24disabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab2_tab160x24enabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab2_tab160x24focused.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab2_tab160x24pressed.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab2_tab160x24selected_focused.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab2_tab160x24selected.c"
+
+	"${project_dir}/gui-orange-gray/pictures-src/tab5_tab64x24disabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab5_tab64x24enabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab5_tab64x24focused.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab5_tab64x24pressed.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab5_tab64x24selected_focused.c"
+	"${project_dir}/gui-orange-gray/pictures-src/tab5_tab64x24selected.c"
+
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_bottomtrack12x200disabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_bottomtrack12x200enabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_toptrack12x200disabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_toptrack12x200enabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_vpointer12x12disabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_vpointer12x12enabled.c"
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_vpointer12x12focused.c"
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_vpointer12x12pressed.c"
+	"${project_dir}/gui-orange-gray/pictures-src/vslider_vpointer12x12selected.c"
 )
 
 set(GUI_ORANGE_GRAY_PICTURES_INCS

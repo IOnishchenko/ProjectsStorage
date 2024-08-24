@@ -27,8 +27,21 @@ set(PROJET_SRCS
 	"${LCD_SH1106_DRIVER_SRCS}"
 	"${GUI_LIB_SRCS}"
 	"${GUI_ORANGE_GRAY_SRCS}"
+
+	"../gui/AudioScreen/AudioInputEqualizerScreen.cpp"
+	"../gui/AudioScreen/AudioInputLevelsScreen.cpp"
+	"../gui/AudioScreen/AudioInputScreen.cpp"
+	"../gui/AudioScreen/AudioOutputEqualizerScreen.cpp"
+	"../gui/AudioScreen/AudioOutputLevelsScreen.cpp"
+	"../gui/AudioScreen/AudioOutputScreen.cpp"
+	"../gui/AudioScreen/AudioScreen.cpp"
+
 	"../gui/MainScreen/MainScreen.cpp"
+
 	"../gui/RadioScreen/RadioScreen.cpp"
+	"../gui/RadioScreen/ReceiverScreen.cpp"
+	"../gui/RadioScreen/TransmitterScreen.cpp"
+
 	"../gui/dumy_picture_gui320x240.c"
 	"../gui/GUIThread.cpp"
 	"../gui/ScreenBase.cpp"

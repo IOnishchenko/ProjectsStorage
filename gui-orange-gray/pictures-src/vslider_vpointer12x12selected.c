@@ -1,0 +1,45 @@
+#include "stdint.h"
+#include "attributes.h"
+#include "gui_resource_types.h"
+
+#define GUI_USE_PICTUREGDATA
+
+//-------------------------------------------------------
+// Picture LUT
+//-------------------------------------------------------
+static const uint16_t vpointer12x12selected_lut[] GUI_RESOURCE_ATTRIBUTES =
+{
+    0xDEBA,0xC63A,0x4C7D,0x037F,0xB61B,0x445D,0x341E
+};
+//-------------------------------------------------------
+// Picture file name: vpointer12x12selected.bmp, size: 12x12
+//-------------------------------------------------------
+static const uint8_t data_vpointer12x12selected[] GUI_RESOURCE_ATTRIBUTES =
+{
+    0x01,0x00,0x00,0x01,0x00,0x02,0x03,0x03,0x00,0x02,0x00,0x01,0x02,0x00,0x00,0x04,0x07,0x03,0x00,0x04,0x00,0x00,0x00,0x01,
+    0x09,0x03,0x00,0x01,0x00,0x05,0x09,0x03,0x00,0x06,0x2F,0x03,0x00,0x05,0x09,0x03,0x00,0x06,0x00,0x01,0x09,0x03,0x00,0x01,
+    0x00,0x00,0x00,0x04,0x07,0x03,0x00,0x04,0x02,0x00,0x00,0x01,0x00,0x02,0x03,0x03,0x00,0x02,0x00,0x01,0x01,0x00
+};
+#ifdef GUI_USE_PICTUREGDATA
+static const PictureGData gdata_vpointer12x12selected =
+{
+    vpointer12x12selected_lut,
+    data_vpointer12x12selected
+};
+#else
+#ifdef GUI_USE_PICTUREGDATAEXT
+static const PictureGDataExt gdata_vpointer12x12selected =
+{
+    sizeof(vpointer12x12selected_lut)/sizeof(uint16_t),
+    vpointer12x12selected_lut,
+    data_vpointer12x12selected
+};
+#endif
+#endif
+const PictureObject vpointer12x12selected =
+{
+    PICTYPE_COMPRESED_L8,
+    12,
+    12,
+    &gdata_vpointer12x12selected
+};

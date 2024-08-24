@@ -3,9 +3,9 @@
 #include "IFocusManager.hpp"
 #include "IEncoderEventManager.hpp"
 #include "IKeyboardEventManager.hpp"
-
 #include "MainScreen.hpp"
 #include "RadioScreen.hpp"
+#include "AudioScreen.hpp"
 
 #include "dumy_picture.h"
 
@@ -77,6 +77,10 @@ void ScreenBase::OnRadioButtonClicked(IRadioButton *)
 //-----------------------------------------------------------------*/
 void ScreenBase::OnAudioButtonClicked(IRadioButton *)
 {
+	RemoveChild(_subGroup.get());
+	_subGroup.reset(new AudioScreen(_context));
+	AddChild(_subGroup.get());
+	_subGroup->Draw();
 }
 
 /*-----------------------------------------------------------------//
