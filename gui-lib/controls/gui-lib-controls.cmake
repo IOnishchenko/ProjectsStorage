@@ -7,6 +7,7 @@ set(GUI_CONTROLS_SRCS
 	"${project_dir}/gui-lib/controls/IRadioButtonGroup.cpp"
 	"${project_dir}/gui-lib/controls/ISlider.cpp"
 	"${project_dir}/gui-lib/controls/ISliderVertical.cpp"
+	"${project_dir}/gui-lib/controls/IToggleFocusUIControl.cpp"
 	"${project_dir}/gui-lib/controls/IUIControl.cpp"
 	"${project_dir}/gui-lib/controls/Label.cpp"
 	"${project_dir}/gui-lib/controls/NumericUpDown.cpp"

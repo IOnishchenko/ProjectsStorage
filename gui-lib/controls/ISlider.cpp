@@ -8,12 +8,16 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	ISlider::ISlider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		uint16_t borderSize, int maxValue, int value, const Action<void(int)> &onValueChenged,
-		const GEPicture &thumb, const GEPicture &leftTrack, const GEPicture &rightTrack)
-		:IUIControl(x, y, w, h, context), MaxValue{0}, MinValue{0}, Value{value}, _borderSize{borderSize},
-		LeftTrack{leftTrack}, Thumb{thumb}, RightTrack{rightTrack}, _valueChengedCmd{onValueChenged}
+		GEPicture & disabledLeftTrack ,GEPicture & disabledPointer, GEPicture & disabledRightTrack,
+		GEPicture & enabledLeftTrack, GEPicture & enabledPointer, GEPicture & enabledRightTrack,
+		GEPicture & focusedPointer, GEPicture & pressedPointer, GEPicture & selectedPointer)
+		:
+		IToggleFocusUIControl(x, y, w, h, context), MaxValue{maxValue}, MinValue{0}, Value{value},
+		_borderSize{borderSize}, _valueChangedCmd(onValueChenged), _disabledLeftTrack{disabledLeftTrack},
+		_disabledPointer{disabledPointer}, _disabledRightTrack{disabledRightTrack}, _enabledLeftTrack{enabledLeftTrack},
+		_enabledPointer{enabledPointer}, _enabledRightTrack{enabledRightTrack}, _focusedPointer{focusedPointer},
+		_pressedPointer{pressedPointer}, _selectedPointer{selectedPointer}
 	{
-		SyncThumbPositionWithValue();
-		context.TouchScreenObserver->Subscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -21,7 +25,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	ISlider::~ISlider()
 	{
-		_context.TouchScreenObserver->Unsubscribe(this);
+		//_context.TouchScreenObserver->Unsubscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -30,9 +34,9 @@ namespace gui
 	void ISlider::OnPress(TouchScreenEven & event)
 	{
 		uint16_t xpen = event.x - X;
-		uint16_t xthumb = Thumb.X;
+		uint16_t xthumb = _enabledPointer.X;
 		// check if the thumb is under the pen
-		if((xpen > xthumb)&&(xpen < (xthumb + Thumb.GetWidth())))
+		if((xpen > xthumb)&&(xpen < (xthumb + _enabledPointer.GetWidth())))
 			return;
 
 		OnPenMove(event);
@@ -78,7 +82,7 @@ namespace gui
 		if(value != Value)
 		{
 			Value = value;
-			_valueChengedCmd(value);
+			_valueChangedCmd(value);
 		}
 		Draw();
 	}
@@ -114,28 +118,55 @@ namespace gui
 	}
 
 	/*--------------------------------------------------------------------------//
-	//
+	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnKeyPress(KeyEvent & event)
+	IGElement * ISlider::GetGraphicElement()
 	{
-
+		switch(_state)
+		{
+			case State::Disabled:
+				for(IGElement * itm = &_disabledLeftTrack; itm; itm = itm->PrepareForDrawing());
+				_disabledLeftTrack.Width = _enabledLeftTrack.Width;
+				_disabledPointer.X = _enabledPointer.X;
+				_disabledRightTrack.X = _enabledRightTrack.X;
+				_disabledRightTrack.Width = _enabledRightTrack.Width;
+				_disabledRightTrack.Foreground.SkippedRows = _enabledRightTrack.Foreground.SkippedRows;
+				return &_disabledLeftTrack;
+			case State::Enabled:
+				for(IGElement * itm = &_enabledLeftTrack; itm; itm = itm->PrepareForDrawing());
+				_enabledRightTrack.SetChild(&_enabledPointer);
+				return &_enabledLeftTrack;
+			case State::Focused:
+				for(IGElement * itm = &_enabledLeftTrack; itm; itm = itm->PrepareForDrawing());
+				_focusedPointer.X = _enabledPointer.X;
+				_enabledRightTrack.SetChild(&_focusedPointer);
+				return &_enabledLeftTrack;
+			case State::Pressed:
+				for(IGElement * itm = &_enabledLeftTrack; itm; itm = itm->PrepareForDrawing());
+				_pressedPointer.X = _enabledPointer.X;
+				_enabledRightTrack.SetChild(&_pressedPointer);
+				return &_enabledLeftTrack;
+			case State::Selected:
+				for(IGElement * itm = &_enabledLeftTrack; itm; itm = itm->PrepareForDrawing());
+				_selectedPointer.X = _enabledPointer.X;
+				_enabledRightTrack.SetChild(&_selectedPointer);
+				return &_enabledLeftTrack;
+			default:
+				return nullptr;
+		}
 	}
 
 	/*--------------------------------------------------------------------------//
-	//
+	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnKeyRelease(KeyEvent & event)
+	int ISlider::GetValue()
 	{
-
+		return Value;
 	}
 
 	/*--------------------------------------------------------------------------//
-	//
+	// ---------------------- Protected Methods --------------------------------
 	//--------------------------------------------------------------------------*/
-	void ISlider::OnKeyLongPress(KeyEvent & event)
-	{
-
-	}
 
 	/*--------------------------------------------------------------------------//
 	// 
@@ -148,37 +179,17 @@ namespace gui
 		Value = value;
 		
 		SyncThumbPositionWithValue();
-		_valueChengedCmd(value);
+		_valueChangedCmd(value);
 		Draw();
 	}
-	
-	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
-	int ISlider::GetValue()
-	{
-		return Value;
-	}
-	
-	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
-	IGElement * ISlider::GetGraphicElement()
-	{
-		return &LeftTrack;
-	}
-	
-	/*--------------------------------------------------------------------------//
-	// ---------------------- Protected Methods --------------------------------
-	//--------------------------------------------------------------------------*/
-	
+
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
 	uint16_t ISlider::MoveThumbToPosition(uint16_t xpen)
 	{
 		uint16_t xn; // new position to value calculate
-		uint16_t thumbWidth = Thumb.GetWidth();
+		uint16_t thumbWidth = _enabledPointer.GetWidth();
 		
 		// right the thumb position calculation
 		if(xpen < (thumbWidth/2 + _borderSize)) // move left
@@ -197,7 +208,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void ISlider::SyncThumbPositionWithValue()
 	{
-		float width = (Width - _borderSize*2 - Thumb.GetWidth());
+		float width = (Width - _borderSize*2 - _enabledPointer.GetWidth());
 		float step = width/(MaxValue - MinValue);
 		uint16_t x = step * (Value - MinValue) + _borderSize;
 		SetGraphicElemntsWithThumbPosition(x);
@@ -208,7 +219,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	int ISlider::CalculateNewValue(uint16_t x)
 	{
-		float width = (Width - _borderSize*2 - Thumb.GetWidth());
+		float width = (Width - _borderSize*2 - _enabledPointer.GetWidth());
 		float step = width/(MaxValue - MinValue);		
 		return (x - _borderSize)/step + MinValue;
 	}
@@ -219,16 +230,16 @@ namespace gui
 	void ISlider::SetGraphicElemntsWithThumbPosition(uint16_t x)
 	{
 		// left track gelement
-		LeftTrack.Width = x;
+		_enabledLeftTrack.Width = x;
 		
 		// thumb gelement
-		Thumb.X = x;
+		_enabledPointer.X = x;
 		
 		// right track gelement
-		x += Thumb.GetWidth(); // x to begin right track drawing
-		RightTrack.X = x;
-		RightTrack.Width = Width - x;
-		RightTrack.Foreground.SkippedRows =
-			RightTrack.Foreground.Bitmap->width - RightTrack.Width;
+		x += _enabledPointer.GetWidth();
+		_enabledRightTrack.X = x;
+		_enabledRightTrack.Width = Width - x;
+		_enabledRightTrack.Foreground.SkippedRows =
+			_enabledRightTrack.Foreground.Bitmap->width - _enabledRightTrack.Width;
 	}
 }

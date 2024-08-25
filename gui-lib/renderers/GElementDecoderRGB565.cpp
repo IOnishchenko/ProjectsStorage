@@ -43,29 +43,37 @@ namespace gui
 		{
 			case PICTYPE_L4:
 				iteratorSrc = &_l4Iterator;
-				_l4Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
+				_l4Iterator.Initialize(Picture.skippedRows + gel->Foreground.SkippedRows,
+					Picture.skippedLinesOnTop + gel->Foreground.SkippedLines,
+					Picture.skippedLinesOnBottom + gel->Foreground.Bitmap->height - gel->Height,
+					gel->Foreground.Bitmap);
 				// iteratorSrc = std::make_unique<L4A4DataIterator<uint16_t>>(Picture.skippedRows,
 				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_L8:
 				iteratorSrc = &_l8Iterator;
-				_l8Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
+				_l8Iterator.Initialize(Picture.skippedRows + gel->Foreground.SkippedRows,
+					Picture.skippedLinesOnTop + gel->Foreground.SkippedLines,
+					Picture.skippedLinesOnBottom + gel->Foreground.Bitmap->height - gel->Height,
+					gel->Foreground.Bitmap);
 				// iteratorSrc = std::make_unique<L8A8DataIterator<uint16_t>>(Picture.skippedRows,
 				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_COMPRESED_L4:
 				iteratorSrc = &_l4CompresedIterator;
-				_l4CompresedIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
+				_l4CompresedIterator.Initialize(Picture.skippedRows + gel->Foreground.SkippedRows,
+					Picture.skippedLinesOnTop + gel->Foreground.SkippedLines,
+					Picture.skippedLinesOnBottom + gel->Foreground.Bitmap->height - gel->Height,
+					gel->Foreground.Bitmap);
 				// iteratorSrc = std::make_unique<L4A4CompresedDataIterator<uint16_t>>(Picture.skippedRows,
 				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_COMPRESED_L8:
 				iteratorSrc = &_l8CompresedIterator;
-				_l8CompresedIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
+				_l8CompresedIterator.Initialize(Picture.skippedRows + gel->Foreground.SkippedRows,
+					Picture.skippedLinesOnTop + gel->Foreground.SkippedLines,
+					Picture.skippedLinesOnBottom + gel->Foreground.Bitmap->height - gel->Height,
+					gel->Foreground.Bitmap);
 				// iteratorSrc = std::make_unique<L8A8CompresedDataIterator<uint16_t>>(Picture.skippedRows,
 				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;

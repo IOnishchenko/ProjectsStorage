@@ -7,13 +7,17 @@ namespace gui
 	// constructors
 	//--------------------------------------------------------------------------*/
 	ISliderVertical::ISliderVertical(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		uint16_t borderSize, int maxValue, int value, const Action<void(int)> & onValueChenged,
-		const GEPicture & thumb, const GEPicture & topTrack, const GEPicture & bottomTrack)
-		:IUIControl(x, y, w, h, context), MaxValue{0}, MinValue{0}, Value{value}, _borderSize{borderSize},
-		TopTrack{topTrack}, Thumb{thumb}, BottomTrack{bottomTrack}, _valueChangedCmd{onValueChenged}
+		uint16_t borderSize, int maxValue, int value, const Action<void(int)> &onValueChenged,
+		GEPicture & disabledTopTrack ,GEPicture & disabledPointer, GEPicture & disabledBottomTrack,
+		GEPicture & enabledTopTrack, GEPicture & enabledPointer, GEPicture & enabledBottomTrack,
+		GEPicture & focusedPointer, GEPicture & pressedPointer, GEPicture & selectedPointer)
+		:
+		IToggleFocusUIControl(x, y, w, h, context), MaxValue{maxValue}, MinValue{0}, Value{value},
+		_borderSize{borderSize}, _valueChangedCmd(onValueChenged), _disabledTopTrack{disabledTopTrack},
+		_disabledPointer{disabledPointer}, _disabledBottomTrack{disabledBottomTrack}, _enabledTopTrack{enabledTopTrack},
+		_enabledPointer{enabledPointer}, _enabledBottomTrack{enabledBottomTrack}, _focusedPointer{focusedPointer},
+		_pressedPointer{pressedPointer}, _selectedPointer{selectedPointer}
 	{
-		SyncThumbPositionWithValue();
-		context.TouchScreenObserver->Subscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -21,7 +25,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	ISliderVertical::~ISliderVertical()
 	{
-		_context.TouchScreenObserver->Unsubscribe(this);
+		//_context.TouchScreenObserver->Unsubscribe(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -30,9 +34,9 @@ namespace gui
 	void ISliderVertical::OnPress(TouchScreenEven & event)
 	{
 		uint16_t ypen = event.y - Y;
-		uint16_t ythumb = Thumb.Y;
+		uint16_t ythumb = _enabledPointer.Y;
 		// check if the thumb is under the pen
-		if((ypen > ythumb)&&(ypen < (ythumb + Thumb.GetHeight())))
+		if((ypen > ythumb)&&(ypen < (ythumb + _enabledPointer.GetHeight())))
 			return;
 
 		OnPenMove(event);
@@ -92,45 +96,6 @@ namespace gui
 	}
 
 	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	bool ISliderVertical::OnFocused()
-	{
-		return true;
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnFocusLost()
-	{
-	}
-
-		/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnKeyPress(KeyEvent & event)
-	{
-
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnKeyRelease(KeyEvent & event)
-	{
-
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void ISliderVertical::OnKeyLongPress(KeyEvent & event)
-	{
-
-	}
-
-	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
 	void ISliderVertical::OnEncoderMoved(EncoderEvent & event)
@@ -151,6 +116,53 @@ namespace gui
 			}
 		}
 	}
+	
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	IGElement * ISliderVertical::GetGraphicElement()
+	{
+		switch(_state)
+		{
+			case State::Disabled:
+				for(IGElement * itm = &_disabledTopTrack; itm; itm = itm->PrepareForDrawing());
+				_disabledTopTrack.Height = _enabledTopTrack.Height;
+				_disabledPointer.Y = _enabledPointer.Y;
+				_enabledBottomTrack.Y = _enabledBottomTrack.Y;
+				_enabledBottomTrack.Height = _enabledBottomTrack.Height;
+				_enabledBottomTrack.Foreground.SkippedLines = _enabledBottomTrack.Foreground.SkippedLines;
+				return &_disabledTopTrack;
+			case State::Enabled:
+				for(IGElement * itm = &_enabledTopTrack; itm; itm = itm->PrepareForDrawing());
+				_enabledBottomTrack.SetChild(&_enabledPointer);
+				return &_enabledTopTrack;
+			case State::Focused:
+				for(IGElement * itm = &_enabledTopTrack; itm; itm = itm->PrepareForDrawing());
+				_focusedPointer.Y = _enabledPointer.Y;
+				_enabledBottomTrack.SetChild(&_focusedPointer);
+				return &_enabledTopTrack;
+			case State::Pressed:
+				for(IGElement * itm = &_enabledTopTrack; itm; itm = itm->PrepareForDrawing());
+				_pressedPointer.Y = _enabledPointer.Y;
+				_enabledBottomTrack.SetChild(&_pressedPointer);
+				return &_enabledTopTrack;
+			case State::Selected:
+				for(IGElement * itm = &_enabledTopTrack; itm; itm = itm->PrepareForDrawing());
+				_selectedPointer.Y = _enabledPointer.Y;
+				_enabledBottomTrack.SetChild(&_selectedPointer);
+				return &_enabledTopTrack;
+			default:
+				return nullptr;
+		}
+	}
+
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	int ISliderVertical::GetValue()
+	{
+		return Value;
+	}
 
 	/*--------------------------------------------------------------------------//
 	// 
@@ -170,26 +182,10 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	int ISliderVertical::GetValue()
-	{
-		return Value;
-	}
-	
-	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
-	IGElement * ISliderVertical::GetGraphicElement()
-	{
-		return &TopTrack;
-	}
-
-	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
 	uint16_t ISliderVertical::MoveThumbToPosition(uint16_t ypen)
 	{
 		uint16_t yn; // new position to value calculate
-		uint16_t thumbHeight = Thumb.GetHeight();
+		uint16_t thumbHeight = _enabledPointer.GetHeight();
 		
 		if(ypen < (thumbHeight/2 + _borderSize))
 			yn = _borderSize;
@@ -207,7 +203,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void ISliderVertical::SyncThumbPositionWithValue()
 	{
-		float height = (Height - _borderSize*2 - Thumb.GetHeight());
+		float height = (Height - _borderSize*2 - _enabledPointer.GetHeight());
 		float step = height/(MaxValue - MinValue);
 		uint16_t y = step * (Value - MinValue) + _borderSize;
 		SetGraphicElemntsWithThumbPosition(y);
@@ -218,7 +214,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	int ISliderVertical::CalculateNewValue(uint16_t y)
 	{
-		float height = (Height - _borderSize*2 - Thumb.GetHeight());
+		float height = (Height - _borderSize*2 - _enabledPointer.GetHeight());
 		float step = height/(MaxValue - MinValue);		
 		return (y - _borderSize)/step + MinValue;
 	}
@@ -232,17 +228,19 @@ namespace gui
 		if(y & 0x01)
 			y++;
 
-		TopTrack.Height = y;
+		_enabledTopTrack.Height = y;
 
-		Thumb.Y = y;
-		y += Thumb.GetHeight();
+		_enabledPointer.Y = y;
+		y += _enabledPointer.GetHeight();
 
-		BottomTrack.Y = y;
-		BottomTrack.Height = Height - TopTrack.GetHeight() - Thumb.GetHeight();
-		if(BottomTrack.Height & 0x01)
-			BottomTrack.Height--;
+		_enabledBottomTrack.Y = y;
+		_enabledBottomTrack.Height = Height - 
+			_enabledTopTrack.GetHeight() - _enabledPointer.GetHeight();
 
-		BottomTrack.Foreground.SkippedLines =
-			BottomTrack.Foreground.Bitmap->height - BottomTrack.Height;
+		if(_enabledBottomTrack.Height & 0x01)
+			_enabledBottomTrack.Height--;
+
+		_enabledBottomTrack.Foreground.SkippedLines =
+			_enabledBottomTrack.Foreground.Bitmap->height - _enabledBottomTrack.Height;
 	}
 }

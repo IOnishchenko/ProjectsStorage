@@ -1,7 +1,5 @@
 #include "NumericUpDown.hpp"
 #include "IEncoderEventManager.hpp"
-#include "IKeyboardEventManager.hpp"
-#include "IFocusManager.hpp"
 #include "ITouchScreenEventObserver.hpp"
 #include <sstream>
 #include <iomanip>
@@ -22,7 +20,7 @@ namespace gui
 		const Font & font, const Action<void(const Parameters &)> & valueChanged)
 		
 		:
-		IUIControl(x, y, w, h, context),
+		IToggleFocusUIControl(x, y, w, h, context),
 		_textGelement(0, GEText::Center_Y(h, font) + 2, w, h,
 			"", enaForeground, enaBackground, font, nullptr),
 		_valueChangedCmd{valueChanged}, _disabledGEl{disabledGEl},
@@ -178,31 +176,6 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	bool NumericUpDown::OnFocused()
-	{
-		if(!_enable)
-			return false;
-
-		_context.KeyboardEventManager->RegisterHandler(this);
-		_state = State::Focused;
-		Draw();
-		return true;
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void NumericUpDown::OnFocusLost()
-	{
-		_lockManagers = false;
-		_context.KeyboardEventManager->UnregisterHandler();
-		_state = State::Enabled;
-		Draw();
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
 	void NumericUpDown::OnEncoderMoved(EncoderEvent & event)
 	{
 		Parameters params =
@@ -212,34 +185,6 @@ namespace gui
 				Direction::Increase : Direction::Decrease,
 		};
 		_valueChangedCmd(params);
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void NumericUpDown::OnKeyPress(KeyEvent & event)
-	{
-		_lockManagers = _state == State::Focused;
-		_state = State::Pressed;
-		Draw();
-	}
-
-	/*--------------------------------------------------------------------------//
-	//
-	//--------------------------------------------------------------------------*/
-	void NumericUpDown::OnKeyRelease(KeyEvent & event)
-	{
-		if(_lockManagers)
-		{
-			_context.EncoderEventManager->RegisterHandler(this);
-			_state = State::Selected;
-		}
-		else
-		{
-			_context.EncoderEventManager->UnregisterHandler();
-			_state = State::Focused;
-		}
-		Draw();
 	}
 
 	/*--------------------------------------------------------------------------//

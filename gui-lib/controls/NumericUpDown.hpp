@@ -1,7 +1,7 @@
 #ifndef GUI_NUMERIC_UP_DOWN_HPP
 #define GUI_NUMERIC_UP_DOWN_HPP
 
-#include "IUIControl.hpp"
+#include "IToggleFocusUIControl.hpp"
 #include "IEncoderEventHandler.hpp"
 #include "IKeyboardEventHandler.hpp"
 #include "ITouchScreenEventHandler.hpp"
@@ -16,22 +16,10 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	class NumericUpDown : public IUIControl,
-		public ITouchScreenEventHandler,
-		public IFocusEventHandler,
-		public IEncoderEventHandler,
-		public IKeyboardEventHandler
+	class NumericUpDown : public IToggleFocusUIControl,
+		public ITouchScreenEventHandler
 	{
 	public:
-
-		enum class State
-		{
-			Disabled,
-			Enabled,
-			Focused,
-			Pressed,
-			Selected,
-		};
 
 		enum class Direction
 		{
@@ -77,16 +65,8 @@ namespace gui
 		void OnPenLeave(TouchScreenEven & event) override;
 		bool IsUnderTouch(uint16_t x, uint16_t y) override;
 
-		// IFocusEventHandler methods
-		bool OnFocused() override;
-		void OnFocusLost() override;
-
 		// IEncoderEventHandler metod
 		void OnEncoderMoved(EncoderEvent & event) override;
-
-		// IKeyboardEventHandler methods
-		void OnKeyPress(KeyEvent & event) override;
-		void OnKeyRelease(KeyEvent & event) override;
 
 		// operators
 		NumericUpDown& operator=(const char * txt);
@@ -95,11 +75,10 @@ namespace gui
 
 	protected:
 		// fields
-		State _state = State::Enabled;
 		std::string _text;
 		GEText _textGelement;
-		bool _lockManagers = false;
 
+	private:
 		const Action<void(const Parameters &)> & _valueChangedCmd;
 		IGElement & _disabledGEl;
 		IGElement & _enabledGEl;

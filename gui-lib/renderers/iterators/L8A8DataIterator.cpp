@@ -13,7 +13,7 @@ namespace gui
 	void L8A8DataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
 		const PictureObject * object)
 	{
-		_skipedLines = slines0 + slines1;
+		_skipedLines = slines1;
 		const PictureGData * pic = (PictureGData *)object->gdata;
 		_lut = (TLut *)pic->lut;
 		_gdata = pic->data;

@@ -28,16 +28,16 @@ namespace gui
 	{
 		switch(_state)
 		{
-			case ButtonState::Disabled:
+			case State::Disabled:
 				_text.BackgroundColor = BACKGROUND_DISABLED;
 				_text.Foreground.Color = TEXT_COLOR_DISABLED;
 				break;
-			case ButtonState::Enabled:
-			case ButtonState::Focused:
+			case State::Enabled:
+			case State::Focused:
 				_text.BackgroundColor = BACKGROUND_GRAY;
 				_text.Foreground.Color = TEXT_COLOR;
 				break;
-			case ButtonState::Pressed:
+			case State::Pressed:
 				_text.BackgroundColor = BACKGROUND_DARK;
 				_text.Foreground.Color = TEXT_COLOR_LIGHT;
 				break;

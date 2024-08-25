@@ -8,11 +8,118 @@ namespace gui
 	// 
 	//--------------------------------------------------------------------------*/
 	Label::Label(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
-		uint32_t foregroundRGB, uint32_t backgroundRGB, const Font & font, uint16_t textOffset)
-		:IUIControl(x, y, w, h, context), _background(0, 0, w, h, backgroundRGB, &_textGelement),
+		IGElement & disabledGEl, IGElement & enabledGEl,
+		uint32_t disForegroubd, uint32_t disBackground,
+		uint32_t enaForeground, uint32_t enaBackground,
+		const Font & font, uint16_t textOffset)
+		:
+		IUIControl(x, y, w, h, context),
 		_textGelement(textOffset, (h - Font::GetCharacterHeightInPixels(font))/2, w, h,
-		"", foregroundRGB, backgroundRGB, font, nullptr)
+		"", enaForeground, enaBackground, font, nullptr),
+		_defaultBackground{nullptr}, _disabledGEl{disabledGEl}, _enabledGEl{enabledGEl},
+		_disForeground{disForegroubd}, _disBackground{disBackground},
+		_enaForeground{enaForeground}, _enaBackground{enaBackground}
 	{
+	}
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	Label::Label(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
+		uint32_t disForegroubd, uint32_t disBackground,
+		uint32_t enaForeground, uint32_t enaBackground,
+		const Font & font, uint16_t textOffset)
+		:
+		IUIControl(x, y, w, h, context),
+		_textGelement(textOffset, (h - Font::GetCharacterHeightInPixels(font))/2, w, h,
+		"", enaForeground, enaBackground, font, nullptr),
+		_defaultBackground{new GERectangle(0, 0, w, h, enaBackground, &_textGelement)},
+		_disabledGEl{*_defaultBackground.get()}, _enabledGEl{*_defaultBackground.get()},
+		_disForeground{disForegroubd}, _disBackground{disBackground},
+		_enaForeground{enaForeground}, _enaBackground{enaBackground}
+	{
+	}
+
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void Label::SetFloatValue(float value, const std::string & unit, int precision, bool alwaysDotVisible)
+	{
+		PrepareStringData(value, precision, alwaysDotVisible);
+		_text += unit;
+		_textGelement = _text;
+	}
+	
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void Label::SetFloatValue(float value, int precision, bool alwaysDotVisible)
+	{
+		PrepareStringData(value, precision, alwaysDotVisible);
+		_textGelement = _text;
+	}
+
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void Label::SetIntValue(int value, const std::string & unit)
+	{
+		_text = std::to_string(value);
+		_text += unit;
+		_textGelement = _text;
+	}
+
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void Label::SetIntValue(int value)
+	{
+		_text = std::to_string(value);
+		_textGelement = _text;
+	}
+
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	IGElement * Label::GetGraphicElement()
+	{
+		if((_enabledGEl.GetHeight() > _textGelement.GetHeight()) ||
+			(_enabledGEl.GetWidth() > _textGelement.GetTextWidth()))
+		{
+			if(_enable)
+			{
+				for(IGElement * itm = &_enabledGEl; itm; itm = itm->PrepareForDrawing());
+				return &_enabledGEl;
+			}
+			else
+			{
+				for(IGElement * itm = &_disabledGEl; itm; itm = itm->PrepareForDrawing());
+				return &_disabledGEl;
+			}
+		}
+		else
+		{
+			for(IGElement * itm = &_textGelement; itm; itm = itm->PrepareForDrawing());
+			return &_textGelement;
+		}
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void Label::SetEnable(bool value)
+	{
+		if(value)
+		{
+			_textGelement.BackgroundColor = _enaBackground;
+			_textGelement.Foreground.Color = _enaForeground;
+		}
+		else
+		{
+			_textGelement.BackgroundColor = _disBackground;
+			_textGelement.Foreground.Color = _disForeground;
+		}
+		IUIControl::SetEnable(value);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -46,34 +153,6 @@ namespace gui
 	}
 
 	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
-	void Label::SetFloatValueToLabelWithSuffix(float value, const std::string & unit, int precision, bool alwaysDotVisible)
-	{
-		PrepareStringData(value, precision, alwaysDotVisible);
-		_text += unit;
-		_textGelement = _text;
-	}
-	
-	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
-	void Label::SetFloatValueToLabe(float value, int precision, bool alwaysDotVisible)
-	{
-		PrepareStringData(value, precision, alwaysDotVisible);
-		_textGelement = _text;
-	}
-
-	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
-	void Label::SetIntValueToLabel(int value)
-	{
-		_text = std::to_string(value);
-		_textGelement = _text;
-	}
-
-	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
 	inline void Label::PrepareStringData(float value, int precision, bool alwaysDotVisible)
@@ -102,23 +181,6 @@ namespace gui
 					break;
 				}
 			}
-		}
-	}
-
-	/*--------------------------------------------------------------------------//
-	// 
-	//--------------------------------------------------------------------------*/
-	IGElement * Label::GetGraphicElement()
-	{
-		if((_background.GetHeight() > _textGelement.GetHeight()) || (_background.GetWidth() > _textGelement.GetWidth()))
-		{
-			for(IGElement * itm = &_background; itm; itm = itm->PrepareForDrawing());
-			return &_background;
-		}
-		else
-		{
-			for(IGElement * itm = &_textGelement; itm; itm = itm->PrepareForDrawing());
-			return &_textGelement;
 		}
 	}
 }

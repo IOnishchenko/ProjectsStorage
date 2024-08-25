@@ -18,8 +18,7 @@ namespace gui
 		public IKeyboardEventHandler
 	{
 	public:
-
-		enum class ButtonState
+		enum class State
 		{
 			Disabled,
 			Enabled,
@@ -37,8 +36,8 @@ namespace gui
 		~IButton() override = default;
 		
 		// methods
-		void SetState(ButtonState state);
-		ButtonState GetState();
+		void SetState(State state);
+		State GetState();
 		IGElement * GetGraphicElement() override;
 		void SetEnable(bool) override;
 
@@ -58,7 +57,7 @@ namespace gui
 
 	protected:
 		// fields
-		ButtonState _state;
+		State _state;
 		const Action<void(IButton *)> & _clickCmd;
 		IGElement & _disabledGEl;
 		IGElement & _enabledGEl;

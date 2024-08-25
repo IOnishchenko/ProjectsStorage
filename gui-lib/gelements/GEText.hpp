@@ -35,6 +35,7 @@ namespace gui
 		IGElement * PrepareForDrawing() override;
 		void SetHorizontalPositionInCenter(uint16_t regionWidth, int16_t offset);
 		void SetVerticalPositionInCenter(uint16_t regionHeight, int16_t offset);
+		uint16_t GetTextWidth();
 
 		GEText& operator=(const std::string_view & txt);
 

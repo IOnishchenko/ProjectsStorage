@@ -3,9 +3,7 @@
 
 #include "IUIControl.hpp"
 #include "ITouchScreenEventHandler.hpp"
-#include "IEncoderEventHandler.hpp"
-#include "IFocusEventHandler.hpp"
-#include "IKeyboardEventHandler.hpp"
+#include "IToggleFocusUIControl.hpp"
 #include "GEPicture.hpp"
 #include "Action.hpp"
 
@@ -14,9 +12,8 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	class ISliderVertical : public IUIControl, 
-		public ITouchScreenEventHandler, public IEncoderEventHandler,
-		public IFocusEventHandler, public IKeyboardEventHandler
+	class ISliderVertical : public IToggleFocusUIControl, 
+		public ITouchScreenEventHandler
 	{
 	public:
 		// properties
@@ -27,7 +24,9 @@ namespace gui
 		// constructors
 		ISliderVertical(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			uint16_t borderSize, int maxValue, int value, const Action<void(int)> & onValueChenged,
-			const GEPicture & thumb, const GEPicture & topTrack, const GEPicture & bottomTrack);
+			GEPicture & disabledTopTrack ,GEPicture & disabledPointer, GEPicture & disabledBottomTrack,
+			GEPicture & enabledTopTrack, GEPicture & enabledPointer, GEPicture & enabledBottomTrack,
+			GEPicture & focusedPointer, GEPicture & pressedPointer, GEPicture & selectedPointer);
 		
 		// dectructor
 		~ISliderVertical() override;
@@ -40,17 +39,8 @@ namespace gui
 		void OnPenMove(TouchScreenEven & event) override;
 		bool IsUnderTouch(uint16_t x, uint16_t y) override;
 
-		// IFocusManager methods
-		bool OnFocused() override;
-		void OnFocusLost() override;
-
 		// IEncoderEventHandler methods
 		void OnEncoderMoved(EncoderEvent & event) override;
-
-		// IKeyboardEventHandler methods
-		void OnKeyPress(KeyEvent & event) override;
-		void OnKeyRelease(KeyEvent & event) override;
-		void OnKeyLongPress(KeyEvent & event) override;
 
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;
@@ -61,16 +51,27 @@ namespace gui
 	protected:
 		// proprties
 		const uint16_t _borderSize;
-		GEPicture TopTrack;
-		GEPicture Thumb;
-		GEPicture BottomTrack;
-		const Action<void(int)> & _valueChangedCmd;
+
 		// methods
 		void SetValue(int value);
 		uint16_t MoveThumbToPosition(uint16_t);
 		virtual void SyncThumbPositionWithValue();
 		virtual int CalculateNewValue(uint16_t x);
 		void SetGraphicElemntsWithThumbPosition(uint16_t);
+
+	private:
+		const Action<void(int)> & _valueChangedCmd;
+		GEPicture & _disabledTopTrack;
+		GEPicture & _disabledPointer;
+		GEPicture & _disabledBottomTrack;
+
+		GEPicture & _enabledTopTrack;
+		GEPicture & _enabledPointer;
+		GEPicture & _enabledBottomTrack;
+
+		GEPicture & _focusedPointer;
+		GEPicture & _pressedPointer;
+		GEPicture & _selectedPointer;
 	};
 }
 

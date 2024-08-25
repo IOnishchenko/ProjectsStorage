@@ -12,7 +12,7 @@ namespace gui
 		const IUIContext & context, IGElement & disabledGEl, IGElement & enabledGEl,
 		IGElement & focusedGEl, IGElement & pressedGEl,
 		const Action<void(IButton*)> & clickCmd)
-		:IUIControl(x, y, w, h, context), _state{ButtonState::Enabled}, _clickCmd{clickCmd},
+		:IUIControl(x, y, w, h, context), _state{State::Enabled}, _clickCmd{clickCmd},
 		_disabledGEl{disabledGEl}, _enabledGEl{enabledGEl}, _focusedGEl{focusedGEl}, _pressedGEl{pressedGEl}
 	{
 	}
@@ -20,7 +20,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void IButton::SetState(IButton::ButtonState state)
+	void IButton::SetState(IButton::State state)
 	{
 		_state = state;
 	}
@@ -28,7 +28,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	IButton::ButtonState IButton::GetState()
+	IButton::State IButton::GetState()
 	{
 		return _state;
 	}
@@ -40,16 +40,16 @@ namespace gui
 	{
 		switch(_state)
 		{
-			case ButtonState::Disabled:
+			case State::Disabled:
 				for(auto * itm = &_disabledGEl; itm; itm = itm->PrepareForDrawing());
 				return &_disabledGEl;
-			case ButtonState::Enabled:
+			case State::Enabled:
 				for(auto * itm = &_enabledGEl; itm; itm = itm->PrepareForDrawing());
 				return &_enabledGEl;
-			case ButtonState::Focused:
+			case State::Focused:
 				for(auto * itm = &_focusedGEl; itm; itm = itm->PrepareForDrawing());
 				return &_focusedGEl;
-			case ButtonState::Pressed:
+			case State::Pressed:
 				for(auto * itm = &_pressedGEl; itm; itm = itm->PrepareForDrawing());
 				return &_pressedGEl;
 			default:
@@ -62,7 +62,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::SetEnable(bool value)
 	{
-		_state = value ? ButtonState::Enabled : ButtonState::Disabled;
+		_state = value ? State::Enabled : State::Disabled;
 		IUIControl::SetEnable(value);
 	}
 
@@ -71,7 +71,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnPress(TouchScreenEven & event)
 	{
-		_state = ButtonState::Pressed;
+		_state = State::Pressed;
 		Draw();
 	}
 
@@ -80,7 +80,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnRelease(TouchScreenEven & event)
 	{
-		_state = ButtonState::Enabled;
+		_state = State::Enabled;
 		Draw();
 		_clickCmd(this);
 	}
@@ -90,9 +90,9 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnPenLeave(TouchScreenEven & event)
 	{
-		if(_state == ButtonState::Enabled)
+		if(_state == State::Enabled)
 			return;
-		_state = ButtonState::Enabled;
+		_state = State::Enabled;
 		Draw();
 	}
 
@@ -113,7 +113,7 @@ namespace gui
 			return false;
 		
 		_context.KeyboardEventManager->RegisterHandler(this);
-		_state = ButtonState::Focused;
+		_state = State::Focused;
 		Draw();
 		return true;
 	}
@@ -124,7 +124,7 @@ namespace gui
 	void IButton::OnFocusLost()
 	{
 		_context.KeyboardEventManager->UnregisterHandler();
-		_state = ButtonState::Enabled;
+		_state = State::Enabled;
 		Draw();
 	}
 
@@ -133,7 +133,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnKeyPress(KeyEvent & event)
 	{
-		_state = ButtonState::Pressed;
+		_state = State::Pressed;
 		Draw();
 	}
 
@@ -142,8 +142,8 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnKeyRelease(KeyEvent & event)
 	{
-		bool onClickEnadled = _state == ButtonState::Pressed;
-		_state = ButtonState::Focused;
+		bool onClickEnadled = _state == State::Pressed;
+		_state = State::Focused;
 		Draw();
 		
 		if(onClickEnadled)
