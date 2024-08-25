@@ -10,13 +10,10 @@ namespace gui
 //-----------------------------------------------------------------*/
 constexpr uint16_t SCREEN_Y = 24;
 constexpr uint16_t SCREEN_HEIGHT = FULL_SCREEN_HEIGHT-BOTTOM_MENU_HEIGHT-SCREEN_Y;
-
 constexpr uint16_t COLUMN0_X = 3;
 constexpr uint16_t COLUMN0_WIDT = 110;
-
 constexpr uint16_t COLUMN1_X = COLUMN0_X + COLUMN0_WIDT + 3;
 constexpr uint16_t COLUMN1_WIDT = 190;
-
 constexpr uint16_t ROW_HEIGHT = 18;
 
 /*-----------------------------------------------------------------//
