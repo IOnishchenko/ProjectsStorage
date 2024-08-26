@@ -37,15 +37,15 @@ ReceiverScreen::ReceiverScreen(const IUIContext & context)
 
 	_headerTxt0(COLUMN0_X, 3, COLUMN0_WIDT, ROW_HEIGHT, "Attenuator",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, nullptr),
-	_headerTxt1(COLUMN0_X, 3+ROW_HEIGHT, COLUMN0_WIDT, ROW_HEIGHT, "Level:",
+	_headerTxt1(COLUMN0_X, 3+ROW_HEIGHT, COLUMN0_WIDT, ROW_HEIGHT, "Level (dB):",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, &_headerTxt0),
 	_headerTxt2(COLUMN0_X, 3+ROW_HEIGHT*2, COLUMN0_WIDT, ROW_HEIGHT, "Analog Gain",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, &_headerTxt1),
-	_headerTxt3(COLUMN0_X, 3+ROW_HEIGHT*3, COLUMN0_WIDT, ROW_HEIGHT, "Control:",
+	_headerTxt3(COLUMN0_X, 3+ROW_HEIGHT*3, COLUMN0_WIDT, ROW_HEIGHT, "Control (dB):",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, &_headerTxt2),
 	_headerTxt4(COLUMN0_X, 3+ROW_HEIGHT*4, COLUMN0_WIDT, ROW_HEIGHT, "Digital Gain",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, &_headerTxt3),
-	_headerTxt5(COLUMN0_X, 3+ROW_HEIGHT*5, COLUMN0_WIDT, ROW_HEIGHT, "Control:",
+	_headerTxt5(COLUMN0_X, 3+ROW_HEIGHT*5, COLUMN0_WIDT, ROW_HEIGHT, "Control (dB):",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, &_headerTxt4),
 
 	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, &_headerTxt5)

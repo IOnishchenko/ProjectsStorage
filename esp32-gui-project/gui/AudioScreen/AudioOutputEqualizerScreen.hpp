@@ -3,7 +3,8 @@
 
 #include "Group.hpp"
 #include "GERectangle.hpp"
-#include "OGSliderVertical.hpp"
+#include "GEText.hpp"
+#include "OGVerticalSliderLabel.hpp"
 #include "Command.hpp"
 
 namespace gui
@@ -20,18 +21,34 @@ namespace gui
 	private:
 		// commands
 		Command<AudioOutputEqualizerScreen, int> _onSlider0ValueChangedCmd;
+		Command<AudioOutputEqualizerScreen, int> _onSlider1ValueChangedCmd;
+		Command<AudioOutputEqualizerScreen, int> _onSlider2ValueChangedCmd;
+		Command<AudioOutputEqualizerScreen, int> _onSlider3ValueChangedCmd;
+		Command<AudioOutputEqualizerScreen, int> _onSlider4ValueChangedCmd;
+		Command<AudioOutputEqualizerScreen, int> _onSlider5ValueChangedCmd;
 
-		OGSliderVertical _slider0;
-		OGSliderVertical _slider1;
-		OGSliderVertical _slider2;
-		OGSliderVertical _slider3;
-		OGSliderVertical _slider4;
-		OGSliderVertical _slider5;
+		OGVerticalSliderLabel _slider0;
+		OGVerticalSliderLabel _slider1;
+		OGVerticalSliderLabel _slider2;
+		OGVerticalSliderLabel _slider3;
+		OGVerticalSliderLabel _slider4;
+		OGVerticalSliderLabel _slider5;
 
+		GEText _slider0Txt;
+		GEText _slider1Txt;
+		GEText _slider2Txt;
+		GEText _slider3Txt;
+		GEText _slider4Txt;
+		GEText _slider5Txt;
 		GERectangle _background;
 
 		// methods
 		void OnSlider0ValueChanged(int value);
+		void OnSlider1ValueChanged(int value);
+		void OnSlider2ValueChanged(int value);
+		void OnSlider3ValueChanged(int value);
+		void OnSlider4ValueChanged(int value);
+		void OnSlider5ValueChanged(int value);
 	};
 }
 

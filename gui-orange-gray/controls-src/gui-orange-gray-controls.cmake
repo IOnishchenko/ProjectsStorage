@@ -9,6 +9,7 @@ set(GUI_ORANGE_GRAY_CONTROLS_SRCS
 	"${project_dir}/gui-orange-gray/controls-src/OGSliderHorizontal.cpp"
 	"${project_dir}/gui-orange-gray/controls-src/OGSliderVertical.cpp"
 	"${project_dir}/gui-orange-gray/controls-src/OGTabControl2T.cpp"
+	"${project_dir}/gui-orange-gray/controls-src/OGVerticalSliderLabel.cpp"
 )
 
 set(GUI_ORANGE_GRAY_CONTROLS_INCS

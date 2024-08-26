@@ -83,6 +83,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	IGElement * Label::GetGraphicElement()
 	{
+		_textGelement.SetHorizontalPositionInCenter(Width, 0);
 		if((_enabledGEl.GetHeight() > _textGelement.GetHeight()) ||
 			(_enabledGEl.GetWidth() > _textGelement.GetTextWidth()))
 		{

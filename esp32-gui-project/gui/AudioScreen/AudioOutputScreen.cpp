@@ -16,7 +16,7 @@ constexpr uint16_t SCREEN_HEIGHT = FULL_SCREEN_HEIGHT-BOTTOM_MENU_HEIGHT-SCREEN_
 //
 //-----------------------------------------------------------------*/
 AudioOutputScreen::AudioOutputScreen(const IUIContext & context)
-	:OGTabControl2T(SCREEN_Y, SCREEN_HEIGHT, context, "LEVELS", "EQUALIZER",
+	:OGTabControl2T(SCREEN_Y, SCREEN_HEIGHT, context, "VOLUME", "EQUALIZER",
 	_onLevelsButtonClikedCmd, _onEqulizerButtonClikedCmd),
 	_onLevelsButtonClikedCmd(this, &AudioOutputScreen::OnLevelsButtonClicked),
 	_onEqulizerButtonClikedCmd(this, &AudioOutputScreen::OnEqulazerButtonClicked),

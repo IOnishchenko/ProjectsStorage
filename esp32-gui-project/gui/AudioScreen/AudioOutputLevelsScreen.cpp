@@ -34,11 +34,11 @@ AudioOutputLevelsScreen::AudioOutputLevelsScreen(const IUIContext & context)
 	_digitalGainSlider(COLUMN1_X, SCREEN_Y+18*3, COLUMN1_WIDT, 30, 5, context, _onDigitalGainCmd),
 	_headerTxt0(COLUMN0_X, 3, COLUMN0_WIDT, ROW_HEIGHT, "Analog Gain",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, nullptr),
-	_headerTxt1(COLUMN0_X, 3+ROW_HEIGHT, COLUMN0_WIDT, ROW_HEIGHT, "Control:",
+	_headerTxt1(COLUMN0_X, 3+ROW_HEIGHT, COLUMN0_WIDT, ROW_HEIGHT, "Control (dB):",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, &_headerTxt0),
 	_headerTxt2(COLUMN0_X, 3+ROW_HEIGHT*2, COLUMN0_WIDT, ROW_HEIGHT, "Digital Gain",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, &_headerTxt1),
-	_headerTxt3(COLUMN0_X, 3+ROW_HEIGHT*3, COLUMN0_WIDT, ROW_HEIGHT, "Control:",
+	_headerTxt3(COLUMN0_X, 3+ROW_HEIGHT*3, COLUMN0_WIDT, ROW_HEIGHT, "Control (dB):",
 		TEXT_COLOR, BACKGROUND_DARK, Font18, &_headerTxt2),
 	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, &_headerTxt3)
 {
