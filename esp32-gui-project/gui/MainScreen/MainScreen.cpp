@@ -52,9 +52,6 @@ MainScreen::~MainScreen()
 	_context.FocusManager->UnregisterHandler(&_button1);
 	_context.FocusManager->UnregisterHandler(&_button2);
 	_context.FocusManager->UnregisterHandler(&_button3);
-
-	_context.EncoderEventManager->UnregisterHandler();
-	_context.KeyboardEventManager->UnregisterHandler();
 }
 
 /*-----------------------------------------------------------------//

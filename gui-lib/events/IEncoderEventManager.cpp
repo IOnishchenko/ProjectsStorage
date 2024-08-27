@@ -22,9 +22,10 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void IEncoderEventManager::UnregisterHandler()
+	void IEncoderEventManager::UnregisterHandler(IEncoderEventHandler * subscriber)
 	{
-		_activeHandler = _defaultHandler;
+		if(_activeHandler == subscriber)
+			_activeHandler = _defaultHandler;
 	}
 
 	/*----------------------------------------------------------------//

@@ -107,7 +107,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IRadioButton::OnFocusLost()
 	{
-		_context.KeyboardEventManager->UnregisterHandler();
+		_context.KeyboardEventManager->UnregisterHandler(this);
 		_state = _logicState == State::Focused ?
 			State::Enabled : State::Selected;
 		_logicState = _state;

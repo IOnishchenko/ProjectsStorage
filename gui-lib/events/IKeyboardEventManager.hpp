@@ -19,7 +19,7 @@ namespace gui
 
 		// methods
 		void RegisterHandler(IKeyboardEventHandler * handler);
-		void UnregisterHandler();
+		void UnregisterHandler(IKeyboardEventHandler * handler);
 
 		// async method
 		AsyncCommand<IKeyboardEventManager, KeyEvent> HandleKeyboardEventAsync;

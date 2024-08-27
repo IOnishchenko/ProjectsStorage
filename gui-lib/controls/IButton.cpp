@@ -123,7 +123,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	void IButton::OnFocusLost()
 	{
-		_context.KeyboardEventManager->UnregisterHandler();
+		_context.KeyboardEventManager->UnregisterHandler(this);
 		_state = State::Enabled;
 		Draw();
 	}

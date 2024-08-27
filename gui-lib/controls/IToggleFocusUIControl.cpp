@@ -21,12 +21,12 @@ namespace gui
 	{
 		if(_state == State::Selected)
 		{
-			_context.KeyboardEventManager->UnregisterHandler();
-			_context.KeyboardEventManager->UnregisterHandler();
+			_context.EncoderEventManager->UnregisterHandler(this);
+			_context.KeyboardEventManager->UnregisterHandler(this);
 		}
 
 		if(_state == State::Focused)
-			_context.KeyboardEventManager->UnregisterHandler();
+			_context.KeyboardEventManager->UnregisterHandler(this);
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -49,7 +49,7 @@ namespace gui
 	void IToggleFocusUIControl::OnFocusLost()
 	{
 		_lockManagers = false;
-		_context.KeyboardEventManager->UnregisterHandler();
+		_context.KeyboardEventManager->UnregisterHandler(this);
 		_state = State::Enabled;
 		Draw();
 	}
@@ -76,7 +76,7 @@ namespace gui
 		}
 		else
 		{
-			_context.EncoderEventManager->UnregisterHandler();
+			_context.EncoderEventManager->UnregisterHandler(this);
 			_state = State::Focused;
 		}
 		Draw();

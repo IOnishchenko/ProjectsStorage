@@ -20,7 +20,7 @@ namespace gui
 
 		// methods
 		void RegisterHandler(IEncoderEventHandler * subscriber);
-		void UnregisterHandler();
+		void UnregisterHandler(IEncoderEventHandler * subscriber);
 
 		// async method
 		AsyncCommand<IEncoderEventManager, EncoderEvent> HandleEncoderEventAsync;

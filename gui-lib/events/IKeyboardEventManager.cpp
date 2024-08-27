@@ -23,9 +23,10 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void IKeyboardEventManager::UnregisterHandler()
+	void IKeyboardEventManager::UnregisterHandler(IKeyboardEventHandler * handler)
 	{
-		_activeHandler = _defaultHandler;
+		if(_activeHandler == handler)
+			_activeHandler = _defaultHandler;
 	}
 
 	/*----------------------------------------------------------------//

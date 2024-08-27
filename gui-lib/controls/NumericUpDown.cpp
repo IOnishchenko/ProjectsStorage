@@ -146,7 +146,7 @@ namespace gui
 		}
 		else
 		{
-			_context.EncoderEventManager->UnregisterHandler();
+			_context.EncoderEventManager->UnregisterHandler(this);
 			_state = State::Enabled;
 		}
 		Draw();

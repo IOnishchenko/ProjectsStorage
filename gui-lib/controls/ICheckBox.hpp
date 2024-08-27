@@ -13,16 +13,6 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	enum class CheckBoxState
-	{
-		Unchecked,
-		Pressed,
-		Checked
-	};
-	
-	/*----------------------------------------------------------------//
-	//
-	//----------------------------------------------------------------*/
 	class ICheckBox : public IUIControl,
 		public ITouchScreenEventHandler, public IFocusEventHandler,
 		public IKeyboardEventHandler
@@ -30,24 +20,30 @@ namespace gui
 	public:
 		enum class State
 		{
-			Disabled,
-			Enabled,
-			Focused,
-			Pressed,
-			Selected,
-			SelectedFocused,
+			CheckedDisabled,
+			UncheckedDisabled,
+			CheckedEnabled,
+			UncheckedEnabled,
+			CheckedFocused,
+			UncheckedFocused,
+			CheckedPressed,
+			UncheckedPressed,
 		};
 
 		// constructor
 		ICheckBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			const Action<void(ICheckBox *)> &checkedCmd, const Action<void(ICheckBox *)> &uncheckedCmd,
-			IGElement * unchecked, IGElement * pressed, IGElement * checked);
+			IGElement & checkedDisabledGEl, IGElement & uncheckedDisabledGEl,
+			IGElement & checkedEnabledGEl, IGElement & uncheckedEnabledGEl,
+			IGElement & checkedFocusedGEl, IGElement & uncheckedFocusedGEl,
+			IGElement & checkedPressedGEl, IGElement & uncheckedPressedGEl);
 		
 		// destructor
 		~ICheckBox() override;
 
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;
+		void SetEnable(bool value) override;
 
 		// ITouchScreenEventHandler methods
 		void OnPress(TouchScreenEven & event) override;
@@ -64,17 +60,30 @@ namespace gui
 		void OnKeyRelease(KeyEvent & event) override;
 
 		// methods
-		CheckBoxState GetState();
-		void SetState(CheckBoxState state);
+		// State IsChecked();
+		// void Check();
+		// void Uncheck();
 		
 	protected:
-		CheckBoxState _state;
-		CheckBoxState _visualState;
+		// commands
 		const Action<void(ICheckBox *)> &_checkedCmd;
 		const Action<void(ICheckBox *)> &_uncheckedCmd;
-		IGElement * _uncheckedGEl;
-		IGElement * _pressedGEl;
-		IGElement * _checkedGEl;
+
+		// fields
+		State _state = State::UncheckedEnabled;
+		State _visualState = State::UncheckedEnabled;
+		IGElement & _checkedDisabledGEl;
+		IGElement & _uncheckedDisabledGEl;
+		IGElement & _checkedEnabledGEl;
+		IGElement & _uncheckedEnabledGEl;
+		IGElement & _checkedFocusedGEl;
+		IGElement & _uncheckedFocusedGEl;
+		IGElement & _checkedPressedGEl;
+		IGElement & _uncheckedPressedGEl;
+
+		// methods
+		void SetPressedState();
+		void HandleOnReleaseEvent();
 	};
 }
 
