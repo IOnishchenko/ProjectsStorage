@@ -38,6 +38,9 @@ namespace gui
 		// IKeyboardEventHandler methods
 		void OnKeyPress(KeyEvent & event) override;
 		void OnKeyRelease(KeyEvent & event) override;
+
+		// IUIControl methods
+		void SetEnable(bool ena) override;
 	
 	protected:
 		State _state = State::Enabled;

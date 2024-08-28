@@ -3,6 +3,8 @@
 
 #include "Group.hpp"
 #include "GERectangle.hpp"
+#include "OGCheckBoxH18.hpp"
+#include "Command.hpp"
 
 namespace gui
 {
@@ -13,10 +15,21 @@ namespace gui
 		AudioInputLevelsScreen(const IUIContext & context);
 
 		// destructor
-		~AudioInputLevelsScreen() override = default;
+		~AudioInputLevelsScreen() override;
 
 	private:
+		// commands
+		Command<AudioInputLevelsScreen, ICheckBox *> _onAGCEnabledCmd;
+		Command<AudioInputLevelsScreen, ICheckBox *> _onAGCDisabledCmd;
+
+		// fields
+		OGCheckBoxH18 _ageEnaCheckbox;
+
 		GERectangle _background;
+
+		// methods
+		void OnAGCEnabled(ICheckBox *);
+		void OnAGCDisabled(ICheckBox *);
 	};
 }
 

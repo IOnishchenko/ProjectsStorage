@@ -33,7 +33,7 @@ namespace gui
 			IGElement & pressedGEl, const Action<void(IButton*)> & clickCmd);
 
 		// destructor
-		~IButton() override = default;
+		~IButton() override;
 		
 		// methods
 		void SetState(State state);

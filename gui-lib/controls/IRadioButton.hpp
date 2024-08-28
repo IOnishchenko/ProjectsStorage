@@ -40,7 +40,7 @@ namespace gui
 			const Action<void(IRadioButton *)> & selCmd);
 
 		// destructor
-		~IRadioButton() override = default;
+		~IRadioButton() override;
 
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;

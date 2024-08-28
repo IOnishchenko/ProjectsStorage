@@ -36,7 +36,7 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	IGElement * ICheckBox::GetGraphicElement()
 	{
-		switch(_state)
+		switch(_visualState)
 		{
 			case State::CheckedDisabled:
 				for(auto itm = &_checkedDisabledGEl; itm; itm = itm->PrepareForDrawing());
@@ -175,23 +175,32 @@ namespace gui
 	{
 		HandleOnReleaseEvent();
 	}
-
-	// /*--------------------------------------------------------------------------//
-	// //
-	// //--------------------------------------------------------------------------*/
-	// CheckBoxState ICheckBox::GetState()
-	// {
-	// 	return _state;
-	// }
 	
-	// /*--------------------------------------------------------------------------//
-	// //
-	// //--------------------------------------------------------------------------*/
-	// void ICheckBox::SetState(CheckBoxState state)
-	// {
-	// 	_state = state;
-	// 	_visualState = state;
-	// }
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	bool ICheckBox::IsChecked()
+	{
+		return ((_state == State::CheckedDisabled) || (_state == State::CheckedEnabled)
+			|| (_state == State::CheckedFocused) || (_state == State::CheckedPressed));
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void ICheckBox::Check()
+	{
+		_state = _enable ? State::CheckedEnabled : State::CheckedDisabled;
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
+	void ICheckBox::Uncheck()
+	{
+		_state = _enable ? State::UncheckedEnabled : State::UncheckedDisabled;
+	}
+
 
 	/*--------------------------------------------------------------------------//
 	//

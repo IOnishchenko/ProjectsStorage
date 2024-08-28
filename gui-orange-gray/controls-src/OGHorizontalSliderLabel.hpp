@@ -15,6 +15,9 @@ namespace gui
 
 		// destructor
 		~OGHorizontalSliderLabel() = default;
+
+		// methods
+		void SetEnable(bool ena);
 	
 		// fields
 		Label Text;

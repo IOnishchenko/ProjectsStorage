@@ -60,9 +60,9 @@ namespace gui
 		void OnKeyRelease(KeyEvent & event) override;
 
 		// methods
-		// State IsChecked();
-		// void Check();
-		// void Uncheck();
+		bool IsChecked();
+		void Check();
+		void Uncheck();
 		
 	protected:
 		// commands

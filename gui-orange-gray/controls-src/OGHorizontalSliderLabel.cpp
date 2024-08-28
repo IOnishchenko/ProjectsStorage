@@ -25,4 +25,17 @@ OGHorizontalSliderLabel::OGHorizontalSliderLabel(uint16_t x, uint16_t y,
 		width-MARGIN-TEXT_WIDTH, maxValue, value, context, valueChanged)
 	{
 	}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+void OGHorizontalSliderLabel::SetEnable(bool ena)
+{
+	Text.SetEnable(ena);
+	Text.Draw();
+
+	Slider.SetEnable(ena);
+	Slider.Draw();
+}
+
 }

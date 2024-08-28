@@ -81,4 +81,20 @@ namespace gui
 		}
 		Draw();
 	}
+
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void IToggleFocusUIControl::SetEnable(bool ena)
+	{
+		if(ena)
+			_state = State::Enabled;
+		else
+		{
+			_state = State::Disabled;
+			_context.EncoderEventManager->UnregisterHandler(this);
+		}
+
+		IUIControl::SetEnable(ena);
+	}
 }

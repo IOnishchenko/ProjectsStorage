@@ -20,6 +20,15 @@ set(GUI_ORANGE_GRAY_PICTURES_SRCS
 	"${project_dir}/gui-orange-gray/pictures-src/button193x44_button193x44selected_focused.c"
 	"${project_dir}/gui-orange-gray/pictures-src/button193x44_button193x44selected.c"
 
+	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18checked_dis.c"
+	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18checked_ena.c"
+	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18checked_foc.c"
+	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18checked_press.c"
+	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18unchecked_dis.c"
+	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18unchecked_ena.c"
+	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18unchecked_foc.c"
+	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18unchecked_press.c"
+
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12disabled.c"
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12enabled.c"
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12focused.c"
