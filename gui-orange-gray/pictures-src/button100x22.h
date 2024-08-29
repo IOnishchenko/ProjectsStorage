@@ -12,7 +12,6 @@ extern const PictureObject button100x22enabled;
 extern const PictureObject button100x22focused;
 extern const PictureObject button100x22pressed;
 extern const PictureObject button100x22selected;
-extern const PictureObject button100x22selected_focused;
 
 
 #ifdef __cplusplus

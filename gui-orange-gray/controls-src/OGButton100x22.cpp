@@ -38,8 +38,8 @@ namespace gui
 				_text.Foreground.Color = TEXT_COLOR;
 				break;
 			case State::Pressed:
-				_text.BackgroundColor = BACKGROUND_DARK;
-				_text.Foreground.Color = TEXT_COLOR_LIGHT;
+				_text.BackgroundColor = BACKGROUND_LIGHT;
+				_text.Foreground.Color = TEXT_COLOR;
 				break;
 			default:
 				_text.BackgroundColor = BACKGROUND_GRAY;

@@ -36,9 +36,6 @@ namespace gui
 						case IRadioButton::State::Selected:
 							rbttn->SetState(IRadioButton::State::Enabled);
 							return;
-						case IRadioButton::State::SelectedFocused:
-							rbttn->SetState(IRadioButton::State::Focused);
-							return;
 						default:
 							;
 					}

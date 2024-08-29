@@ -5,27 +5,28 @@
 #include "GERectangle.hpp"
 #include "OGCheckBoxH18.hpp"
 #include "Command.hpp"
+#include <memory>
 
 namespace gui
 {
-	class AudioInputLevelsScreen : public Group
+	class AudioInputLevelsView : public Group
 	{
 	public:
 		// constructor
-		AudioInputLevelsScreen(const IUIContext & context);
+		AudioInputLevelsView(const IUIContext & context);
 
 		// destructor
-		~AudioInputLevelsScreen() override;
+		~AudioInputLevelsView() override;
 
 	private:
 		// commands
-		Command<AudioInputLevelsScreen, ICheckBox *> _onAGCEnabledCmd;
-		Command<AudioInputLevelsScreen, ICheckBox *> _onAGCDisabledCmd;
+		Command<AudioInputLevelsView, ICheckBox *> _onAGCEnabledCmd;
+		Command<AudioInputLevelsView, ICheckBox *> _onAGCDisabledCmd;
 
 		// fields
-		OGCheckBoxH18 _ageEnaCheckbox;
-
+		OGCheckBoxH18 _agcEnaCheckbox;
 		GERectangle _background;
+		std::unique_ptr<IUIControl> _subGroup;
 
 		// methods
 		void OnAGCEnabled(ICheckBox *);

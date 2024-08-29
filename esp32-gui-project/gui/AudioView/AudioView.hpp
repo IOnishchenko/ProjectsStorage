@@ -8,19 +8,19 @@
 
 namespace gui
 {
-	class AudioScreen : public OGTabControl2T
+	class AudioView : public OGTabControl2T
 	{
 	public:
 		// constructor
-		AudioScreen(const IUIContext & context);
+		AudioView(const IUIContext & context);
 
 		// destructor
-		~AudioScreen() override = default;
+		~AudioView() override = default;
 
 	private:
 		// commands
-		Command<AudioScreen, IRadioButton *> _onOutputButtonClikedCmd;
-		Command<AudioScreen, IRadioButton *> _onInputButtonClikedCmd;
+		Command<AudioView, IRadioButton *> _onOutputButtonClikedCmd;
+		Command<AudioView, IRadioButton *> _onInputButtonClikedCmd;
 
 		// fields
 		std::unique_ptr<IUIControl> _subGroup;

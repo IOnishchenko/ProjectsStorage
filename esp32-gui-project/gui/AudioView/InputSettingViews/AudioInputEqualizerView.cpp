@@ -1,4 +1,4 @@
-#include "AudioInputEqualizerScreen.hpp"
+#include "AudioInputEqualizerView.hpp"
 #include "OGCommon.hpp"
 #include "IFocusManager.hpp"
 #include "font18.h"
@@ -8,17 +8,15 @@ namespace gui
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-constexpr uint16_t SCREEN_Y = 48;
-constexpr uint16_t MARGIN = 4;
+constexpr uint16_t SCREEN_Y = TABCONTROL_HEIGHT * 2;
 constexpr uint16_t SCREEN_HEIGHT = FULL_SCREEN_HEIGHT-BOTTOM_MENU_HEIGHT-SCREEN_Y;
-constexpr uint16_t TEXT_HEIGHT = 18;
 constexpr uint16_t TEXT_WIDTH = 40;
 constexpr uint16_t SLIDER_HEIGHT = SCREEN_HEIGHT-MARGIN*3-TEXT_HEIGHT;
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-AudioInputEqualizerScreen::AudioInputEqualizerScreen(const IUIContext & context)
+AudioInputEqualizerView::AudioInputEqualizerView(const IUIContext & context)
 	:Group(0, SCREEN_Y, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, context,
 	{
 		&_slider0.Text, &_slider0.Slider, &_slider1.Text, &_slider1.Slider,
@@ -26,11 +24,11 @@ AudioInputEqualizerScreen::AudioInputEqualizerScreen(const IUIContext & context)
 		&_slider4.Text, &_slider4.Slider,
 	}, &_background),
 
-	_onSlider0ValueChangedCmd(this, &AudioInputEqualizerScreen::OnSlider0ValueChanged),
-	_onSlider1ValueChangedCmd(this, &AudioInputEqualizerScreen::OnSlider1ValueChanged),
-	_onSlider2ValueChangedCmd(this, &AudioInputEqualizerScreen::OnSlider2ValueChanged),
-	_onSlider3ValueChangedCmd(this, &AudioInputEqualizerScreen::OnSlider3ValueChanged),
-	_onSlider4ValueChangedCmd(this, &AudioInputEqualizerScreen::OnSlider4ValueChanged),
+	_onSlider0ValueChangedCmd(this, &AudioInputEqualizerView::OnSlider0ValueChanged),
+	_onSlider1ValueChangedCmd(this, &AudioInputEqualizerView::OnSlider1ValueChanged),
+	_onSlider2ValueChangedCmd(this, &AudioInputEqualizerView::OnSlider2ValueChanged),
+	_onSlider3ValueChangedCmd(this, &AudioInputEqualizerView::OnSlider3ValueChanged),
+	_onSlider4ValueChangedCmd(this, &AudioInputEqualizerView::OnSlider4ValueChanged),
 
 	_slider0(16, SCREEN_Y+MARGIN, SLIDER_HEIGHT, 50, 25, context, _onSlider0ValueChangedCmd),
 	_slider1(16+62, SCREEN_Y+MARGIN, SLIDER_HEIGHT, 50, 25, context, _onSlider1ValueChangedCmd),
@@ -61,7 +59,7 @@ AudioInputEqualizerScreen::AudioInputEqualizerScreen(const IUIContext & context)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-AudioInputEqualizerScreen::~AudioInputEqualizerScreen()
+AudioInputEqualizerView::~AudioInputEqualizerView()
 {
 	_context.FocusManager->UnregisterHandler(&_slider0.Slider);
 	_context.FocusManager->UnregisterHandler(&_slider1.Slider);
@@ -73,7 +71,7 @@ AudioInputEqualizerScreen::~AudioInputEqualizerScreen()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void AudioInputEqualizerScreen::OnSlider0ValueChanged(int value)
+void AudioInputEqualizerView::OnSlider0ValueChanged(int value)
 {
 	_slider0.Text.SetFloatValue(value, 1, true);
 	_slider0.Text.Draw();
@@ -82,7 +80,7 @@ void AudioInputEqualizerScreen::OnSlider0ValueChanged(int value)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void AudioInputEqualizerScreen::OnSlider1ValueChanged(int value)
+void AudioInputEqualizerView::OnSlider1ValueChanged(int value)
 {
 	_slider1.Text.SetFloatValue(value, 1, true);
 	_slider1.Text.Draw();
@@ -91,7 +89,7 @@ void AudioInputEqualizerScreen::OnSlider1ValueChanged(int value)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void AudioInputEqualizerScreen::OnSlider2ValueChanged(int value)
+void AudioInputEqualizerView::OnSlider2ValueChanged(int value)
 {
 	_slider2.Text.SetFloatValue(value, 1, true);
 	_slider2.Text.Draw();
@@ -100,7 +98,7 @@ void AudioInputEqualizerScreen::OnSlider2ValueChanged(int value)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void AudioInputEqualizerScreen::OnSlider3ValueChanged(int value)
+void AudioInputEqualizerView::OnSlider3ValueChanged(int value)
 {
 	_slider3.Text.SetFloatValue(value, 1, true);
 	_slider3.Text.Draw();
@@ -109,7 +107,7 @@ void AudioInputEqualizerScreen::OnSlider3ValueChanged(int value)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void AudioInputEqualizerScreen::OnSlider4ValueChanged(int value)
+void AudioInputEqualizerView::OnSlider4ValueChanged(int value)
 {
 	_slider4.Text.SetFloatValue(value, 1, true);
 	_slider4.Text.Draw();

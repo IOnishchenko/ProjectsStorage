@@ -51,9 +51,22 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
+	constexpr uint16_t TABCONTROL_HEIGHT = 24;
+
 	constexpr uint16_t FULL_SCREEN_WIDTH = 320;
 	constexpr uint16_t FULL_SCREEN_HEIGHT = 240;
 	constexpr uint16_t BOTTOM_MENU_HEIGHT = 24;
+
+	constexpr uint16_t MARGIN = 4;
+	constexpr uint16_t COLUMN0_X = 0 + MARGIN*2;
+	constexpr uint16_t COLUMN0_WIDT = 100;
+	constexpr uint16_t COLUMN1_X = COLUMN0_X + COLUMN0_WIDT + MARGIN;
+	constexpr uint16_t COLUMN1_WIDT = 200;
+
+	constexpr uint16_t TEXT_HEIGHT = 18;
+	constexpr uint16_t ROW_HEIGHT = TEXT_HEIGHT*2;
+
+	constexpr uint16_t HSLIDER_HEIGHT = 12;
 }
 
 #endif // GUI_ORANGE_GRAY_COMMON_HPP

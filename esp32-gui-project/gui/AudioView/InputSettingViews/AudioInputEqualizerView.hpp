@@ -9,22 +9,22 @@
 
 namespace gui
 {
-	class AudioInputEqualizerScreen : public Group
+	class AudioInputEqualizerView : public Group
 	{
 	public:
 		// constructor
-		AudioInputEqualizerScreen(const IUIContext & context);
+		AudioInputEqualizerView(const IUIContext & context);
 
 		// destructor
-		~AudioInputEqualizerScreen() override;
+		~AudioInputEqualizerView() override;
 
 	private:
-				// commands
-		Command<AudioInputEqualizerScreen, int> _onSlider0ValueChangedCmd;
-		Command<AudioInputEqualizerScreen, int> _onSlider1ValueChangedCmd;
-		Command<AudioInputEqualizerScreen, int> _onSlider2ValueChangedCmd;
-		Command<AudioInputEqualizerScreen, int> _onSlider3ValueChangedCmd;
-		Command<AudioInputEqualizerScreen, int> _onSlider4ValueChangedCmd;
+		// commands
+		Command<AudioInputEqualizerView, int> _onSlider0ValueChangedCmd;
+		Command<AudioInputEqualizerView, int> _onSlider1ValueChangedCmd;
+		Command<AudioInputEqualizerView, int> _onSlider2ValueChangedCmd;
+		Command<AudioInputEqualizerView, int> _onSlider3ValueChangedCmd;
+		Command<AudioInputEqualizerView, int> _onSlider4ValueChangedCmd;
 
 		OGVerticalSliderLabel _slider0;
 		OGVerticalSliderLabel _slider1;

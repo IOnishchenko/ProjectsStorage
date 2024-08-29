@@ -1,7 +1,7 @@
-#include "AudioInputScreen.hpp"
+#include "AudioOutputView.hpp"
 #include "OGCommon.hpp"
-#include "AudioInputLevelsScreen.hpp"
-#include "AudioInputEqualizerScreen.hpp"
+#include "AudioOutputLevelsView.hpp"
+#include "AudioOutputEqualizerView.hpp"
 
 namespace gui
 {
@@ -15,12 +15,12 @@ constexpr uint16_t SCREEN_HEIGHT = FULL_SCREEN_HEIGHT-BOTTOM_MENU_HEIGHT-SCREEN_
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-AudioInputScreen::AudioInputScreen(const IUIContext & context)
-	:OGTabControl2T(SCREEN_Y, SCREEN_HEIGHT, context, "LEVELS", "EQUALIZER",
+AudioOutputView::AudioOutputView(const IUIContext & context)
+	:OGTabControl2T(SCREEN_Y, SCREEN_HEIGHT, context, "VOLUME", "EQUALIZER",
 	_onLevelsButtonClikedCmd, _onEqulizerButtonClikedCmd),
-	_onLevelsButtonClikedCmd(this, &AudioInputScreen::OnLevelsButtonClicked),
-	_onEqulizerButtonClikedCmd(this, &AudioInputScreen::OnEqulazerButtonClicked),
-	_subGroup{new AudioInputLevelsScreen(context)}
+	_onLevelsButtonClikedCmd(this, &AudioOutputView::OnLevelsButtonClicked),
+	_onEqulizerButtonClikedCmd(this, &AudioOutputView::OnEqulazerButtonClicked),
+	_subGroup{new AudioOutputLevelsView(context)}
 {
 	AddChild(_subGroup.get());
 }
@@ -28,10 +28,11 @@ AudioInputScreen::AudioInputScreen(const IUIContext & context)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void AudioInputScreen::OnLevelsButtonClicked(IRadioButton *)
+void AudioOutputView::OnLevelsButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new AudioInputLevelsScreen(_context));
+	_subGroup.reset();
+	_subGroup = std::make_unique<AudioOutputLevelsView>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }
@@ -39,10 +40,11 @@ void AudioInputScreen::OnLevelsButtonClicked(IRadioButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void AudioInputScreen::OnEqulazerButtonClicked(IRadioButton *)
+void AudioOutputView::OnEqulazerButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new AudioInputEqualizerScreen(_context));
+	_subGroup.reset();
+	_subGroup = std::make_unique<AudioOutputEqualizerView>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }

@@ -12,7 +12,6 @@ extern const PictureObject tab64x24enabled;
 extern const PictureObject tab64x24focused;
 extern const PictureObject tab64x24pressed;
 extern const PictureObject tab64x24selected;
-extern const PictureObject tab64x24selected_focused;
 
 
 #ifdef __cplusplus

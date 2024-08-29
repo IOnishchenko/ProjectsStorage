@@ -14,7 +14,7 @@ namespace gui
 		const Action<void(const Parameters &)> & valueChanged)
 		:NumericUpDown(x, y, WIDTH, HEIGHT, context, _disabledPic, _enabledPic, _focusedPic,
 		_pressedPic, _selectedPic, TEXT_COLOR_DISABLED, BACKGROUND_DISABLED, TEXT_COLOR,
-		BACKGROUND_GRAY, TEXT_COLOR, BACKGROUND_GRAY, BACKGROUND_GRAY, BACKGROUND_DARK,
+		BACKGROUND_GRAY, TEXT_COLOR, BACKGROUND_GRAY, TEXT_COLOR, BACKGROUND_LIGHT,
 		TEXT_COLOR, BACKGROUND_GRAY, Font32, valueChanged),
 		_disabledPic(&button193x44disabled, &_textGelement),
 		_enabledPic(&button193x44enabled, &_textGelement),

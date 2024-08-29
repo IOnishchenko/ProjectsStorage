@@ -5,7 +5,7 @@
 #include "IKeyboardEventManager.hpp"
 #include "MainScreen.hpp"
 #include "RadioScreen.hpp"
-#include "AudioScreen.hpp"
+#include "AudioView.hpp"
 
 #include "dumy_picture.h"
 
@@ -56,7 +56,8 @@ ScreenBase::ScreenBase(const IUIContext & context)
 void ScreenBase::OnMainButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new MainScreen(_context));
+	_subGroup.reset();
+	_subGroup = std::make_unique<MainScreen>(_context);
 	AddChild(_subGroup.get());
 	Draw();
 }
@@ -67,7 +68,8 @@ void ScreenBase::OnMainButtonClicked(IRadioButton *)
 void ScreenBase::OnRadioButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new RadioScreen(_context));
+	_subGroup.reset();
+	_subGroup = std::make_unique<RadioScreen>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }
@@ -78,7 +80,8 @@ void ScreenBase::OnRadioButtonClicked(IRadioButton *)
 void ScreenBase::OnAudioButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new AudioScreen(_context));
+	_subGroup.reset();
+	_subGroup = std::make_unique<AudioView>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }

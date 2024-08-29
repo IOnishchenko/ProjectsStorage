@@ -8,7 +8,6 @@ namespace gui
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-constexpr uint16_t MARGIN = 3;
 constexpr uint16_t TEXT_WIDTH = 40;
 constexpr uint16_t TEXT_HEIHGT = 18;
 constexpr uint16_t SLIDER_HEIGHT = 12;

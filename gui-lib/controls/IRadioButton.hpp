@@ -29,15 +29,13 @@ namespace gui
 			Enabled,
 			Focused,
 			Pressed,
-			Selected,
-			SelectedFocused,
+			Selected
 		};
 
 		// constructor
 		IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			IGElement & disabledGEl, IGElement & enabledGEl, IGElement & focusedGEl,
-			IGElement & pressedGEl, IGElement & selectedGEl, IGElement & selectedFocusedGEl,
-			const Action<void(IRadioButton *)> & selCmd);
+			IGElement & pressedGEl, IGElement & selectedGEl, const Action<void(IRadioButton *)> & selCmd);
 
 		// destructor
 		~IRadioButton() override;
@@ -75,7 +73,6 @@ namespace gui
 		IGElement & _focusedGEl;
 		IGElement & _pressedGEl;
 		IGElement & _selectedGEl;
-		IGElement & _selectedFocusedGEl;
 
 		IRadioButtonGroup * Group = nullptr;
 

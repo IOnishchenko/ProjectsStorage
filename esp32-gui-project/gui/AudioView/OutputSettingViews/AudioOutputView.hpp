@@ -8,19 +8,19 @@
 
 namespace gui
 {
-	class AudioOutputScreen : public OGTabControl2T
+	class AudioOutputView : public OGTabControl2T
 	{
 	public:
 		// constructor
-		AudioOutputScreen(const IUIContext & context);
+		AudioOutputView(const IUIContext & context);
 
 		// destructor
-		~AudioOutputScreen() override = default;
+		~AudioOutputView() override = default;
 
 	private:
 		// commands
-		Command<AudioOutputScreen, IRadioButton *> _onLevelsButtonClikedCmd;
-		Command<AudioOutputScreen, IRadioButton *> _onEqulizerButtonClikedCmd;
+		Command<AudioOutputView, IRadioButton *> _onLevelsButtonClikedCmd;
+		Command<AudioOutputView, IRadioButton *> _onEqulizerButtonClikedCmd;
 
 		// fields
 		std::unique_ptr<IUIControl> _subGroup;

@@ -30,7 +30,8 @@ RadioScreen::RadioScreen(const IUIContext & context)
 void RadioScreen::OnRxButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new ReceiverScreen(_context));
+	_subGroup.reset();
+	_subGroup = std::make_unique<ReceiverScreen>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }
@@ -41,7 +42,8 @@ void RadioScreen::OnRxButtonClicked(IRadioButton *)
 void RadioScreen::OnTxButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
-	_subGroup.reset(new TransmitterScreen(_context));
+	_subGroup.reset();
+	_subGroup = std::make_unique<TransmitterScreen>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }

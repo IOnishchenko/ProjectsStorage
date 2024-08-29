@@ -10,7 +10,6 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	constexpr uint16_t CHECKBOX_HEIGHT = 18;
 	constexpr uint16_t CHECKBOX_ICON_WIDTH = 36;
-	constexpr uint16_t MARGIN = 5;
 	
 	/*--------------------------------------------------------------------------//
 	// 

@@ -11,11 +11,10 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	IRadioButton::IRadioButton(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 		IGElement & disabledGEl, IGElement & enabledGEl, IGElement & focusedGEl,
-		IGElement & pressedGEl, IGElement & selectedGEl, IGElement & selectedFocusedGEl,
-		const Action<void(IRadioButton *)> & selCmd)
+		IGElement & pressedGEl, IGElement & selectedGEl, const Action<void(IRadioButton *)> & selCmd)
 		:IUIControl(x, y, w, h, context),
 		_onItemSelected{selCmd}, _disabledGEl{disabledGEl}, _enabledGEl{enabledGEl}, _focusedGEl{focusedGEl},
-		_pressedGEl{pressedGEl}, _selectedGEl{selectedGEl}, _selectedFocusedGEl{selectedFocusedGEl}
+		_pressedGEl{pressedGEl}, _selectedGEl{selectedGEl}
 	{
 	}
 
@@ -41,9 +40,6 @@ namespace gui
 			case State::Selected:
 				for(auto itm = &_selectedGEl; itm; itm = itm->PrepareForDrawing());
 				return &_selectedGEl;
-			case State::SelectedFocused:
-				for(auto itm = &_selectedFocusedGEl; itm; itm = itm->PrepareForDrawing());
-				return &_selectedFocusedGEl;
 			default:
 				return nullptr;
 		}
@@ -99,12 +95,11 @@ namespace gui
 	//--------------------------------------------------------------------------*/
 	bool IRadioButton::OnFocused()
 	{
-		if(!_enable)
+		if(!_enable || (_state == State::Selected))
 			return false;
 
 		_context.KeyboardEventManager->RegisterHandler(this);
-		_state = _state == State::Selected ?
-			State::SelectedFocused : State::Focused;
+		_state = State::Focused;
 		_logicState = _state;
 		Draw();
 		return true;
@@ -182,15 +177,12 @@ namespace gui
 				_onItemSelected(this);
 				break;
 			case State::Focused:
-				_state = State::SelectedFocused;
+				_state = State::Selected;
 				Group->RadioButtonCallBack(this);
 				_onItemSelected(this);
 				break;
 			case State::Selected:
 				_state = State::Selected;
-				break;
-			case State::SelectedFocused:
-				_state = State::SelectedFocused;
 				break;
 			default:
 				return;

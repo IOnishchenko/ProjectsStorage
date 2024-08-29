@@ -14,7 +14,7 @@ namespace gui
 			const IUIContext & context, const Action<void(int)> & valueChanged);
 
 		// destructor
-		~OGHorizontalSliderLabel() = default;
+		virtual ~OGHorizontalSliderLabel() = default;
 
 		// methods
 		void SetEnable(bool ena);

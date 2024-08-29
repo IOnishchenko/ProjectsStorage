@@ -3,7 +3,7 @@
 
 #include "Group.hpp"
 #include "GERectangle.hpp"
-#include "OGHorizontalSliderLabel.hpp"
+#include "SliderWithHeader.hpp"
 #include "Command.hpp"
 
 namespace gui
@@ -23,16 +23,10 @@ namespace gui
 		Command<ReceiverScreen, int> _onAnalogGainCmd;
 		Command<ReceiverScreen, int> _onDigitalGainCmd;
 
-		OGHorizontalSliderLabel _attGainSlider;
-		OGHorizontalSliderLabel _analogGainSlider;
-		OGHorizontalSliderLabel _digitalGainSlider;
+		custom::SliderWithHeader _attGainSlider;
+		custom::SliderWithHeader _analogGainSlider;
+		custom::SliderWithHeader _digitalGainSlider;
 
-		GEText _headerTxt0;
-		GEText _headerTxt1;
-		GEText _headerTxt2;
-		GEText _headerTxt3;
-		GEText _headerTxt4;
-		GEText _headerTxt5;
 		GERectangle _background;
 
 		// methods

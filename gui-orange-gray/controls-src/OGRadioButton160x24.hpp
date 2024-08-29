@@ -30,7 +30,6 @@ namespace gui
 		GEPicture _focusedPic;
 		GEPicture _pressedPic;
 		GEPicture _selectedPic;
-		GEPicture _selectedFocusedPic;
 	};
 }
 
