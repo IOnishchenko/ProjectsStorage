@@ -17,7 +17,7 @@ namespace gui
 		virtual ~OGHorizontalSliderLabel() = default;
 
 		// methods
-		void SetEnable(bool ena);
+		virtual void SetEnable(bool ena);
 	
 		// fields
 		Label Text;

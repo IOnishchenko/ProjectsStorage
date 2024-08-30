@@ -20,7 +20,7 @@ extern void IRAM_ATTR external_gpio_interrup_cb(void * param);
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static inline esp_err_t i2c0_initialize()
+static inline void i2c0_initialize()
 {
 	i2c_master_bus_config_t bus_config =
 	{
@@ -33,20 +33,16 @@ static inline esp_err_t i2c0_initialize()
 		.trans_queue_depth = 0,
 		.flags.enable_internal_pullup = true,
 	};
-
 	i2c_master_bus_handle_t i2c_bus_handler;
-	esp_err_t err = i2c_new_master_bus(&bus_config, &i2c_bus_handler);
-	sh1106_set_interface(i2c_bus_handler);
-	if(err != ESP_OK)
-		return ESP_FAIL;
+	ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &i2c_bus_handler));
 
-	return ESP_OK;
+	sh1106_set_interface(i2c_bus_handler);
 }
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static inline esp_err_t spi_initialize()
+static inline void spi_initialize()
 {
 	// ----- VSPI CONFIGURATION ------
 	spi_bus_config_t buscfgv =
@@ -66,8 +62,7 @@ static inline esp_err_t spi_initialize()
 		.intr_flags = ESP_INTR_FLAG_LEVEL1
 	};
 	//Initialize the VSPI bus
-	esp_err_t ret = spi_bus_initialize(LCD_SPI, &buscfgv, SPI_DMA_CH_AUTO);
-	ESP_ERROR_CHECK(ret);
+	ESP_ERROR_CHECK(spi_bus_initialize(LCD_SPI, &buscfgv, SPI_DMA_CH_AUTO));
 
 	spi_device_interface_config_t lcd_dev_cfg =
 	{
@@ -89,8 +84,7 @@ static inline esp_err_t spi_initialize()
 	};
 	//Attach the LCD to the SPI bus
 	spi_device_handle_t spi_port;
-	ret |= spi_bus_add_device(LCD_SPI, &lcd_dev_cfg, &spi_port);
-	ESP_ERROR_CHECK(ret);
+	ESP_ERROR_CHECK(spi_bus_add_device(LCD_SPI, &lcd_dev_cfg, &spi_port));
 	st7789_set_interface(spi_port);
 
 	// ----- HSPI CONFIGURATIO -----
@@ -110,11 +104,8 @@ static inline esp_err_t spi_initialize()
 		.isr_cpu_id = ESP_INTR_CPU_AFFINITY_AUTO,
 		.intr_flags = ESP_INTR_FLAG_LEVEL1
 	};
-	
 	//Initialize the HSPI bus
-	ret |= spi_bus_initialize(SD_SPI, &buscfgh, SPI_DMA_CH_AUTO);
-	ESP_ERROR_CHECK(ret);
-	return ret;
+	ESP_ERROR_CHECK(spi_bus_initialize(SD_SPI, &buscfgh, SPI_DMA_CH_AUTO));
 }
 
 /*-----------------------------------------------------------------//
@@ -161,7 +152,7 @@ static void timer_initialization()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-esp_err_t vfs_initialize()
+void vfs_initialize()
 {
 	sdmmc_host_t host = SDSPI_HOST_DEFAULT();
 	host.slot = SD_SPI;
@@ -183,13 +174,12 @@ esp_err_t vfs_initialize()
 
 	// Card has been initialized, print its properties
 	sdmmc_card_print_info(stdout, card);
-	return ret;
 }
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-static inline esp_err_t gpio_initialize()
+static inline void gpio_initialize()
 {
 	gpio_config_t io_conf =
 	{
@@ -199,35 +189,36 @@ static inline esp_err_t gpio_initialize()
 		.pull_up_en = true,
 		.intr_type = GPIO_INTR_DISABLE
 	};
-	esp_err_t res = gpio_config(&io_conf);
+	gpio_config(&io_conf);
 
 	io_conf.pin_bit_mask = (1ULL << ENC_BUTTON);
 	io_conf.mode = GPIO_MODE_INPUT;
-	res |= gpio_config(&io_conf);
+	gpio_config(&io_conf);
 
 	io_conf.pin_bit_mask = ((1ULL << ENC_A) | (1ULL << ENC_B));
 	io_conf.pull_up_en = false;
 	io_conf.intr_type = GPIO_INTR_ANYEDGE;
-	res |= gpio_config(&io_conf);
+	gpio_config(&io_conf);
 
-	res |= gpio_install_isr_service(0x00u);
-	res |= gpio_isr_handler_add(ENC_A, external_gpio_interrup_cb, (void*)ENC_A);
-	res |= gpio_isr_handler_add(ENC_B, external_gpio_interrup_cb, (void*)ENC_B);
-	return res;
+	gpio_install_isr_service(0x00u);
+	gpio_isr_handler_add(ENC_A, external_gpio_interrup_cb, (void*)ENC_A);
+	gpio_isr_handler_add(ENC_B, external_gpio_interrup_cb, (void*)ENC_B);
 }
 
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-esp_err_t hw_initialize()
+void hw_initialize()
 {
-	// encoder exti config
+	// timer configuration
 	timer_initialization();
+
 	// i2c configuration
-	esp_err_t res = i2c0_initialize();
-	// hspi config
-	res |= spi_initialize();
+	// i2c0_initialize();
+
+	// vspi and hspi config
+	spi_initialize();
+
 	// gpio configuration
-	res |= gpio_initialize();
-	return res;
+	gpio_initialize();
 }

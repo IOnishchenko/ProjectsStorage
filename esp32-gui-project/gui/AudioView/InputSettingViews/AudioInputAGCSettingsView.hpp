@@ -23,15 +23,18 @@ namespace gui
 		// commands
 		Command<AudioInputAGCSettingsView, int> _onTargetLevelChangedCmd;
 		Command<AudioInputAGCSettingsView, int> _onNoiseThreshouldChangedCmd;
+		Command<AudioInputAGCSettingsView, int> _onMaxGainChangedCmd;
 
 		custom::SliderWithHeader _targetLevelSlider;
 		custom::SliderWithHeader _noiseThreshouldSlider;
+		custom::SliderWithHeader _maxGainSlider;
 
 		GERectangle _background;
 
 		// methods
 		void OnTargetLevelChanged(int value);
 		void OnNoiseThreshouldChanged(int value);
+		void OnMaxGainChanged(int value);
 	};
 }
 

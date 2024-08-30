@@ -1,5 +1,5 @@
-#ifndef GUI_RADIO_SCREEN_HPP
-#define GUI_RADIO_SCREEN_HPP
+#ifndef GUI_RADIO_VIEW_HPP
+#define GUI_RADIO_VIEW_HPP
 
 #include "OGTabControl2T.hpp"
 #include "IUIContext.hpp"
@@ -8,19 +8,19 @@
 
 namespace gui
 {
-	class RadioScreen : public OGTabControl2T
+	class RadioView : public OGTabControl2T
 	{
 	public:
 		// constructor
-		RadioScreen(const IUIContext & context);
+		RadioView(const IUIContext & context);
 
 		// destructor
-		~RadioScreen() override = default;
+		~RadioView() override = default;
 
 	private:
 		// commands
-		Command<RadioScreen, IRadioButton *> _onRxButtonClikedCmd;
-		Command<RadioScreen, IRadioButton *> _onTxButtonClikedCmd;
+		Command<RadioView, IRadioButton *> _onRxButtonClikedCmd;
+		Command<RadioView, IRadioButton *> _onTxButtonClikedCmd;
 
 		// fields
 		std::unique_ptr<IUIControl> _subGroup;
@@ -31,4 +31,4 @@ namespace gui
 	};
 }
 
-#endif // GUI_RADIO_SCREEN_HPP
+#endif // GUI_RADIO_VIEW_HPP

@@ -31,10 +31,7 @@ OGHorizontalSliderLabel::OGHorizontalSliderLabel(uint16_t x, uint16_t y,
 void OGHorizontalSliderLabel::SetEnable(bool ena)
 {
 	Text.SetEnable(ena);
-	Text.Draw();
-
 	Slider.SetEnable(ena);
-	Slider.Draw();
 }
 
 }

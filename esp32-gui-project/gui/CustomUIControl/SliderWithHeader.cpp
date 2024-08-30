@@ -52,5 +52,26 @@ namespace custom
 			delete _secondLineHeader;
 		delete Header;
 	}
+
+	/*-----------------------------------------------------------------//
+	//
+	//-----------------------------------------------------------------*/
+	void SliderWithHeader::SetEnable(bool ena)
+	{
+		if(ena)
+		{
+			Header->Foreground.Color = TEXT_COLOR;
+			if(_secondLineHeader)
+				_secondLineHeader->Foreground.Color = TEXT_COLOR;
+		}
+		else
+		{
+			Header->Foreground.Color = TEXT_COLOR_DISABLED;
+			if(_secondLineHeader)
+				_secondLineHeader->Foreground.Color = TEXT_COLOR_DISABLED;
+		}
+		OGHorizontalSliderLabel::SetEnable(ena);
+	}
+
 }
 }

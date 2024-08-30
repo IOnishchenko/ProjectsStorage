@@ -19,21 +19,27 @@ AudioInputAGCSettingsView::AudioInputAGCSettingsView(const IUIContext & context)
 	{
 		&_targetLevelSlider.Text, &_targetLevelSlider.Slider,
 		&_noiseThreshouldSlider.Text, &_noiseThreshouldSlider.Slider,
+		&_maxGainSlider.Text, &_maxGainSlider.Slider,
 	}, &_background),
 	_onTargetLevelChangedCmd(this, &AudioInputAGCSettingsView::OnTargetLevelChanged),
 	_onNoiseThreshouldChangedCmd(this, &AudioInputAGCSettingsView::OnNoiseThreshouldChanged),
+	_onMaxGainChangedCmd(this, &AudioInputAGCSettingsView::OnMaxGainChanged),
 	_targetLevelSlider(SCREEN_Y, SCREEN_Y, 64, 30, context, _onTargetLevelChangedCmd,
 		"Target", "Level (dB):", nullptr),
 	_noiseThreshouldSlider(SCREEN_Y, SCREEN_Y+MARGIN+ROW_HEIGHT, 25, 12, context,
 		_onNoiseThreshouldChangedCmd, "Noise", "Level (dB):", _targetLevelSlider.Header),
+	_maxGainSlider(SCREEN_Y, SCREEN_Y+MARGIN*2+ROW_HEIGHT*2, 58, 24, context,
+		_onMaxGainChangedCmd, "Maximum", "Gain (dB):", _noiseThreshouldSlider.Header),
 
-	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, _noiseThreshouldSlider.Header)
+	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, _maxGainSlider.Header)
 {
 	context.FocusManager->RegisterHandler(100, &_targetLevelSlider.Slider);
 	context.FocusManager->RegisterHandler(100, &_noiseThreshouldSlider.Slider);
+	context.FocusManager->RegisterHandler(100, &_maxGainSlider.Slider);
 
 	_targetLevelSlider.Text.SetIntValue(64);
 	_noiseThreshouldSlider.Text.SetIntValue(12);
+	_maxGainSlider.Text.SetIntValue(24);
 }
 
 /*-----------------------------------------------------------------//
@@ -43,6 +49,7 @@ AudioInputAGCSettingsView::~AudioInputAGCSettingsView()
 {
 	_context.FocusManager->UnregisterHandler(&_targetLevelSlider.Slider);
 	_context.FocusManager->UnregisterHandler(&_noiseThreshouldSlider.Slider);
+	_context.FocusManager->UnregisterHandler(&_maxGainSlider.Slider);
 }
 
 /*-----------------------------------------------------------------//
@@ -61,6 +68,15 @@ void AudioInputAGCSettingsView::OnNoiseThreshouldChanged(int value)
 {
 	_noiseThreshouldSlider.Text.SetIntValue(value);
 	_noiseThreshouldSlider.Text.Draw();
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+void AudioInputAGCSettingsView::OnMaxGainChanged(int value)
+{
+	_maxGainSlider.Text.SetIntValue(value);
+	_maxGainSlider.Text.Draw();
 }
 
 }

@@ -3,8 +3,8 @@
 #include "IFocusManager.hpp"
 #include "IEncoderEventManager.hpp"
 #include "IKeyboardEventManager.hpp"
-#include "MainScreen.hpp"
-#include "RadioScreen.hpp"
+#include "MainView.hpp"
+#include "RadioView.hpp"
 #include "AudioView.hpp"
 
 #include "dumy_picture.h"
@@ -27,7 +27,7 @@ ScreenBase::ScreenBase(const IUIContext & context)
 	_onDSPButtonClikedCmd(this, &ScreenBase::OnDSPButtonClicked),
 	_onSettingsButtonClikedCmd(this, &ScreenBase::OnSettingsButtonClicked),
 
-	_subGroup{new MainScreen(context)},
+	_subGroup{new MainView(context)},
 
 	_mainButton(0, 240-24, "MAIN", context, _onMainButtonClikedCmd),
 	_radioButton(64, 240-24, "RADIO", context, _onRadioButtonClikedCmd),
@@ -57,7 +57,7 @@ void ScreenBase::OnMainButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
 	_subGroup.reset();
-	_subGroup = std::make_unique<MainScreen>(_context);
+	_subGroup = std::make_unique<MainView>(_context);
 	AddChild(_subGroup.get());
 	Draw();
 }
@@ -69,7 +69,7 @@ void ScreenBase::OnRadioButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
 	_subGroup.reset();
-	_subGroup = std::make_unique<RadioScreen>(_context);
+	_subGroup = std::make_unique<RadioView>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }

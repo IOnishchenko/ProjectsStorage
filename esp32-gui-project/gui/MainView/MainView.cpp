@@ -1,4 +1,4 @@
-#include "MainScreen.hpp"
+#include "MainView.hpp"
 #include "OGCommon.hpp"
 #include "IFocusManager.hpp"
 #include "IEncoderEventManager.hpp"
@@ -12,19 +12,19 @@ namespace gui
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-MainScreen::MainScreen(const IUIContext & context)
+MainView::MainView(const IUIContext & context)
 	:Group(0, 0, 320, 240, context,
 	{
 		&_button0, &_button1, &_button2, &_button3,
 		&_frequencyLabel
 	}, nullptr),
 
-	_onButton0ClickedCmd(this, &MainScreen::OnButton0Clicked),
-	_onButton1ClickedCmd(this, &MainScreen::OnButton1Clicked),
-	_onButton2ClickedCmd(this, &MainScreen::OnButton2Clicked),
-	_onButton3ClickedCmd(this, &MainScreen::OnButton3Clicked),
+	_onButton0ClickedCmd(this, &MainView::OnButton0Clicked),
+	_onButton1ClickedCmd(this, &MainView::OnButton1Clicked),
+	_onButton2ClickedCmd(this, &MainView::OnButton2Clicked),
+	_onButton3ClickedCmd(this, &MainView::OnButton3Clicked),
 
-	_onFrequencyChangedCmd(this, &MainScreen::OnFrequencyChanged),
+	_onFrequencyChangedCmd(this, &MainView::OnFrequencyChanged),
 
 	_button0(6, 24, "AGC: 40", context, _onButton0ClickedCmd),
 	_button1(6, 46, "BW: 2.75", context, _onButton1ClickedCmd),
@@ -45,7 +45,7 @@ MainScreen::MainScreen(const IUIContext & context)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-MainScreen::~MainScreen()
+MainView::~MainView()
 {
 	_context.FocusManager->UnregisterHandler(&_frequencyLabel);
 	_context.FocusManager->UnregisterHandler(&_button0);
@@ -57,7 +57,7 @@ MainScreen::~MainScreen()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnButton0Clicked(IButton *)
+void MainView::OnButton0Clicked(IButton *)
 {
 	printf("Button0 was ckicked\n");
 }
@@ -65,7 +65,7 @@ void MainScreen::OnButton0Clicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnButton1Clicked(IButton *)
+void MainView::OnButton1Clicked(IButton *)
 {
 	printf("Button1 was ckicked\n");
 }
@@ -73,7 +73,7 @@ void MainScreen::OnButton1Clicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnButton2Clicked(IButton *)
+void MainView::OnButton2Clicked(IButton *)
 {
 	printf("Button2 was ckicked\n");
 }
@@ -81,7 +81,7 @@ void MainScreen::OnButton2Clicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnButton3Clicked(IButton *)
+void MainView::OnButton3Clicked(IButton *)
 {
 	printf("Button3 was ckicked\n");
 }
@@ -89,7 +89,7 @@ void MainScreen::OnButton3Clicked(IButton *)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void MainScreen::OnFrequencyChanged(const NumericUpDown::Parameters & params)
+void MainView::OnFrequencyChanged(const NumericUpDown::Parameters & params)
 {
 	printf("Frequency was changed\n");
 	(params.EventType == NumericUpDown::Direction::Increase) ?

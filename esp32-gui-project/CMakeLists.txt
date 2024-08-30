@@ -40,11 +40,12 @@ set(PROJET_SRCS
 
 	"../gui/CustomUIControl/SliderWithHeader.cpp"
 
-	"../gui/MainScreen/MainScreen.cpp"
+	"../gui/MainView/MainView.cpp"
 
-	"../gui/RadioScreen/RadioScreen.cpp"
-	"../gui/RadioScreen/ReceiverScreen.cpp"
-	"../gui/RadioScreen/TransmitterScreen.cpp"
+	"../gui/RadioView/RadioView.cpp"
+	"../gui/RadioView/ReceiverView.cpp"
+	"../gui/RadioView/TransmitterSettingsView.cpp"
+	"../gui/RadioView/TransmitterView.cpp"
 
 	"../gui/dumy_picture_gui320x240.c"
 	"../gui/GUIThread.cpp"
@@ -66,10 +67,10 @@ set(INCLUDE_DIRS
 	"../gui/AudioView/InputSettingViews/"
 	"../gui/AudioView/OutputSettingViews/"
 	"../gui/CustomUIControl/"
-	"../gui/DSPScreen/"
-	"../gui/MainScreen/"
-	"../gui/RadioScreen/"
-	"../gui/SettingsScreen/"
+	"../gui/DSPView/"
+	"../gui/MainView/"
+	"../gui/RadioView/"
+	"../gui/SettingsView/"
 )
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)

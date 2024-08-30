@@ -1,4 +1,4 @@
-#include "ReceiverScreen.hpp"
+#include "ReceiverView.hpp"
 #include "OGCommon.hpp"
 #include "IFocusManager.hpp"
 
@@ -14,7 +14,7 @@ constexpr uint16_t SCREEN_HEIGHT = FULL_SCREEN_HEIGHT-BOTTOM_MENU_HEIGHT-SCREEN_
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-ReceiverScreen::ReceiverScreen(const IUIContext & context)
+ReceiverView::ReceiverView(const IUIContext & context)
 	:Group(0, SCREEN_Y, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, context,
 	{
 		&_attGainSlider.Text, &_attGainSlider.Slider,
@@ -22,9 +22,9 @@ ReceiverScreen::ReceiverScreen(const IUIContext & context)
 		&_digitalGainSlider.Text, &_digitalGainSlider.Slider,
 	}, &_background),
 
-	_onAttGainCmd(this, &ReceiverScreen::OnAttGainChanged),
-	_onAnalogGainCmd(this, &ReceiverScreen::OnAgalogGainChanged),
-	_onDigitalGainCmd(this, &ReceiverScreen::OnDigitalGainChanged),
+	_onAttGainCmd(this, &ReceiverView::OnAttGainChanged),
+	_onAnalogGainCmd(this, &ReceiverView::OnAgalogGainChanged),
+	_onDigitalGainCmd(this, &ReceiverView::OnDigitalGainChanged),
 
 	_attGainSlider(SCREEN_Y, SCREEN_Y+MARGIN*2, 33, 10, context, _onAttGainCmd,
 		"Attenuator", "Level (dB):", nullptr),
@@ -47,7 +47,7 @@ ReceiverScreen::ReceiverScreen(const IUIContext & context)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-ReceiverScreen::~ReceiverScreen()
+ReceiverView::~ReceiverView()
 {
 	_context.FocusManager->UnregisterHandler(&_attGainSlider.Slider);
 	_context.FocusManager->UnregisterHandler(&_analogGainSlider.Slider);
@@ -57,7 +57,7 @@ ReceiverScreen::~ReceiverScreen()
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void ReceiverScreen::OnAttGainChanged(int value)
+void ReceiverView::OnAttGainChanged(int value)
 {
 	_attGainSlider.Text.SetFloatValue(-value, 1, true);
 	_attGainSlider.Text.Draw();
@@ -66,7 +66,7 @@ void ReceiverScreen::OnAttGainChanged(int value)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void ReceiverScreen::OnAgalogGainChanged(int value)
+void ReceiverView::OnAgalogGainChanged(int value)
 {
 	_analogGainSlider.Text.SetFloatValue(value, 1, true);
 	_analogGainSlider.Text.Draw();
@@ -75,7 +75,7 @@ void ReceiverScreen::OnAgalogGainChanged(int value)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-void ReceiverScreen::OnDigitalGainChanged(int value)
+void ReceiverView::OnDigitalGainChanged(int value)
 {
 	_digitalGainSlider.Text.SetFloatValue(value, 1, true);
 	_digitalGainSlider.Text.Draw();

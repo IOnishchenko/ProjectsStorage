@@ -26,6 +26,9 @@ namespace custom
 		// destructor
 		~SliderWithHeader() override;
 
+		// methods
+		void SetEnable(bool ena) override;
+
 		// fields
 		GEText * Header;
 	

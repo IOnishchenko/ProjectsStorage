@@ -26,7 +26,7 @@ namespace gui
 			uint32_t disForegroubd, uint32_t disBackground,
 			uint32_t enaForeground, uint32_t enaBackground,
 			const Font & font, uint16_t textOffset = 0);
-		
+
 		// destructor
 		~Label() override = default;
 
@@ -44,7 +44,7 @@ namespace gui
 		Label& operator=(const char * txt);
 		Label& operator=(const std::string & txt);
 		Label& operator=(const std::string_view & txt);
-		
+
 	protected:
 		// fields
 		std::string _text;

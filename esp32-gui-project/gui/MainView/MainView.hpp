@@ -1,5 +1,5 @@
-#ifndef GUI_MAIN_SCREEN_HPP
-#define GUI_MAIN_SCREEN_HPP
+#ifndef GUI_MAIN_VIEW_HPP
+#define GUI_MAIN_VIEW_HPP
 
 #include "Group.hpp"
 #include "Command.hpp"
@@ -12,25 +12,25 @@
 
 namespace gui
 {
-	class MainScreen : public Group
+	class MainView : public Group
 	{
 	public:
 		// constructor
-		MainScreen(const IUIContext & context);
+		MainView(const IUIContext & context);
 
 		// destructor
-		~MainScreen() override;
+		~MainView() override;
 
 	private:
 		// fields
 		uint32_t _frequency = 14130000u;
 
-		Command<MainScreen, IButton *> _onButton0ClickedCmd;
-		Command<MainScreen, IButton *> _onButton1ClickedCmd;
-		Command<MainScreen, IButton *> _onButton2ClickedCmd;
-		Command<MainScreen, IButton *> _onButton3ClickedCmd;
+		Command<MainView, IButton *> _onButton0ClickedCmd;
+		Command<MainView, IButton *> _onButton1ClickedCmd;
+		Command<MainView, IButton *> _onButton2ClickedCmd;
+		Command<MainView, IButton *> _onButton3ClickedCmd;
 
-		Command<MainScreen, const NumericUpDown::Parameters &> _onFrequencyChangedCmd;
+		Command<MainView, const NumericUpDown::Parameters &> _onFrequencyChangedCmd;
 
 		OGButton100x22 _button0;
 		OGButton100x22 _button1;

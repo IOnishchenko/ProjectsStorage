@@ -1,5 +1,5 @@
-#ifndef GUI_RECEIVER_SCREEN_HPP
-#define GUI_RECEIVER_SCREEN_HPP
+#ifndef GUI_RECEIVER_VIEW_HPP
+#define GUI_RECEIVER_VIEW_HPP
 
 #include "Group.hpp"
 #include "GERectangle.hpp"
@@ -8,20 +8,20 @@
 
 namespace gui
 {
-	class ReceiverScreen : public Group
+	class ReceiverView : public Group
 	{
 	public:
 		// constructor
-		ReceiverScreen(const IUIContext & context);
+		ReceiverView(const IUIContext & context);
 
 		// destructor
-		~ReceiverScreen() override;
+		~ReceiverView() override;
 
 	private:
 		// commands
-		Command<ReceiverScreen, int> _onAttGainCmd;
-		Command<ReceiverScreen, int> _onAnalogGainCmd;
-		Command<ReceiverScreen, int> _onDigitalGainCmd;
+		Command<ReceiverView, int> _onAttGainCmd;
+		Command<ReceiverView, int> _onAnalogGainCmd;
+		Command<ReceiverView, int> _onDigitalGainCmd;
 
 		custom::SliderWithHeader _attGainSlider;
 		custom::SliderWithHeader _analogGainSlider;
@@ -36,4 +36,4 @@ namespace gui
 	};
 }
 
-#endif // GUI_RECEIVER_SCREEN_HPP
+#endif // GUI_RECEIVER_VIEW_HPP
