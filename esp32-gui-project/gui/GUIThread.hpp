@@ -65,7 +65,7 @@ namespace gui
 		void Initialize();
 
 		// async method
-		AsyncCommand<GUIThread, uint32_t> LogDataAsync;
+		//AsyncCommand<GUIThread, uint32_t> LogDataAsync;
 
 	private:
 		// field
@@ -79,7 +79,7 @@ namespace gui
 		ScreenBase _mainScreen;
 
 		// method
-		void LogData(uint32_t data);
+		//void LogData(uint32_t data);
 	};
 }
 
