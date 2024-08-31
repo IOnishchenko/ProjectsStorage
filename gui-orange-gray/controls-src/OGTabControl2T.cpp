@@ -8,9 +8,7 @@ namespace gui
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-constexpr uint16_t FULL_WIDTH = 320;
 constexpr uint16_t TAB_WIDTH = 160;
-constexpr uint16_t TAB_HEIGHT = 24;
 
 /*-----------------------------------------------------------------//
 //
@@ -20,13 +18,13 @@ OGTabControl2T::OGTabControl2T(uint16_t y, uint16_t height, const IUIContext & c
 	const Action<void(IRadioButton *)> & onTab1Selected,
 	const Action<void(IRadioButton *)> & onTab2Selected)
 	:
-	Group(0, y, FULL_WIDTH, height, context,
+	Group(0, y, FULL_SCREEN_WIDTH, height, context,
 	{
 		&_group
 	}, nullptr),
 	_tab1RButton(0, y, text1, context, onTab1Selected),
 	_tab2RButton(TAB_WIDTH, y, text2, context, onTab2Selected),
-	_group(0, y, FULL_SCREEN_WIDTH, TAB_HEIGHT, context,
+	_group(0, y, FULL_SCREEN_WIDTH, BOTTOM_MENU_HEIGHT, context,
 	{
 		&_tab1RButton, &_tab2RButton
 	}, nullptr)

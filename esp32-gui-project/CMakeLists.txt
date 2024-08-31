@@ -40,6 +40,17 @@ set(PROJET_SRCS
 
 	"../gui/CustomUIControl/SliderWithHeader.cpp"
 
+	"../gui/DSPView/DSPAlgorithmView/DSPAGCView.cpp"
+	"../gui/DSPView/DSPAlgorithmView/DSPAlgorithmView.cpp"
+
+	"../gui/DSPView/DSPModulationView/AMModulationView.cpp"
+	"../gui/DSPView/DSPModulationView/CWModulationView.cpp"
+	"../gui/DSPView/DSPModulationView/DSPModulationView.cpp"
+	"../gui/DSPView/DSPModulationView/FMModulationView.cpp"
+	"../gui/DSPView/DSPModulationView/ModulationViewBase.cpp"
+	"../gui/DSPView/DSPModulationView/SSBModulationView.cpp"
+	"../gui/DSPView/DSPView.cpp"
+
 	"../gui/MainView/MainView.cpp"
 
 	"../gui/RadioView/RadioView.cpp"
@@ -63,11 +74,17 @@ set(INCLUDE_DIRS
 	"${FREE_RTOS_COMMON_INCS}"
 	"${GUI_ORANGE_GRAY_INCS}"
 	"../gui/"
+
 	"../gui/AudioView/"
 	"../gui/AudioView/InputSettingViews/"
 	"../gui/AudioView/OutputSettingViews/"
+
 	"../gui/CustomUIControl/"
+
 	"../gui/DSPView/"
+	"../gui/DSPView/DSPAlgorithmView/"
+	"../gui/DSPView/DSPModulationView/"
+
 	"../gui/MainView/"
 	"../gui/RadioView/"
 	"../gui/SettingsView/"

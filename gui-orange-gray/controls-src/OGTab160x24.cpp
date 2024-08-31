@@ -1,16 +1,19 @@
 #include "OGCommon.hpp"
-#include "OGRadioButton160x24.hpp"
+#include "OGTab160x24.hpp"
 #include "tab2.h"
 
 namespace gui
 {
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
 	constexpr uint16_t WIDTH = 160;
 	constexpr uint16_t HEIGHT = 24;
 
 	/*--------------------------------------------------------------------------//
 	// Constructor
 	//--------------------------------------------------------------------------*/
-	OGRadioButton160x24::OGRadioButton160x24(uint16_t x, uint16_t y, const std::string_view & text,
+	OGTab160x24::OGTab160x24(uint16_t x, uint16_t y, const std::string_view & text,
 		const IUIContext & context, const Action<void(IRadioButton *)> & selCmd)
 		:IRadioButton(x, y, WIDTH, HEIGHT, context, _disabledPic, _enabledPic, _focusedPic,
 			_pressedPic, _selectedPic, selCmd),
@@ -26,7 +29,7 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	IGElement * OGRadioButton160x24::GetGraphicElement()
+	IGElement * OGTab160x24::GetGraphicElement()
 	{
 		switch(_state)
 		{

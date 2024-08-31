@@ -105,13 +105,13 @@ namespace gui
 			case EncoderDirection::ENC_INCREASE:
 			{
 				if(Value < MaxValue)
-					SetValue(Value + 1);
+					UpdateValue(Value + 1);
 				break;
 			}
 			case EncoderDirection::ENC_DECREASE:
 			{
 				if(Value > MinValue)
-					SetValue(Value - 1);
+					UpdateValue(Value - 1);
 				break;
 			}
 		}
@@ -165,13 +165,51 @@ namespace gui
 	}
 
 	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void ISlider::SetValue(int value)
+	{
+		Value = value;
+		SyncThumbPositionWithValue();
+	}
+	
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void ISlider::SetMaxValue(int value)
+	{
+		MaxValue = value;
+		SyncThumbPositionWithValue();
+	}
+	
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void ISlider::SetMinValue(int value)
+	{
+		MinValue = value;
+		SyncThumbPositionWithValue();
+	}
+	
+	/*--------------------------------------------------------------------------//
+	// 
+	//--------------------------------------------------------------------------*/
+	void ISlider::UpdateRange(int minValue, int value, int maxValue)
+	{
+		MinValue = minValue;
+		Value = value;
+		MaxValue = maxValue;
+		SyncThumbPositionWithValue();
+	}
+	
+	/*--------------------------------------------------------------------------//
 	// ---------------------- Protected Methods --------------------------------
 	//--------------------------------------------------------------------------*/
 
 	/*--------------------------------------------------------------------------//
 	// 
 	//--------------------------------------------------------------------------*/
-	void ISlider::SetValue(int value)
+	void ISlider::UpdateValue(int value)
 	{
 		if(Value == value)
 			return;

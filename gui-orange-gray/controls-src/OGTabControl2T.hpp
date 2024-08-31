@@ -3,7 +3,7 @@
 
 #include "Group.hpp"
 #include "IUIContext.hpp"
-#include "OGRadioButton160x24.hpp"
+#include "OGTab160x24.hpp"
 #include "IRadioButtonGroup.hpp"
 #include "Action.hpp"
 
@@ -23,8 +23,8 @@ namespace gui
 
 	protected:
 		// field
-		OGRadioButton160x24 _tab1RButton;
-		OGRadioButton160x24 _tab2RButton;
+		OGTab160x24 _tab1RButton;
+		OGTab160x24 _tab2RButton;
 		IRadioButtonGroup _group;
 	};
 }

@@ -42,6 +42,7 @@ namespace gui
 
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;
+		void SetEnable(bool ena) override;
 
 		// ITouchScreenEventHandler methods
 		void OnPress(TouchScreenEven & event) override;

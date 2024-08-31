@@ -22,7 +22,7 @@ namespace gui
 	constexpr uint32_t BACKGROUND_DARK_RGB888 = 0x212b2d;
 	constexpr uint32_t BACKGROUND_GRAY_RGB888 = 0x3d5a68;
 	constexpr uint32_t BACKGROUND_LIGHT_RGB888 = 0x5586a6;
-	constexpr uint32_t BACKGROUND_DISABLED_RGB888 = 0x3d5a68;
+	constexpr uint32_t BACKGROUND_GRAY_DISABLED_RGB888 = 0x2C3E45;
 
 	/*--------------------------------------------------------------------------//
 	// 
@@ -45,8 +45,10 @@ namespace gui
 	constexpr uint16_t BACKGROUND_LIGHT = (uint16_t)~(((BACKGROUND_LIGHT_RGB888 >> 8) & 0xf800) |
 		((BACKGROUND_LIGHT_RGB888 >> 5) & 0x07e0) | ((BACKGROUND_LIGHT_RGB888 >> 3) & 0x001f));
 
-	constexpr uint16_t BACKGROUND_DISABLED = (uint16_t)~(((BACKGROUND_DISABLED_RGB888 >> 8) & 0xf800) |
-		((BACKGROUND_DISABLED_RGB888 >> 5) & 0x07e0) | ((BACKGROUND_DISABLED_RGB888 >> 3) & 0x001f));
+	constexpr uint16_t BACKGROUND_DISABLED =
+		(uint16_t)~(((BACKGROUND_GRAY_DISABLED_RGB888 >> 8) & 0xf800) | 
+		((BACKGROUND_GRAY_DISABLED_RGB888 >> 5) & 0x07e0) |
+		((BACKGROUND_GRAY_DISABLED_RGB888 >> 3) & 0x001f));
 
 	/*--------------------------------------------------------------------------//
 	// 

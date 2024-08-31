@@ -16,12 +16,6 @@ namespace gui
 		public ITouchScreenEventHandler
 	{
 	public:
-
-		// properties
-		int MaxValue;
-		int MinValue;
-		int Value;
-		
 		// constructors
 		ISlider(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const IUIContext & context,
 			uint16_t borderSize, int maxValue, int value, const Action<void(int)> & onValueChenged,
@@ -48,13 +42,22 @@ namespace gui
 	
 		// methods
 		int GetValue();
+		void SetValue(int value);
+		void SetMaxValue(int value);
+		void SetMinValue(int value);
+		void UpdateRange(int minValue, int value, int maxValue);
 			
 	protected:
+		// properties
+		int MaxValue;
+		int MinValue;
+		int Value;
+
 		// fields
 		const uint16_t _borderSize;
 
 		// methods
-		void SetValue(int value);
+		void UpdateValue(int value);
 		uint16_t MoveThumbToPosition(uint16_t);
 		virtual void SyncThumbPositionWithValue();
 		virtual int CalculateNewValue(uint16_t x);

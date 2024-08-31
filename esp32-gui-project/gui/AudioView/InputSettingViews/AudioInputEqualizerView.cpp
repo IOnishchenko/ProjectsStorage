@@ -43,11 +43,11 @@ AudioInputEqualizerView::AudioInputEqualizerView(const IUIContext & context)
 	_slider4Txt(26+250, MARGIN*2+SLIDER_HEIGHT, TEXT_WIDTH, TEXT_HEIGHT, "3.0", TEXT_COLOR, BACKGROUND_DARK, Font18, &_slider3Txt),
 	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, &_slider4Txt)
 {
-	context.FocusManager->RegisterHandler(100, &_slider0.Slider);
-	context.FocusManager->RegisterHandler(100, &_slider1.Slider);
-	context.FocusManager->RegisterHandler(100, &_slider2.Slider);
-	context.FocusManager->RegisterHandler(100, &_slider3.Slider);
 	context.FocusManager->RegisterHandler(100, &_slider4.Slider);
+	context.FocusManager->RegisterHandler(100, &_slider3.Slider);
+	context.FocusManager->RegisterHandler(100, &_slider2.Slider);
+	context.FocusManager->RegisterHandler(100, &_slider1.Slider);
+	context.FocusManager->RegisterHandler(100, &_slider0.Slider);
 
 	_slider0.Text.SetFloatValue(25, 1, true);
 	_slider1.Text.SetFloatValue(25, 1, true);

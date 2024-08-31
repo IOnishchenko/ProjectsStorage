@@ -6,6 +6,7 @@
 #include "MainView.hpp"
 #include "RadioView.hpp"
 #include "AudioView.hpp"
+#include "DSPView.hpp"
 
 #include "dumy_picture.h"
 
@@ -91,6 +92,11 @@ void ScreenBase::OnAudioButtonClicked(IRadioButton *)
 //-----------------------------------------------------------------*/
 void ScreenBase::OnDSPButtonClicked(IRadioButton *)
 {
+	RemoveChild(_subGroup.get());
+	_subGroup.reset();
+	_subGroup = std::make_unique<DSPView>(_context);
+	AddChild(_subGroup.get());
+	_subGroup->Draw();
 }
 
 /*-----------------------------------------------------------------//

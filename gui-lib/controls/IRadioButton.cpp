@@ -21,6 +21,14 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
+	IRadioButton::~IRadioButton()
+	{
+		_context.KeyboardEventManager->UnregisterHandler(this);
+	}
+
+	/*--------------------------------------------------------------------------//
+	//
+	//--------------------------------------------------------------------------*/
 	IGElement * IRadioButton::GetGraphicElement()
 	{
 		switch(_state)
@@ -48,9 +56,22 @@ namespace gui
 	/*--------------------------------------------------------------------------//
 	//
 	//--------------------------------------------------------------------------*/
-	IRadioButton::~IRadioButton()
+	void IRadioButton::SetEnable(bool ena)
 	{
-		_context.KeyboardEventManager->UnregisterHandler(this);
+		if(ena)
+		{
+			_state = State::Enabled;
+			_logicState = State::Enabled;
+		}
+		else
+		{
+			if(_state == State::Focused)
+				_context.KeyboardEventManager->UnregisterHandler(this);
+
+			_state = State::Disabled;
+			_logicState = State::Disabled;
+		}
+		IUIControl::SetEnable(ena);
 	}
 
 	/*--------------------------------------------------------------------------//

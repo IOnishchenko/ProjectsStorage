@@ -1,5 +1,5 @@
-#ifndef GUI_ORANGE_GRAY_RADIO_BUTTON_160x24_HPP
-#define GUI_ORANGE_GRAY_RADIO_BUTTON_160x24_HPP
+#ifndef GUI_ORANGE_GRAY_TAB_160x24_HPP
+#define GUI_ORANGE_GRAY_TAB_160x24_HPP
 
 #include "IUIContext.hpp"
 #include "IRadioButton.hpp"
@@ -8,15 +8,15 @@
 
 namespace gui
 {
-	class OGRadioButton160x24 : public IRadioButton
+	class OGTab160x24 : public IRadioButton
 	{
 	public:
 		// constructor
-		OGRadioButton160x24(uint16_t x, uint16_t y, const std::string_view & text,
+		OGTab160x24(uint16_t x, uint16_t y, const std::string_view & text,
 			const IUIContext & context, const Action<void(IRadioButton *)> & selCmd);
 
 		// destructor
-		~OGRadioButton160x24() override = default;
+		~OGTab160x24() override = default;
 
 		// methods
 		// IUIControl methods
@@ -33,4 +33,4 @@ namespace gui
 	};
 }
 
-#endif // GUI_ORANGE_GRAY_RADIO_BUTTON_160x24_HPP
+#endif // GUI_ORANGE_GRAY_TAB_160x24_HPP
