@@ -26,10 +26,10 @@ SSBModulationView::SSBModulationView(const IUIContext & context)
 {
 	AddChild(&_enaCESSB);
 
-	_hpfCutoffSlider.Slider.UpdateRange(200, 250, 300);
+	_hpfCutoffSlider.UpdateRange(200, 250, 300);
 	_hpfCutoffSlider.Text.SetIntValue(250);
 
-	_lpfCutoffSlider.Slider.UpdateRange(2900, 2950, 3000);
+	_lpfCutoffSlider.UpdateRange(2900, 2950, 3000);
 	_lpfCutoffSlider.Text.SetIntValue(2950);
 
 	context.FocusManager->RegisterHandler(100, &_enaCESSB);

@@ -191,6 +191,7 @@ namespace gui
 	void ICheckBox::Check()
 	{
 		_state = _enable ? State::CheckedEnabled : State::CheckedDisabled;
+		_visualState = _state;
 	}
 
 	/*--------------------------------------------------------------------------//
@@ -199,6 +200,7 @@ namespace gui
 	void ICheckBox::Uncheck()
 	{
 		_state = _enable ? State::UncheckedEnabled : State::UncheckedDisabled;
+		_visualState = _state;
 	}
 
 

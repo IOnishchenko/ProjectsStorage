@@ -17,9 +17,6 @@ namespace gui
 		// destructor
 		~TransmitterSettingsView() override;
 
-		// methods
-		void SetEnable(bool ena) override;
-
 	private:
 		// commands
 		Command<TransmitterSettingsView, int> _onPowerChangedCmd;

@@ -2,6 +2,10 @@
 #include "DSPAlgorithmView.hpp"
 #include "OGCommon.hpp"
 #include "DSPAGCView.hpp"
+#include "DSPNoiseReductionView.hpp"
+#include "DSPNoiseBlankerView.hpp"
+#include "DSPNotchView.hpp"
+#include "DSPSquelchView.hpp"
 
 namespace gui
 {
@@ -47,7 +51,7 @@ void DSPAlgorithmView::OnNRClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
 	_subGroup.reset();
-	_subGroup = std::make_unique<DSPAGCView>(_context);
+	_subGroup = std::make_unique<DSPNoiseReductionView>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }
@@ -59,7 +63,7 @@ void DSPAlgorithmView::OnNBClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
 	_subGroup.reset();
-	_subGroup = std::make_unique<DSPAGCView>(_context);
+	_subGroup = std::make_unique<DSPNoiseBlankerView>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }
@@ -71,7 +75,7 @@ void DSPAlgorithmView::OnNotchClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
 	_subGroup.reset();
-	_subGroup = std::make_unique<DSPAGCView>(_context);
+	_subGroup = std::make_unique<DSPNotchView>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }
@@ -83,7 +87,7 @@ void DSPAlgorithmView::OnSquelchClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());
 	_subGroup.reset();
-	_subGroup = std::make_unique<DSPAGCView>(_context);
+	_subGroup = std::make_unique<DSPSquelchView>(_context);
 	AddChild(_subGroup.get());
 	_subGroup->Draw();
 }

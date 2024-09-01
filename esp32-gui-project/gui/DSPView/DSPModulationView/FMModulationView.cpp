@@ -11,10 +11,10 @@ FMModulationView::FMModulationView(const IUIContext & context)
 	_onHPFCutoffChanged(this, &FMModulationView::OnHPFCutoffFrequencyChanged),
 	_onLPFCutoffChanged(this, &FMModulationView::OnLPFCutoffFrequencyChanged)
 {
-	_hpfCutoffSlider.Slider.UpdateRange(200, 230, 300);
+	_hpfCutoffSlider.UpdateRange(200, 230, 300);
 	_hpfCutoffSlider.Text.SetIntValue(230);
 
-	_lpfCutoffSlider.Slider.UpdateRange(5100, 5150, 5200);
+	_lpfCutoffSlider.UpdateRange(5100, 5150, 5200);
 	_lpfCutoffSlider.Text.SetIntValue(5150);
 }
 

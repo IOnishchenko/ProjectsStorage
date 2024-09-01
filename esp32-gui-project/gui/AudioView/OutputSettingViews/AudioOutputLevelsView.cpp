@@ -17,8 +17,8 @@ constexpr uint16_t SCREEN_HEIGHT = FULL_SCREEN_HEIGHT-BOTTOM_MENU_HEIGHT-SCREEN_
 AudioOutputLevelsView::AudioOutputLevelsView(const IUIContext & context)
 	:Group(0, SCREEN_Y, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, context,
 	{
-		&_analogGainSlider.Text, &_analogGainSlider.Slider,
-		&_digitalGainSlider.Text, &_digitalGainSlider.Slider,
+		&_analogGainSlider.Text, &_analogGainSlider,
+		&_digitalGainSlider.Text, &_digitalGainSlider,
 	}, &_background),
 	_onAnalogGainCmd(this, &AudioOutputLevelsView::OnAgalogGainChanged),
 	_onDigitalGainCmd(this, &AudioOutputLevelsView::OnDigitalGainChanged),
@@ -29,8 +29,8 @@ AudioOutputLevelsView::AudioOutputLevelsView(const IUIContext & context)
 
 	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, _digitalGainSlider.Header)
 {
-	context.FocusManager->RegisterHandler(100, &_analogGainSlider.Slider);
-	context.FocusManager->RegisterHandler(100, &_digitalGainSlider.Slider);
+	context.FocusManager->RegisterHandler(100, &_analogGainSlider);
+	context.FocusManager->RegisterHandler(100, &_digitalGainSlider);
 
 	_analogGainSlider.Text.SetIntValue(10);
 	_digitalGainSlider.Text.SetIntValue(10);
@@ -41,8 +41,8 @@ AudioOutputLevelsView::AudioOutputLevelsView(const IUIContext & context)
 //-----------------------------------------------------------------*/
 AudioOutputLevelsView::~AudioOutputLevelsView()
 {
-	_context.FocusManager->UnregisterHandler(&_analogGainSlider.Slider);
-	_context.FocusManager->UnregisterHandler(&_digitalGainSlider.Slider);
+	_context.FocusManager->UnregisterHandler(&_analogGainSlider);
+	_context.FocusManager->UnregisterHandler(&_digitalGainSlider);
 }
 
 /*-----------------------------------------------------------------//

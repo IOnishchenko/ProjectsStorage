@@ -12,10 +12,10 @@ CWModulationView::CWModulationView(const IUIContext & context)
 	_onHPFCutoffChanged(this, &CWModulationView::OnHPFCutoffFrequencyChanged),
 	_onLPFCutoffChanged(this, &CWModulationView::OnLPFCutoffFrequencyChanged)
 {
-	_hpfCutoffSlider.Slider.UpdateRange(50, 80, 100);
+	_hpfCutoffSlider.UpdateRange(50, 80, 100);
 	_hpfCutoffSlider.Text.SetIntValue(80);
 
-	_lpfCutoffSlider.Slider.UpdateRange(900, 950, 1000);
+	_lpfCutoffSlider.UpdateRange(900, 950, 1000);
 	_lpfCutoffSlider.Text.SetIntValue(950);
 }
 

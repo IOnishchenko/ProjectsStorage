@@ -17,9 +17,9 @@ constexpr uint16_t SCREEN_HEIGHT = FULL_SCREEN_HEIGHT-BOTTOM_MENU_HEIGHT-SCREEN_
 AudioInputAGCSettingsView::AudioInputAGCSettingsView(const IUIContext & context)
 	:Group(0, SCREEN_Y, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, context,
 	{
-		&_targetLevelSlider.Text, &_targetLevelSlider.Slider,
-		&_noiseThreshouldSlider.Text, &_noiseThreshouldSlider.Slider,
-		&_maxGainSlider.Text, &_maxGainSlider.Slider,
+		&_targetLevelSlider.Text, &_targetLevelSlider,
+		&_noiseThreshouldSlider.Text, &_noiseThreshouldSlider,
+		&_maxGainSlider.Text, &_maxGainSlider,
 	}, &_background),
 	_onTargetLevelChangedCmd(this, &AudioInputAGCSettingsView::OnTargetLevelChanged),
 	_onNoiseThreshouldChangedCmd(this, &AudioInputAGCSettingsView::OnNoiseThreshouldChanged),
@@ -33,9 +33,9 @@ AudioInputAGCSettingsView::AudioInputAGCSettingsView(const IUIContext & context)
 
 	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, _maxGainSlider.Header)
 {
-	context.FocusManager->RegisterHandler(100, &_targetLevelSlider.Slider);
-	context.FocusManager->RegisterHandler(100, &_noiseThreshouldSlider.Slider);
-	context.FocusManager->RegisterHandler(100, &_maxGainSlider.Slider);
+	context.FocusManager->RegisterHandler(100, &_targetLevelSlider);
+	context.FocusManager->RegisterHandler(100, &_noiseThreshouldSlider);
+	context.FocusManager->RegisterHandler(100, &_maxGainSlider);
 
 	_targetLevelSlider.Text.SetIntValue(64);
 	_noiseThreshouldSlider.Text.SetIntValue(12);
@@ -47,9 +47,9 @@ AudioInputAGCSettingsView::AudioInputAGCSettingsView(const IUIContext & context)
 //-----------------------------------------------------------------*/
 AudioInputAGCSettingsView::~AudioInputAGCSettingsView()
 {
-	_context.FocusManager->UnregisterHandler(&_targetLevelSlider.Slider);
-	_context.FocusManager->UnregisterHandler(&_noiseThreshouldSlider.Slider);
-	_context.FocusManager->UnregisterHandler(&_maxGainSlider.Slider);
+	_context.FocusManager->UnregisterHandler(&_targetLevelSlider);
+	_context.FocusManager->UnregisterHandler(&_noiseThreshouldSlider);
+	_context.FocusManager->UnregisterHandler(&_maxGainSlider);
 }
 
 /*-----------------------------------------------------------------//

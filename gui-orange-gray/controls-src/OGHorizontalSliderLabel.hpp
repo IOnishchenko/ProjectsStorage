@@ -6,7 +6,7 @@
 
 namespace gui
 {
-	class OGHorizontalSliderLabel
+	class OGHorizontalSliderLabel : public OGSliderHorizontal
 	{
 	public:
 		// constructor
@@ -21,7 +21,6 @@ namespace gui
 	
 		// fields
 		Label Text;
-		OGSliderHorizontal Slider;
 	};
 }
 

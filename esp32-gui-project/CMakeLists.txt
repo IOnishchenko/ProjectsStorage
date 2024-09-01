@@ -42,6 +42,11 @@ set(PROJET_SRCS
 
 	"../gui/DSPView/DSPAlgorithmView/DSPAGCView.cpp"
 	"../gui/DSPView/DSPAlgorithmView/DSPAlgorithmView.cpp"
+	"../gui/DSPView/DSPAlgorithmView/DSPAlgorithmViewBase.cpp"
+	"../gui/DSPView/DSPAlgorithmView/DSPNoiseBlankerView.cpp"
+	"../gui/DSPView/DSPAlgorithmView/DSPNoiseReductionView.cpp"
+	"../gui/DSPView/DSPAlgorithmView/DSPNotchView.cpp"
+	"../gui/DSPView/DSPAlgorithmView/DSPSquelchView.cpp"
 
 	"../gui/DSPView/DSPModulationView/AMModulationView.cpp"
 	"../gui/DSPView/DSPModulationView/CWModulationView.cpp"

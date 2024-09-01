@@ -20,8 +20,8 @@ ModulationViewBase::ModulationViewBase(const IUIContext & context,
 	:
 	Group(0, SCREEN_Y, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, context,
 	{
-		&_hpfCutoffSlider.Text, &_hpfCutoffSlider.Slider,
-		&_lpfCutoffSlider.Text, &_lpfCutoffSlider.Slider,
+		&_hpfCutoffSlider.Text, &_hpfCutoffSlider,
+		&_lpfCutoffSlider.Text, &_lpfCutoffSlider,
 	}, &_background),
 	_hpfCutoffSlider(SCREEN_Y, SCREEN_Y+MARGIN*2, 100, 10, context, hpfCutofChanged,
 		"HPF Cutoff", "Frequency:", nullptr),
@@ -30,8 +30,8 @@ ModulationViewBase::ModulationViewBase(const IUIContext & context,
 
 	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, _lpfCutoffSlider.Header)
 {
-	context.FocusManager->RegisterHandler(100, &_hpfCutoffSlider.Slider);
-	context.FocusManager->RegisterHandler(100, &_lpfCutoffSlider.Slider);
+	context.FocusManager->RegisterHandler(100, &_hpfCutoffSlider);
+	context.FocusManager->RegisterHandler(100, &_lpfCutoffSlider);
 }
 
 /*-----------------------------------------------------------------//
@@ -39,8 +39,8 @@ ModulationViewBase::ModulationViewBase(const IUIContext & context,
 //-----------------------------------------------------------------*/
 ModulationViewBase::~ModulationViewBase()
 {
-	_context.FocusManager->UnregisterHandler(&_hpfCutoffSlider.Slider);
-	_context.FocusManager->UnregisterHandler(&_lpfCutoffSlider.Slider);
+	_context.FocusManager->UnregisterHandler(&_hpfCutoffSlider);
+	_context.FocusManager->UnregisterHandler(&_lpfCutoffSlider);
 }
 
 }
