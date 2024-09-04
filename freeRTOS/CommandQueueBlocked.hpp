@@ -13,11 +13,11 @@
 // 
 //--------------------------------------------------------------------------*/
 template<typename TMessage, uint32_t QLength>
-class CommandQueue :  public AsyncCallQueue
+class CommandQueueBlocked :  public AsyncCallQueue
 {
 public:
 	// constructor
-	CommandQueue()
+	CommandQueueBlocked()
 		:_indexToWrite{0}
 	{
 		_spinlock = portMUX_INITIALIZER_UNLOCKED;
@@ -27,7 +27,7 @@ public:
 	}
 
 	// destructor
-	~CommandQueue() override
+	~CommandQueueBlocked() override
 	{
 		vQueueDelete(_queueHandle);
 		// TODO - 

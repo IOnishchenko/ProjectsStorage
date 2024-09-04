@@ -1,6 +1,6 @@
 #include "configuration.h"
 #include "GUIThread.hpp"
-
+#include "ScreenBase.hpp"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -29,10 +29,11 @@ extern "C" void gui_thread(void * args)
 gui::GUIThread::GUIThread(lcd_driver & lcdDriver)
 	:IFocusManager(), IEncoderEventManager(this, _asyncCommandDispatcher),
 	IKeyboardEventManager(this, _asyncCommandDispatcher),
+	IWindowManager(_renderer, this, this, nullptr, this, _commandDispatcher),
 	// LogDataAsync(this, &gui::GUIThread::LogData, _asyncCommandDispatcher),
 	_queue(), _asyncCommandDispatcher(_queue), _decoder(), _renderer(_decoder, lcdDriver),
-	_context{_renderer, this, this, nullptr, this},
-	_mainScreen(_context)
+	_commandQueue(), _commandDispatcher(_commandQueue)
+	
 {
 }
 
@@ -43,6 +44,7 @@ void gui::GUIThread::Run()
 {
 	while(true)
 	{
+		_commandDispatcher.HandleAsyncCall();
 		_asyncCommandDispatcher.HandleAsyncCall();
 	}
 }
@@ -53,7 +55,7 @@ void gui::GUIThread::Run()
 void gui::GUIThread::Initialize()
 {
 	st7789.initialize();
-	_mainScreen.Draw();
+	CreateAndShowWindow<ScreenBase>();
 }
 
 /*-----------------------------------------------------------------//

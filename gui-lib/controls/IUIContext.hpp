@@ -8,6 +8,7 @@ namespace gui
 	class IKeyboardEventManager;
 	class ITouchScreenEventObserver;
 	class IFocusManager;
+	class IWindowManager;
 
 	struct IUIContext
 	{
@@ -20,6 +21,8 @@ namespace gui
 		ITouchScreenEventObserver * TouchScreenObserver;
 
 		IFocusManager * FocusManager;
+
+		IWindowManager & WindowManager;
 	};
 }
 

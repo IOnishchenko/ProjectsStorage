@@ -12,10 +12,12 @@
 
 #include "AsyncCallMessage.hpp"
 #include "AsyncCommandDispatcher.hpp"
-#include "CommandQueue.hpp"
+#include "CommandQueueBlocked.hpp"
 #include "UIEvents.hpp"
+#include "ICommandQueue.hpp"
+#include "CommandDispatcher.hpp"
 
-#include "ScreenBase.hpp"
+#include "IWindowManager.hpp"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -25,6 +27,7 @@ namespace gui
 	//
 	//-----------------------------------------------------------------*/
 	constexpr uint32_t GUI_THREAD_MESSAGE_NUMBER = 16;
+	constexpr uint32_t GUI_INTERNAL_MESSAGE_NUMBER = 8;
 
 	/*-----------------------------------------------------------------//
 	//
@@ -41,7 +44,8 @@ namespace gui
 	class GUIThread :
 		public IFocusManager,
 		public IEncoderEventManager,
-		public IKeyboardEventManager
+		public IKeyboardEventManager,
+		public IWindowManager
 	{
 		// it is used for memeory size calculation when 
 		// memory pool is created 
@@ -51,6 +55,11 @@ namespace gui
 			AsyncCallMessage<TouchScreenEven> OnTouchScreenMessage;
 			AsyncCallMessage<KeyEvent> OnKeyboardMessage;
 			AsyncCallMessage<EncoderEvent> OnEncoderRotatedMessage; 
+		};
+
+		union GUIInternalMessageContaner
+		{
+			AsyncCallMessage<void *> OnWindowManagerMessage;
 		};
 
 	public:
@@ -69,14 +78,14 @@ namespace gui
 
 	private:
 		// field
-		CommandQueue<GUIThreadEventsContaner, GUI_THREAD_MESSAGE_NUMBER> _queue;
+		CommandQueueBlocked<GUIThreadEventsContaner, GUI_THREAD_MESSAGE_NUMBER> _queue;
 		AsyncCommandDispatcher _asyncCommandDispatcher;
 		GElementDecoderRGB565 _decoder;
 		ControlRenderer<uint16_t, LCD_BUFFER_SIZE_IN_BYTES/sizeof(uint16_t), LCD_BUFFER_NUMBER> _renderer;
-		IUIContext _context;
 
 		// gui
-		ScreenBase _mainScreen;
+		CommandQueue<GUIInternalMessageContaner, GUI_INTERNAL_MESSAGE_NUMBER> _commandQueue;
+		CommandDispatcher _commandDispatcher;
 
 		// method
 		//void LogData(uint32_t data);
