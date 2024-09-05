@@ -3,6 +3,7 @@ set(GUI_CONTROLS_SRCS
 	"${project_dir}/gui-lib/controls/Group.cpp"
 	"${project_dir}/gui-lib/controls/IButton.cpp"
 	"${project_dir}/gui-lib/controls/ICheckBox.cpp"
+	"${project_dir}/gui-lib/controls/IModalWindow.cpp"
 	"${project_dir}/gui-lib/controls/IRadioButton.cpp"
 	"${project_dir}/gui-lib/controls/IRadioButtonGroup.cpp"
 	"${project_dir}/gui-lib/controls/ISlider.cpp"

@@ -5,14 +5,6 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	ITouchScreenEventObserver::ITouchScreenEventObserver(AsyncCommandDispatcher & dispatcher)
-		:HandleTouchScreenEventAsync(this, &ITouchScreenEventObserver::HandleTouchScreenEvent, dispatcher)
-	{
-	}
-
-	/*----------------------------------------------------------------//
-	//
-	//----------------------------------------------------------------*/
 	void ITouchScreenEventObserver::HandleTouchScreenEvent(TouchScreenEven event)
 	{
 		switch(event.Type)

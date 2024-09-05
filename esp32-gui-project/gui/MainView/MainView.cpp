@@ -6,6 +6,8 @@
 
 #include <cstdio>
 #include "dumy_picture.h"
+#include "DialogOkBaseView.hpp"
+#include "IWindowManager.hpp"
 
 namespace gui
 {
@@ -60,6 +62,7 @@ MainView::~MainView()
 void MainView::OnButton0Clicked(IButton *)
 {
 	printf("Button0 was ckicked\n");
+	_context.WindowManager.OpenDialogWindow<DialogOkBaseView>();
 }
 
 /*-----------------------------------------------------------------//

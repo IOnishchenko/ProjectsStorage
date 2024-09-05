@@ -4,6 +4,7 @@
 #include "Group.hpp"
 #include "IUIContext.hpp"
 #include "CommandDispatcher.hpp"
+#include "Command.hpp"
 #include <memory>
 
 namespace gui

@@ -3,8 +3,6 @@
 
 #include "ISubscribersManager.hpp"
 #include "ITouchScreenEventHandler.hpp"
-#include "AsyncCommandDispatcher.hpp"
-#include "AsyncCommand.hpp"
 
 namespace gui
 {
@@ -12,20 +10,19 @@ namespace gui
 	{
 	public:
 		// constructor
-		ITouchScreenEventObserver(AsyncCommandDispatcher & dispatcher);
+		// ITouchScreenEventObserver();
 
 		// destructor
 		~ITouchScreenEventObserver() override = default;
 
-		// async method
-		AsyncCommand<ITouchScreenEventObserver, TouchScreenEven> HandleTouchScreenEventAsync;
+		// methods
+		void HandleTouchScreenEvent(TouchScreenEven event);
 
 	private:
 		// fields
 		ITouchScreenEventHandler * _activeHandler = nullptr;
 
 		// methods
-		void HandleTouchScreenEvent(TouchScreenEven event);
 		void OnPressed(TouchScreenEven & event);
 		void OnReleased(TouchScreenEven & event);
 		void OnMoved(TouchScreenEven & event);

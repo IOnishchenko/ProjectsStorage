@@ -27,9 +27,12 @@ extern "C" void gui_thread(void * args)
 //
 //-----------------------------------------------------------------*/
 gui::GUIThread::GUIThread(lcd_driver & lcdDriver)
-	:IFocusManager(), IEncoderEventManager(this, _asyncCommandDispatcher),
-	IKeyboardEventManager(this, _asyncCommandDispatcher),
+	:IFocusManager(), IEncoderEventManager(this), IKeyboardEventManager(this),
 	IWindowManager(_renderer, this, this, nullptr, this, _commandDispatcher),
+	HandleEncoderEventAsync(this, &IEncoderEventManager::HandleEncoderEvent,
+		_asyncCommandDispatcher),
+	HandleKeyboardEventAsync(this, &IKeyboardEventManager::HandleKeyboardEvent,
+		_asyncCommandDispatcher),
 	// LogDataAsync(this, &gui::GUIThread::LogData, _asyncCommandDispatcher),
 	_queue(), _asyncCommandDispatcher(_queue), _decoder(), _renderer(_decoder, lcdDriver),
 	_commandQueue(), _commandDispatcher(_commandQueue)

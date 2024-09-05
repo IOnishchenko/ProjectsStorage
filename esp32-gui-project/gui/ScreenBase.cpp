@@ -54,6 +54,19 @@ ScreenBase::ScreenBase(const IUIContext & context)
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
+ScreenBase::~ScreenBase()
+{
+	_context.FocusManager->UnregisterHandler(&_mainButton);
+	_context.FocusManager->UnregisterHandler(&_radioButton);
+	_context.FocusManager->UnregisterHandler(&_audioButton);
+	_context.FocusManager->UnregisterHandler(&_dspButton);
+	_context.FocusManager->UnregisterHandler(&_settingsButton);
+}
+
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
 void ScreenBase::OnMainButtonClicked(IRadioButton *)
 {
 	RemoveChild(_subGroup.get());

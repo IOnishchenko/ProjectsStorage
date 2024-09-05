@@ -5,9 +5,8 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	IEncoderEventManager::IEncoderEventManager(IEncoderEventHandler * defaultHandler, AsyncCommandDispatcher & dispatcher)
-		:HandleEncoderEventAsync(this, &IEncoderEventManager::HandleEncoderEvent, dispatcher),
-		_defaultHandler{defaultHandler}, _activeHandler{defaultHandler}
+	IEncoderEventManager::IEncoderEventManager(IEncoderEventHandler * defaultHandler)
+		:_defaultHandler{defaultHandler}, _activeHandler{defaultHandler}
 	{
 	}
 	

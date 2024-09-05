@@ -5,10 +5,8 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	IKeyboardEventManager::IKeyboardEventManager(IKeyboardEventHandler * defaultHandler,
-		AsyncCommandDispatcher & dispatcher)
-		:HandleKeyboardEventAsync(this, &IKeyboardEventManager::HandleKeyboardEvent, dispatcher),
-		_defaultHandler{defaultHandler}, _activeHandler{defaultHandler}
+	IKeyboardEventManager::IKeyboardEventManager(IKeyboardEventHandler * defaultHandler)
+		:_defaultHandler{defaultHandler}, _activeHandler{defaultHandler}
 	{
 	}
 

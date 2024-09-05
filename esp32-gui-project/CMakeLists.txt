@@ -40,6 +40,8 @@ set(PROJET_SRCS
 
 	"../gui/CustomUIControl/SliderWithHeader.cpp"
 
+	"../gui/DialogViews/DialogOkBaseView.cpp"
+
 	"../gui/DSPView/DSPAlgorithmView/DSPAGCView.cpp"
 	"../gui/DSPView/DSPAlgorithmView/DSPAlgorithmView.cpp"
 	"../gui/DSPView/DSPAlgorithmView/DSPAlgorithmViewBase.cpp"
@@ -85,6 +87,8 @@ set(INCLUDE_DIRS
 	"../gui/AudioView/OutputSettingViews/"
 
 	"../gui/CustomUIControl/"
+	
+	"../gui/DialogViews/"
 
 	"../gui/DSPView/"
 	"../gui/DSPView/DSPAlgorithmView/"

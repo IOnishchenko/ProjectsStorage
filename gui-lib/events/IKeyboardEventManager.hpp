@@ -2,7 +2,6 @@
 #define GUI_IKEYBOARD_EVENT_MANAGER_HPP
 
 #include "IKeyboardEventHandler.hpp"
-#include "AsyncCommand.hpp"
 #include "UIEvents.hpp"
 
 namespace gui
@@ -11,8 +10,7 @@ namespace gui
 	{
 	public:
 		// constructor
-		IKeyboardEventManager(IKeyboardEventHandler * defaultHandler,
-			AsyncCommandDispatcher & dispatcher);
+		IKeyboardEventManager(IKeyboardEventHandler * defaultHandler);
 
 		// destructor
 		virtual ~IKeyboardEventManager() = default;
@@ -20,17 +18,12 @@ namespace gui
 		// methods
 		void RegisterHandler(IKeyboardEventHandler * handler);
 		void UnregisterHandler(IKeyboardEventHandler * handler);
+		void HandleKeyboardEvent(KeyEvent event);
 
-		// async method
-		AsyncCommand<IKeyboardEventManager, KeyEvent> HandleKeyboardEventAsync;
-
-	private:
+	protected:
 		// field
 		IKeyboardEventHandler * _defaultHandler;
 		IKeyboardEventHandler * _activeHandler = nullptr;
-
-		// metods
-		void HandleKeyboardEvent(KeyEvent event);
 	};
 }
 

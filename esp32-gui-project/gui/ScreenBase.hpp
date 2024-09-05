@@ -16,7 +16,7 @@ namespace gui
 		ScreenBase(const IUIContext & context);
 
 		// destrictor
-		~ScreenBase() override = default;
+		~ScreenBase() override;
 
 	private:
 		// commands

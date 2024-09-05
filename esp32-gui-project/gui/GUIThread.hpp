@@ -74,6 +74,8 @@ namespace gui
 		void Initialize();
 
 		// async method
+		AsyncCommand<IEncoderEventManager, EncoderEvent> HandleEncoderEventAsync;
+		AsyncCommand<IKeyboardEventManager, KeyEvent> HandleKeyboardEventAsync;
 		//AsyncCommand<GUIThread, uint32_t> LogDataAsync;
 
 	private:
@@ -83,7 +85,6 @@ namespace gui
 		GElementDecoderRGB565 _decoder;
 		ControlRenderer<uint16_t, LCD_BUFFER_SIZE_IN_BYTES/sizeof(uint16_t), LCD_BUFFER_NUMBER> _renderer;
 
-		// gui
 		CommandQueue<GUIInternalMessageContaner, GUI_INTERNAL_MESSAGE_NUMBER> _commandQueue;
 		CommandDispatcher _commandDispatcher;
 

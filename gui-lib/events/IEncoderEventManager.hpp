@@ -1,8 +1,6 @@
 #ifndef GUI_ITOUCH_SCREEN_EVENT_MANAGER_HPP
 #define GUI_ITOUCH_SCREEN_EVENT_MANAGER_HPP
 
-#include "AsyncCommand.hpp"
-#include "AsyncCommandDispatcher.hpp"
 #include "UIEvents.hpp"
 #include "IEncoderEventHandler.hpp"
 
@@ -12,8 +10,7 @@ namespace gui
 	{
 	public:
 		// constructor
-		IEncoderEventManager(IEncoderEventHandler * defaultHandler,
-			AsyncCommandDispatcher & dispatcher);
+		IEncoderEventManager(IEncoderEventHandler * defaultHandler);
 
 		// destructor
 		virtual ~IEncoderEventManager() = default;
@@ -21,17 +18,12 @@ namespace gui
 		// methods
 		void RegisterHandler(IEncoderEventHandler * subscriber);
 		void UnregisterHandler(IEncoderEventHandler * subscriber);
+		void HandleEncoderEvent(EncoderEvent event);
 
-		// async method
-		AsyncCommand<IEncoderEventManager, EncoderEvent> HandleEncoderEventAsync;
-
-	private:
+	protected:
 		// field
 		IEncoderEventHandler * _defaultHandler;
 		IEncoderEventHandler * _activeHandler = nullptr;
-
-		// method
-		void HandleEncoderEvent(EncoderEvent event);
 	};
 }
 
