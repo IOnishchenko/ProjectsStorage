@@ -66,6 +66,8 @@ set(GUI_ORANGE_GRAY_PICTURES_SRCS
 	"${project_dir}/gui-orange-gray/pictures-src/vslider_vpointer12x12focused.c"
 	"${project_dir}/gui-orange-gray/pictures-src/vslider_vpointer12x12pressed.c"
 	"${project_dir}/gui-orange-gray/pictures-src/vslider_vpointer12x12selected.c"
+
+	"${project_dir}/gui-orange-gray/pictures-src/windows_window240x176.c"
 )
 
 set(GUI_ORANGE_GRAY_PICTURES_INCS

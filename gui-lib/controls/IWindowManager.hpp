@@ -67,6 +67,14 @@ namespace gui
 				_createWindow);
 		}
 
+		/*-----------------------------------------------------------------//
+		//
+		//-----------------------------------------------------------------*/
+		const IUIContext & GetContext()
+		{
+			return _context;
+		}
+
 	private:
 		// commands
 		Command<IWindowManager, void(IWindowManager::*)()> _createWindowCmd;

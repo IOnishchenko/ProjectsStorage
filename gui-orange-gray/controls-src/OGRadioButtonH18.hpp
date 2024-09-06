@@ -5,6 +5,7 @@
 #include "IRadioButton.hpp"
 #include "GEText.hpp"
 #include "GEPicture.hpp"
+#include "GERectangle.hpp"
 
 namespace gui
 {
@@ -25,6 +26,8 @@ namespace gui
 	private:
 		// fields
 		GEText _text;
+		GERectangle _background;
+		
 		GEPicture _disabledPic;
 		GEPicture _enabledPic;
 		GEPicture _focusedPic;

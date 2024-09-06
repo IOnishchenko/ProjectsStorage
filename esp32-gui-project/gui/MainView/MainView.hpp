@@ -39,6 +39,8 @@ namespace gui
 
 		OGNumericUpDown _frequencyLabel;
 
+		GEPicture _background;
+
 		// methods
 		void OnButton0Clicked(IButton *);
 		void OnButton1Clicked(IButton *);

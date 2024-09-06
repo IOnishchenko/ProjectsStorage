@@ -26,17 +26,12 @@ namespace gui
 		Command<ScreenBase, IRadioButton *> _onDSPButtonClikedCmd;
 		Command<ScreenBase, IRadioButton *> _onSettingsButtonClikedCmd;
 
-		// fields
-		std::unique_ptr<IUIControl> _subGroup;
-
 		OGRadioButton64x24 _mainButton;
 		OGRadioButton64x24 _radioButton;
 		OGRadioButton64x24 _audioButton;
 		OGRadioButton64x24 _dspButton;
 		OGRadioButton64x24 _settingsButton;
 		IRadioButtonGroup _mainRBGroup;
-
-		GEPicture _picture;
 
 		// methods
 		void OnMainButtonClicked(IRadioButton *);

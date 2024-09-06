@@ -18,6 +18,8 @@
 #include "CommandDispatcher.hpp"
 
 #include "IWindowManager.hpp"
+
+#include "ScreenBase.hpp"
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -87,6 +89,8 @@ namespace gui
 
 		CommandQueue<GUIInternalMessageContaner, GUI_INTERNAL_MESSAGE_NUMBER> _commandQueue;
 		CommandDispatcher _commandDispatcher;
+
+		ScreenBase _baseScreen;
 
 		// method
 		//void LogData(uint32_t data);

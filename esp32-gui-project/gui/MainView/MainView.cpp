@@ -9,17 +9,19 @@
 #include "DialogOkBaseView.hpp"
 #include "IWindowManager.hpp"
 
+#include "dumy_picture.h"
+
 namespace gui
 {
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
 MainView::MainView(const IUIContext & context)
-	:Group(0, 0, 320, 240, context,
+	:Group(0, 0, 320, 240-24, context,
 	{
 		&_button0, &_button1, &_button2, &_button3,
 		&_frequencyLabel
-	}, nullptr),
+	}, &_background),
 
 	_onButton0ClickedCmd(this, &MainView::OnButton0Clicked),
 	_onButton1ClickedCmd(this, &MainView::OnButton1Clicked),
@@ -33,7 +35,8 @@ MainView::MainView(const IUIContext & context)
 	_button2(6, 68, "TXP: 25", context, _onButton2ClickedCmd),
 	_button3(6, 90, "VOL: 45", context, _onButton3ClickedCmd),
 
-	_frequencyLabel(117, 68, context, _onFrequencyChangedCmd)
+	_frequencyLabel(117, 68, context, _onFrequencyChangedCmd),
+	_background(0, 0, 320, 240-24, 0, 0, &gui320x240, nullptr)
 {
 	context.FocusManager->RegisterHandler(0, &_frequencyLabel);
 	context.FocusManager->RegisterHandler(1, &_button0);

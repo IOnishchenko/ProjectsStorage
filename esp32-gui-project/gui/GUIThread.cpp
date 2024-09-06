@@ -1,6 +1,6 @@
 #include "configuration.h"
 #include "GUIThread.hpp"
-#include "ScreenBase.hpp"
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -35,8 +35,8 @@ gui::GUIThread::GUIThread(lcd_driver & lcdDriver)
 		_asyncCommandDispatcher),
 	// LogDataAsync(this, &gui::GUIThread::LogData, _asyncCommandDispatcher),
 	_queue(), _asyncCommandDispatcher(_queue), _decoder(), _renderer(_decoder, lcdDriver),
-	_commandQueue(), _commandDispatcher(_commandQueue)
-	
+	_commandQueue(), _commandDispatcher(_commandQueue),
+	_baseScreen(GetContext())
 {
 }
 
@@ -58,7 +58,7 @@ void gui::GUIThread::Run()
 void gui::GUIThread::Initialize()
 {
 	st7789.initialize();
-	CreateAndShowWindow<ScreenBase>();
+	_baseScreen.Draw();
 }
 
 /*-----------------------------------------------------------------//
