@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+extern const PictureObject window240x110;
 extern const PictureObject window240x176;
 
 

@@ -6,7 +6,9 @@
 
 #include <cstdio>
 #include "dumy_picture.h"
-#include "DialogOkBaseView.hpp"
+#include "SelectModulationDialog.hpp"
+#include "SetReceiverAGCDialog.hpp"
+#include "SetVolumeDialog.hpp"
 #include "IWindowManager.hpp"
 
 #include "dumy_picture.h"
@@ -30,9 +32,9 @@ MainView::MainView(const IUIContext & context)
 
 	_onFrequencyChangedCmd(this, &MainView::OnFrequencyChanged),
 
-	_button0(6, 24, "AGC: 40", context, _onButton0ClickedCmd),
-	_button1(6, 46, "BW: 2.75", context, _onButton1ClickedCmd),
-	_button2(6, 68, "TXP: 25", context, _onButton2ClickedCmd),
+	_button0(6, 24, "MOD: USB", context, _onButton0ClickedCmd),
+	_button1(6, 46, "AGC: 40", context, _onButton1ClickedCmd),
+	_button2(6, 68, "BW: 2.75", context, _onButton2ClickedCmd),
 	_button3(6, 90, "VOL: 45", context, _onButton3ClickedCmd),
 
 	_frequencyLabel(117, 68, context, _onFrequencyChangedCmd),
@@ -64,8 +66,7 @@ MainView::~MainView()
 //-----------------------------------------------------------------*/
 void MainView::OnButton0Clicked(IButton *)
 {
-	printf("Button0 was ckicked\n");
-	_context.WindowManager.OpenDialogWindow<DialogOkBaseView>();
+	_context.WindowManager.OpenDialogWindow<SelectModulationDialog>();
 }
 
 /*-----------------------------------------------------------------//
@@ -73,7 +74,7 @@ void MainView::OnButton0Clicked(IButton *)
 //-----------------------------------------------------------------*/
 void MainView::OnButton1Clicked(IButton *)
 {
-	printf("Button1 was ckicked\n");
+	_context.WindowManager.OpenDialogWindow<SetReceiverAGCDialog>();
 }
 
 /*-----------------------------------------------------------------//
@@ -81,7 +82,6 @@ void MainView::OnButton1Clicked(IButton *)
 //-----------------------------------------------------------------*/
 void MainView::OnButton2Clicked(IButton *)
 {
-	printf("Button2 was ckicked\n");
 }
 
 /*-----------------------------------------------------------------//
@@ -89,7 +89,7 @@ void MainView::OnButton2Clicked(IButton *)
 //-----------------------------------------------------------------*/
 void MainView::OnButton3Clicked(IButton *)
 {
-	printf("Button3 was ckicked\n");
+	_context.WindowManager.OpenDialogWindow<SetVolumeDialog>();
 }
 
 /*-----------------------------------------------------------------//
@@ -97,7 +97,6 @@ void MainView::OnButton3Clicked(IButton *)
 //-----------------------------------------------------------------*/
 void MainView::OnFrequencyChanged(const NumericUpDown::Parameters & params)
 {
-	printf("Frequency was changed\n");
 	(params.EventType == NumericUpDown::Direction::Increase) ?
 		_frequency++ : _frequency--;
 

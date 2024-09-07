@@ -40,7 +40,10 @@ set(PROJET_SRCS
 
 	"../gui/CustomUIControl/SliderWithHeader.cpp"
 
-	"../gui/DialogViews/DialogOkBaseView.cpp"
+	"../gui/DialogViews/SelectModulationDialog.cpp"
+	"../gui/DialogViews/SetReceiverAGCDialog.cpp"
+	"../gui/DialogViews/SetVolumeDialog.cpp"
+	"../gui/DialogViews/SliderDialog.cpp"
 
 	"../gui/DSPView/DSPAlgorithmView/DSPAGCView.cpp"
 	"../gui/DSPView/DSPAlgorithmView/DSPAlgorithmView.cpp"
