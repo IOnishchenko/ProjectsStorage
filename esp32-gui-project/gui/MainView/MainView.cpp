@@ -9,6 +9,7 @@
 #include "SelectModulationDialog.hpp"
 #include "SetReceiverAGCDialog.hpp"
 #include "SetVolumeDialog.hpp"
+#include "SetFiltersDialog.hpp"
 #include "IWindowManager.hpp"
 
 #include "dumy_picture.h"
@@ -82,6 +83,7 @@ void MainView::OnButton1Clicked(IButton *)
 //-----------------------------------------------------------------*/
 void MainView::OnButton2Clicked(IButton *)
 {
+	_context.WindowManager.OpenDialogWindow<SetFiltersDialog>();
 }
 
 /*-----------------------------------------------------------------//

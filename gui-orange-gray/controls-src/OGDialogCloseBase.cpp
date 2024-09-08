@@ -16,7 +16,7 @@ namespace gui
 	// 
 	//--------------------------------------------------------------------------*/
 	OGDialogCloseBase::OGDialogCloseBase(const IUIContext & context,
-		const std::string_view & headerText)
+		const std::string_view & headerText, IGElement * userBackground)
 		:
 		IModalWindow(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, context,
 		{
@@ -29,7 +29,7 @@ namespace gui
 			_onCloseButtonClickedCmd),
 
 		_headerText(20, 10, 100, 18, headerText, TEXT_COLOR, BACKGROUND_GRAY,
-			Font18, nullptr),
+			Font18, userBackground),
 		_background(&window240x176, &_headerText)
 	{
 		_modalWindowContext.FocusManager->RegisterHandler(100, &_closeButton);

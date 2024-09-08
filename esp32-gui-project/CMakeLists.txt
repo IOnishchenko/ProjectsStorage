@@ -38,9 +38,12 @@ set(PROJET_SRCS
 	"../gui/AudioView/OutputSettingViews/AudioOutputView.cpp"
 	"../gui/AudioView/AudioView.cpp"
 
+	"../gui/CustomUIControl/HPFSlider.cpp"
+	"../gui/CustomUIControl/LPFSlider.cpp"
 	"../gui/CustomUIControl/SliderWithHeader.cpp"
 
 	"../gui/DialogViews/SelectModulationDialog.cpp"
+	"../gui/DialogViews/SetFiltersDialog.cpp"
 	"../gui/DialogViews/SetReceiverAGCDialog.cpp"
 	"../gui/DialogViews/SetVolumeDialog.cpp"
 	"../gui/DialogViews/SliderDialog.cpp"

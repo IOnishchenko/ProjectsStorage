@@ -28,7 +28,7 @@ namespace gui
 	public:
 		// constructor
 		OGDialogCloseBase(const IUIContext & context,
-			const std::string_view & headerText);
+			const std::string_view & headerText, IGElement * nextElement = nullptr);
 
 		// destructor
 		~OGDialogCloseBase() override;

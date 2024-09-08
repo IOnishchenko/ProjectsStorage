@@ -35,6 +35,18 @@ set(GUI_ORANGE_GRAY_PICTURES_SRCS
 	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18unchecked_foc.c"
 	"${project_dir}/gui-orange-gray/pictures-src/checkbox36x18_checkbox36x18unchecked_press.c"
 
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_background150x18.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_left150x18dis.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_left150x18ena.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_left150x18foc.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_left150x18press.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_left150x18sel.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_right150x18dis.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_right150x18ena.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_right150x18foc.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_right150x18press.c"
+	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_right150x18sel.c"
+
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12disabled.c"
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12enabled.c"
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12focused.c"
