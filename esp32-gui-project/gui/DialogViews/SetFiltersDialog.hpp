@@ -4,6 +4,7 @@
 #include "OGDialogCloseBase.hpp"
 #include "HPFSlider.hpp"
 #include "LPFSlider.hpp"
+#include "Label.hpp"
 #include "GERectangle.hpp"
 
 namespace gui
@@ -25,11 +26,14 @@ namespace gui
 		// field
 		custom::HPFSlider _hpfSlider;
 		custom::LPFSlider _lpfSlider;
+		Label _hpfLabel;
+		Label _lpfLabel;
+		Label _bandLabel;
 
-		GERectangle _rightLine;
-		GERectangle _topLine;
+		// GERectangle _rightLine;
+		// GERectangle _topLine;
 		GERectangle _bottomLine;
-		GERectangle _legtLine;
+		//GERectangle _legtLine;
 
 		// methods
 		void OnHPFFrequencyChanged(int value);

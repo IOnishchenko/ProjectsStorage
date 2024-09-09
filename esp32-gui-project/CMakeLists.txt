@@ -39,7 +39,9 @@ set(PROJET_SRCS
 	"../gui/AudioView/AudioView.cpp"
 
 	"../gui/CustomUIControl/HPFSlider.cpp"
+	"../gui/CustomUIControl/HPFSliderWithHeader.cpp"
 	"../gui/CustomUIControl/LPFSlider.cpp"
+	"../gui/CustomUIControl/LPFSliderWithHeader.cpp"
 	"../gui/CustomUIControl/SliderWithHeader.cpp"
 
 	"../gui/DialogViews/SelectModulationDialog.cpp"

@@ -3,7 +3,8 @@
 
 #include "Group.hpp"
 #include "OGSliderHorizontal.hpp"
-#include "SliderWithHeader.hpp"
+#include "HPFSliderWithHeader.hpp"
+#include "LPFSliderWithHeader.hpp"
 #include "Command.hpp"
 #include "GERectangle.hpp"
 #include "GEText.hpp"
@@ -26,8 +27,8 @@ namespace gui
 
 	protected:
 		// fields
-		custom::SliderWithHeader _hpfCutoffSlider;
-		custom::SliderWithHeader _lpfCutoffSlider;
+		custom::HPFSliderWithHeader _hpfCutoffSlider;
+		custom::LPFSliderWithHeader _lpfCutoffSlider;
 
 		GERectangle _background;
 	};
