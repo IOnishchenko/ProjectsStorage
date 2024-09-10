@@ -2,12 +2,10 @@
 #define GUI_MODULATION_VIEW_BASE_HPP
 
 #include "Group.hpp"
-#include "OGSliderHorizontal.hpp"
-#include "HPFSliderWithHeader.hpp"
-#include "LPFSliderWithHeader.hpp"
-#include "Command.hpp"
-#include "GERectangle.hpp"
+#include "BandPassSliderWithLabel.hpp"
+#include "Action.hpp"
 #include "GEText.hpp"
+#include "GERectangle.hpp"
 
 namespace gui
 {
@@ -27,8 +25,11 @@ namespace gui
 
 	protected:
 		// fields
-		custom::HPFSliderWithHeader _hpfCutoffSlider;
-		custom::LPFSliderWithHeader _lpfCutoffSlider;
+		custom::BandPassSliderWithLabel _bandPassControls;
+
+		GEText _headerText0;
+		GEText _headerText1;
+		GEText _headerText2;
 
 		GERectangle _background;
 	};

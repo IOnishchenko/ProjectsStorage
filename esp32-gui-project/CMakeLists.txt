@@ -38,6 +38,7 @@ set(PROJET_SRCS
 	"../gui/AudioView/OutputSettingViews/AudioOutputView.cpp"
 	"../gui/AudioView/AudioView.cpp"
 
+	"../gui/CustomUIControl/BandPassSliderWithLabel.cpp"
 	"../gui/CustomUIControl/HPFSlider.cpp"
 	"../gui/CustomUIControl/HPFSliderWithHeader.cpp"
 	"../gui/CustomUIControl/LPFSlider.cpp"

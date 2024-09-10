@@ -2,10 +2,7 @@
 #define GUI_DIALOG_SET_FILTERS_DIALOG_HPP
 
 #include "OGDialogCloseBase.hpp"
-#include "HPFSlider.hpp"
-#include "LPFSlider.hpp"
-#include "Label.hpp"
-#include "GERectangle.hpp"
+#include "BandPassSliderWithLabel.hpp"
 
 namespace gui
 {
@@ -24,16 +21,7 @@ namespace gui
 		Command<SetFiltersDialog, int> _lpfFrequencyChangedCmd;
 		
 		// field
-		custom::HPFSlider _hpfSlider;
-		custom::LPFSlider _lpfSlider;
-		Label _hpfLabel;
-		Label _lpfLabel;
-		Label _bandLabel;
-
-		// GERectangle _rightLine;
-		// GERectangle _topLine;
-		GERectangle _bottomLine;
-		//GERectangle _legtLine;
+		custom::BandPassSliderWithLabel _slider;
 
 		// methods
 		void OnHPFFrequencyChanged(int value);

@@ -11,11 +11,13 @@ FMModulationView::FMModulationView(const IUIContext & context)
 	_onHPFCutoffChanged(this, &FMModulationView::OnHPFCutoffFrequencyChanged),
 	_onLPFCutoffChanged(this, &FMModulationView::OnLPFCutoffFrequencyChanged)
 {
-	_hpfCutoffSlider.UpdateRange(200, 230, 300);
-	_hpfCutoffSlider.Text.SetIntValue(230);
+	_bandPassControls.HPFFrequencyCutoffSlider.UpdateRange(200, 230, 300);
+	_bandPassControls.HPFFrequencyCutoffLabel.SetIntValue(230, "Hz");
 
-	_lpfCutoffSlider.UpdateRange(5100, 5150, 5200);
-	_lpfCutoffSlider.Text.SetIntValue(5150);
+	_bandPassControls.LPFFrequencyCutoffSlider.UpdateRange(5100, 5150, 5200);
+	_bandPassControls.LPFFrequencyCutoffLabel.SetIntValue(5150, "Hz");
+
+	_bandPassControls.BandPassWidthLabel.SetIntValue(5150-230, "Hz");
 }
 
 /*-----------------------------------------------------------------//
@@ -23,8 +25,12 @@ FMModulationView::FMModulationView(const IUIContext & context)
 //-----------------------------------------------------------------*/
 void FMModulationView::OnHPFCutoffFrequencyChanged(int value)
 {
-	_hpfCutoffSlider.Text.SetIntValue(value);
-	_hpfCutoffSlider.Text.Draw();
+	_bandPassControls.HPFFrequencyCutoffLabel.SetIntValue(value, "Hz");
+	_bandPassControls.HPFFrequencyCutoffLabel.Draw();
+
+	_bandPassControls.BandPassWidthLabel.SetIntValue(
+		_bandPassControls.LPFFrequencyCutoffSlider.GetValue()-value, "Hz");
+	_bandPassControls.BandPassWidthLabel.Draw();
 }
 
 /*-----------------------------------------------------------------//
@@ -32,8 +38,12 @@ void FMModulationView::OnHPFCutoffFrequencyChanged(int value)
 //-----------------------------------------------------------------*/
 void FMModulationView::OnLPFCutoffFrequencyChanged(int value)
 {
-	_lpfCutoffSlider.Text.SetIntValue(value);
-	_lpfCutoffSlider.Text.Draw();
+	_bandPassControls.LPFFrequencyCutoffLabel.SetIntValue(value, "Hz");
+	_bandPassControls.LPFFrequencyCutoffLabel.Draw();
+
+	_bandPassControls.BandPassWidthLabel.SetIntValue(
+		value-_bandPassControls.HPFFrequencyCutoffSlider.GetValue(), "Hz");
+	_bandPassControls.BandPassWidthLabel.Draw();
 }
 
 }

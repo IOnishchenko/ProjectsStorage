@@ -12,11 +12,13 @@ CWModulationView::CWModulationView(const IUIContext & context)
 	_onHPFCutoffChanged(this, &CWModulationView::OnHPFCutoffFrequencyChanged),
 	_onLPFCutoffChanged(this, &CWModulationView::OnLPFCutoffFrequencyChanged)
 {
-	_hpfCutoffSlider.UpdateRange(50, 80, 100);
-	_hpfCutoffSlider.Text.SetIntValue(80);
+	_bandPassControls.HPFFrequencyCutoffSlider.UpdateRange(50, 80, 100);
+	_bandPassControls.HPFFrequencyCutoffLabel.SetIntValue(80, "Hz");
 
-	_lpfCutoffSlider.UpdateRange(900, 950, 1000);
-	_lpfCutoffSlider.Text.SetIntValue(950);
+	_bandPassControls.LPFFrequencyCutoffSlider.UpdateRange(900, 950, 1000);
+	_bandPassControls.LPFFrequencyCutoffLabel.SetIntValue(950, "Hz");
+
+	_bandPassControls.BandPassWidthLabel.SetIntValue(950-80, "Hz");
 }
 
 /*-----------------------------------------------------------------//
@@ -24,8 +26,12 @@ CWModulationView::CWModulationView(const IUIContext & context)
 //-----------------------------------------------------------------*/
 void CWModulationView::OnHPFCutoffFrequencyChanged(int value)
 {
-	_hpfCutoffSlider.Text.SetIntValue(value);
-	_hpfCutoffSlider.Text.Draw();
+	_bandPassControls.HPFFrequencyCutoffLabel.SetIntValue(value, "Hz");
+	_bandPassControls.HPFFrequencyCutoffLabel.Draw();
+
+	_bandPassControls.BandPassWidthLabel.SetIntValue(
+		_bandPassControls.LPFFrequencyCutoffSlider.GetValue()-value, "Hz");
+	_bandPassControls.BandPassWidthLabel.Draw();
 }
 
 /*-----------------------------------------------------------------//
@@ -33,8 +39,12 @@ void CWModulationView::OnHPFCutoffFrequencyChanged(int value)
 //-----------------------------------------------------------------*/
 void CWModulationView::OnLPFCutoffFrequencyChanged(int value)
 {
-	_lpfCutoffSlider.Text.SetIntValue(value);
-	_lpfCutoffSlider.Text.Draw();
+	_bandPassControls.LPFFrequencyCutoffLabel.SetIntValue(value, "Hz");
+	_bandPassControls.LPFFrequencyCutoffLabel.Draw();
+
+	_bandPassControls.BandPassWidthLabel.SetIntValue(
+		value-_bandPassControls.HPFFrequencyCutoffSlider.GetValue(), "Hz");
+	_bandPassControls.BandPassWidthLabel.Draw();
 }
 
 }
