@@ -37,8 +37,8 @@ ModulationViewBase::ModulationViewBase(const IUIContext & context,
 
 	_background(0, 0, FULL_SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_DARK, &_headerText2)
 {
-	context.FocusManager->RegisterHandler(100, &_bandPassControls.HPFFrequencyCutoffSlider);
 	context.FocusManager->RegisterHandler(100, &_bandPassControls.LPFFrequencyCutoffSlider);
+	context.FocusManager->RegisterHandler(100, &_bandPassControls.HPFFrequencyCutoffSlider);
 }
 
 /*-----------------------------------------------------------------//
