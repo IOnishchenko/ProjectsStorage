@@ -26,6 +26,7 @@ set(PROJET_SRCS
 	"${LCD_ST7789_DRIVER_SRCS}"
 	"${LCD_SH1106_DRIVER_SRCS}"
 	"${GUI_LIB_SRCS}"
+	"${FREE_RTOS_COMMON_SRCS}"
 	"${GUI_ORANGE_GRAY_SRCS}"
 
 	"../gui/AudioView/InputSettingViews/AudioInputAGCSettingsView.cpp"

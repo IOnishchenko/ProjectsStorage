@@ -1,5 +1,6 @@
 #include "configuration.h"
 #include "GUIThread.hpp"
+#include "AnimatedTimer.hpp"
 
 /*-----------------------------------------------------------------//
 //
@@ -28,12 +29,17 @@ extern "C" void gui_thread(void * args)
 //-----------------------------------------------------------------*/
 gui::GUIThread::GUIThread(lcd_driver & lcdDriver)
 	:IFocusManager(), IEncoderEventManager(this), IKeyboardEventManager(this),
-	IWindowManager(_renderer, this, this, nullptr, this, _commandDispatcher),
+	IWindowManager(_renderer, this, this, nullptr, this, this, _commandDispatcher),
+	IAnimatedControlManager(),
 	HandleEncoderEventAsync(this, &IEncoderEventManager::HandleEncoderEvent,
 		_asyncCommandDispatcher),
 	HandleKeyboardEventAsync(this, &IKeyboardEventManager::HandleKeyboardEvent,
 		_asyncCommandDispatcher),
-	// LogDataAsync(this, &gui::GUIThread::LogData, _asyncCommandDispatcher),
+	HandleAnimationTimerTickAsync(this, &IAnimatedControlManager::AnimateControls,
+		_asyncCommandDispatcher),
+
+// LogDataAsync(this, &gui::GUIThread::LogData, _asyncCommandDispatcher),
+
 	_queue(), _asyncCommandDispatcher(_queue), _decoder(), _renderer(_decoder, lcdDriver),
 	_commandQueue(), _commandDispatcher(_commandQueue),
 	_baseScreen(GetContext())
@@ -58,7 +64,34 @@ void gui::GUIThread::Run()
 void gui::GUIThread::Initialize()
 {
 	st7789.initialize();
+	CreateAnimationTimer();
 	_baseScreen.Draw();
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+CommandDispatcher & gui::GUIThread::GetCommandDispatcher()
+{
+	return _commandDispatcher;
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+void gui::GUIThread::StartAnimation()
+{
+	// start animation timer
+	StartAnimationTimer();
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+void gui::GUIThread::StopAnimation()
+{
+	// stop animation timer
+	StopAnimationTimer();
 }
 
 /*-----------------------------------------------------------------//

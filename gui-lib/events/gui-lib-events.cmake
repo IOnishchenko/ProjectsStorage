@@ -1,5 +1,6 @@
 
 set(GUI_EVENTS_SRCS
+	"${project_dir}/gui-lib/events/IAnimatedControlManager.cpp"
 	"${project_dir}/gui-lib/events/IEncoderEventManager.cpp"
 	"${project_dir}/gui-lib/events/IFocusManager.cpp"
 	"${project_dir}/gui-lib/events/IKeyboardEventHandler.cpp"

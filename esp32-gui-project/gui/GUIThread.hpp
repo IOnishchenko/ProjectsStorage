@@ -3,9 +3,14 @@
 
 #include "stdint.h"
 #include "lcd-driver.h"
+#include "configuration.h"
+
 #include "IEncoderEventManager.hpp"
 #include "IKeyboardEventManager.hpp"
 #include "IFocusManager.hpp"
+#include "IWindowManager.hpp"
+#include "IAnimatedControlManager.hpp"
+
 #include "GElementDecoderRGB565.hpp"
 #include "ControlRenderer.hpp"
 #include "IUIContext.hpp"
@@ -16,8 +21,6 @@
 #include "UIEvents.hpp"
 #include "ICommandQueue.hpp"
 #include "CommandDispatcher.hpp"
-
-#include "IWindowManager.hpp"
 
 #include "ScreenBase.hpp"
 /*-----------------------------------------------------------------//
@@ -47,7 +50,8 @@ namespace gui
 		public IFocusManager,
 		public IEncoderEventManager,
 		public IKeyboardEventManager,
-		public IWindowManager
+		public IWindowManager,
+		public IAnimatedControlManager
 	{
 		// it is used for memeory size calculation when 
 		// memory pool is created 
@@ -75,10 +79,17 @@ namespace gui
 		void Run();
 		void Initialize();
 
+		// IAnimatedControlManager methods
+		CommandDispatcher & GetCommandDispatcher() override;
+		void StartAnimation() override;
+		void StopAnimation() override;
+
 		// async method
 		AsyncCommand<IEncoderEventManager, EncoderEvent> HandleEncoderEventAsync;
 		AsyncCommand<IKeyboardEventManager, KeyEvent> HandleKeyboardEventAsync;
-		//AsyncCommand<GUIThread, uint32_t> LogDataAsync;
+		AsyncCommand<IAnimatedControlManager, uint32_t> HandleAnimationTimerTickAsync;
+		
+		// AsyncCommand<GUIThread, uint32_t> LogDataAsync;
 
 	private:
 		// field
@@ -93,7 +104,7 @@ namespace gui
 		ScreenBase _baseScreen;
 
 		// method
-		//void LogData(uint32_t data);
+		// void LogData(uint32_t data);
 	};
 }
 

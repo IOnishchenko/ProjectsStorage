@@ -19,7 +19,8 @@ namespace gui
 			this,
 			context.TouchScreenObserver,
 			&_focusManager,
-			context.WindowManager
+			context.WindowManager,
+			context.AnimatedControlManager,
 		}, _mainContext{context}, _focusManager()
 	{
 		context.EncoderEventManager->RegisterHandler(this);
@@ -43,7 +44,8 @@ namespace gui
 			this,
 			context.TouchScreenObserver,
 			&_focusManager,
-			context.WindowManager
+			context.WindowManager,
+			context.AnimatedControlManager,
 		}, _mainContext{context}, _focusManager()
 	{
 		context.EncoderEventManager->RegisterHandler(this);

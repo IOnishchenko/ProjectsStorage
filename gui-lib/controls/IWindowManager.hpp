@@ -17,6 +17,7 @@ namespace gui
 			IKeyboardEventManager * keyboardEventManager,
 			ITouchScreenEventObserver * touchScreenObserver,
 			IFocusManager * focusManager,
+			IAnimatedControlManager * animationManager,
 			CommandDispatcher & commandDispatcher)
 			:
 			_createWindowCmd(this, &IWindowManager::CreateWindow),
@@ -27,7 +28,8 @@ namespace gui
 				keyboardEventManager, 
 				touchScreenObserver,
 				focusManager,
-				*this
+				*this,
+				animationManager
 			},
 			_commandDispatcher{commandDispatcher}
 		{

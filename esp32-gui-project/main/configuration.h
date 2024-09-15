@@ -82,8 +82,8 @@ extern "C" {
 #define ENC_B		GPIO_NUM_34
 #define ENC_BUTTON	GPIO_NUM_32
 
-#endif // CONFIGURATION_H
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif // CONFIGURATION_H
