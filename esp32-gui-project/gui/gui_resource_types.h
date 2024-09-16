@@ -11,8 +11,10 @@ typedef enum
 {
     PICTYPE_BITS,
     PICTYPE_A4,
+    PICTYPE_A8,
     PICTYPE_L4,
     PICTYPE_L8,
+    PICTYPE_AL44,
     PICTYPE_COMPRESED_A4,
     PICTYPE_COMPRESED_L4,
     PICTYPE_COMPRESED_L8,
@@ -26,10 +28,26 @@ typedef struct
 
 typedef struct
 {
-    const uint8_t lut_size;
+    const void * alpha_lut;
+    const void * color_lut;
+    const uint8_t * data;
+} AL44PictureGData;
+
+typedef struct
+{
+    const uint16_t lut_size;
     const void * lut;
     const uint8_t * data;
 } PictureGDataExt;
+
+typedef struct
+{
+    const uint16_t alpha_lut_size;
+    const void * alpha_lut;
+    const uint16_t color_lut_size;
+    const void * color_lut;
+    const uint8_t * data;
+} AL44PictureGDataExt;
 
 typedef struct
 {
