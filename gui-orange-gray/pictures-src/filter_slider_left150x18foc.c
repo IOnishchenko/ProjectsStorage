@@ -65,7 +65,7 @@ static const PictureGDataExt gdata_left150x18foc =
 #endif
 const PictureObject left150x18foc =
 {
-    PICTYPE_COMPRESED_L8,
+    PICTYPE_COMPRESSED_L8,
     150,
     18,
     &gdata_left150x18foc

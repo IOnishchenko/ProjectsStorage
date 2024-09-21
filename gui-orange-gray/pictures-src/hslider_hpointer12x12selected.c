@@ -37,7 +37,7 @@ static const PictureGDataExt gdata_hpointer12x12selected =
 #endif
 const PictureObject hpointer12x12selected =
 {
-    PICTYPE_COMPRESED_L4,
+    PICTYPE_COMPRESSED_L4,
     12,
     12,
     &gdata_hpointer12x12selected

@@ -1,4 +1,4 @@
-#include "L8A8CompresedDataIterator.hpp"
+#include "Base8BitsDataIterator.hpp"
 
 /*----------------------------------------------------------------//
 //
@@ -10,23 +10,14 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L8A8CompresedDataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0,
-		uint16_t slines1, const PictureObject * object)
+	void Base8BitsDataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
+		const PictureObject * object, void *)
 	{
 		_skipedLines = slines1;
 		const PictureGData * pic = (PictureGData *)object->gdata;
-		
-		uint32_t skipped = srow;
-		skipped *= object->height;
-		skipped += slines0;
-
-		// find data position
 		_lut = (TLut *)pic->lut;
 		_gdata = pic->data;
-		_count = *_gdata;
-		_count++;
-		_gdata++;
-		CalculatePositionToRead(skipped);
+		_gdata += slines0 + srow * object->height;
 	}
 
 	// IDataIterator methods
@@ -34,51 +25,33 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	uint32_t L8A8CompresedDataIterator<TLut>::GetValue()
+	void Base8BitsDataIterator<TLut>::JumpToNextPixel()
 	{
-		uint32_t res = _lut[*_gdata];
-		_count--;
-		if(!_count)
-		{
-			_gdata++;
-			_count = *_gdata;
-			_count++;
-			_gdata++;
-		}
-
-		return res;
+		_gdata++;
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L8A8CompresedDataIterator<TLut>::JumpToNextRow()
+	void Base8BitsDataIterator<TLut>::JumpToNextRow()
 	{
-		CalculatePositionToRead(_skipedLines);
+		_gdata += _skipedLines;
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L8A8CompresedDataIterator<TLut>::CalculatePositionToRead(uint32_t skippedLine)
+	inline TLut Base8BitsDataIterator<TLut>::ReadDataFromLut()
 	{
-		while(skippedLine >= _count)
-		{
-			skippedLine -= _count;
-			_gdata++;
-			_count = *_gdata;
-			_count++;
-			_gdata++;
-		}
-		_count -= skippedLine;
+		return _lut[*_gdata];
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	template class L8A8CompresedDataIterator<uint8_t>;
-	template class L8A8CompresedDataIterator<uint16_t>;
-	template class L8A8CompresedDataIterator<uint32_t>;
+	template class Base8BitsDataIterator<uint8_t>;
+	template class Base8BitsDataIterator<uint16_t>;
+	template class Base8BitsDataIterator<uint32_t>;
 }

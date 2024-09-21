@@ -1,4 +1,4 @@
-#include "BitDataIterrator.hpp"
+#include "L4CompressedDataIterator.hpp"
 
 /*----------------------------------------------------------------//
 //
@@ -6,36 +6,28 @@
 
 namespace gui
 {
-	constexpr uint16_t BIT_PER_BYTE = 8;
-	
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void BitDataIterator::Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
-		const PictureObject * object)
+	template<typename TLut>
+	uint32_t L4CompressedDataIterator<TLut>::GetColor()
 	{
-		_skipedLines = slines0 + slines1;
-		_index = srow * object->height + slines0;
-		_gdata = ((PictureGData *)object->gdata)->data;
+		return base::ReadDataFromLUT();
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	uint32_t BitDataIterator::GetValue()
+	template<typename TLut>
+	uint8_t L4CompressedDataIterator<TLut>::GetAlpha()
 	{
-		uint8_t byte = _gdata[_index >> 3];
-		uint8_t shift = _index & 0x0007;
-		uint32_t res = (byte & (1 << shift)) ? 1 : 0;
-		_index++;
-		return res;
+		return 0xffU;
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	void BitDataIterator::JumpToNextRow()
-	{
-		_index += _skipedLines;
-	}
+	template class L4CompressedDataIterator<uint8_t>;
+	template class L4CompressedDataIterator<uint16_t>;
+	template class L4CompressedDataIterator<uint32_t>;
 }

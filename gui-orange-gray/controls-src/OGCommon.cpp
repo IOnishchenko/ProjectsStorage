@@ -2,6 +2,7 @@
 #include "font18.h"
 #include "font24.h"
 #include "font32.h"
+#include "attributes.h"
 
 #include "Font.hpp"
 

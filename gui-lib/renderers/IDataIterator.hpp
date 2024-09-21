@@ -13,8 +13,10 @@ namespace gui
 
 		// methods
 		virtual void Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
-			const PictureObject * object) = 0;
-		virtual uint32_t GetValue() = 0;
+			const PictureObject * object, void * param) = 0;
+		virtual uint32_t GetColor() = 0;
+		virtual uint8_t GetAlpha() = 0;
+		virtual void JumpToNextPixel() = 0;
 		virtual void JumpToNextRow() = 0;
 	};
 }

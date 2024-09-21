@@ -1,6 +1,8 @@
 #ifndef IVALUE_PROVIDER_H
 #define IVALUE_PROVIDER_H
 
+#include "stdint.h"
+
 template<typename VType>
 class IValue
 {

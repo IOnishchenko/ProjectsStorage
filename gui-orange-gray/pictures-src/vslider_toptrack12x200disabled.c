@@ -37,7 +37,7 @@ static const PictureGDataExt gdata_toptrack12x200disabled =
 #endif
 const PictureObject toptrack12x200disabled =
 {
-    PICTYPE_COMPRESED_L8,
+    PICTYPE_COMPRESSED_L8,
     12,
     200,
     &gdata_toptrack12x200disabled

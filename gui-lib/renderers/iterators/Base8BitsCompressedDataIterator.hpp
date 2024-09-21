@@ -1,5 +1,5 @@
-#ifndef GUI_L8A8_COMPRESED_DATA_ITERATOR_HPP
-#define GUI_L8A8_COMPRESED_DATA_ITERATOR_HPP
+#ifndef GUI_BASE_8BITS_COMPRESSED_DATA_ITERATOR_HPP
+#define GUI_BASE_8BITS_COMPRESSED_DATA_ITERATOR_HPP
 
 #include "IDataIterator.hpp"
 #include "gui_resource_types.h"
@@ -7,23 +7,23 @@
 namespace gui
 {
 	template<typename TLut>
-	class L8A8CompresedDataIterator : public IDataIterator
+	class Base8BitsCompressedDataIterator : public IDataIterator
 	{
 	public:
 		// constructor
-		// L8A8CompresedDataIterator(uint16_t srow, uint16_t slines0, uint16_t slines1,
+		// Base8BitsCompressedDataIterator(uint16_t srow, uint16_t slines0, uint16_t slines1,
 		// 	const PictureObject * object);
 
 		// destructor
-		~L8A8CompresedDataIterator() override = default;
+		~Base8BitsCompressedDataIterator() override = default;
 
 		// IDataIterator methods
 		void Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
-			const PictureObject * object) override;
-		uint32_t GetValue() override;
+			const PictureObject * object, void * param) override;
+		void JumpToNextPixel() override;
 		void JumpToNextRow() override;
 	
-	private:
+	protected:
 		// fields
 		uint32_t _skipedLines;
 		uint32_t _count;
@@ -32,7 +32,8 @@ namespace gui
 
 		// methods
 		void CalculatePositionToRead(uint32_t skippedLine);
+		TLut ReadDataFromLut();
 	};
 }
 
-#endif // GUI_L8A8_COMPRESED_DATA_ITERATOR_HPP
+#endif // GUI_BASE_8BITS_COMPRESSED_DATA_ITERATOR_HPP

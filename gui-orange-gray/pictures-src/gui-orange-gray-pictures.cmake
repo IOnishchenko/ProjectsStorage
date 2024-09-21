@@ -47,6 +47,8 @@ set(GUI_ORANGE_GRAY_PICTURES_SRCS
 	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_right150x18press.c"
 	"${project_dir}/gui-orange-gray/pictures-src/filter_slider_right150x18sel.c"
 
+	"${project_dir}/gui-orange-gray/pictures-src/grid320x100_grid320x100.c"
+
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12disabled.c"
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12enabled.c"
 	"${project_dir}/gui-orange-gray/pictures-src/hslider_hpointer12x12focused.c"

@@ -58,7 +58,7 @@ static const PictureGDataExt gdata_tab160x24selected =
 #endif
 const PictureObject tab160x24selected =
 {
-    PICTYPE_COMPRESED_L4,
+    PICTYPE_COMPRESSED_L4,
     160,
     24,
     &gdata_tab160x24selected

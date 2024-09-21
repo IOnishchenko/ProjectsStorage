@@ -1,4 +1,4 @@
-#include "L4A4CompresedDataIterator.hpp"
+#include "Base4BitsCompressedDataIterator.hpp"
 
 /*----------------------------------------------------------------//
 //
@@ -10,8 +10,8 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L4A4CompresedDataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
-		const PictureObject * object)
+	void Base4BitsCompressedDataIterator<TLut>::Initialize(uint16_t srow,
+		uint16_t slines0, uint16_t slines1, const PictureObject * object, void *)
 	{
 		_skipedLines = slines1;
 		const PictureGData * pic = (PictureGData *)object->gdata;
@@ -31,26 +31,21 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	uint32_t L4A4CompresedDataIterator<TLut>::GetValue()
+	void Base4BitsCompressedDataIterator<TLut>::JumpToNextPixel()
 	{
-		uint8_t value = *_gdata & 0x0f;
-		uint32_t res = _lut[value];
-
 		_count--;
 		if(!_count)
 		{
 			_gdata++;
 			_count = (*_gdata >> 4) + 1;
 		}
-
-		return (uint32_t)res;
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L4A4CompresedDataIterator<TLut>::JumpToNextRow()
+	void Base4BitsCompressedDataIterator<TLut>::JumpToNextRow()
 	{
 		CalculatePositionToRead(_skipedLines);
 	}
@@ -59,7 +54,7 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L4A4CompresedDataIterator<TLut>::CalculatePositionToRead(uint32_t skippedLine)
+	void Base4BitsCompressedDataIterator<TLut>::CalculatePositionToRead(uint32_t skippedLine)
 	{
 		while(skippedLine >= _count)
 		{
@@ -73,7 +68,17 @@ namespace gui
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	template class L4A4CompresedDataIterator<uint8_t>;
-	template class L4A4CompresedDataIterator<uint16_t>;
-	template class L4A4CompresedDataIterator<uint32_t>;
+	template<typename TLut>
+	TLut Base4BitsCompressedDataIterator<TLut>::ReadDataFromLUT()
+	{
+		uint8_t value = *_gdata & 0x0f;
+		return _lut[value];
+	}
+
+	/*----------------------------------------------------------------//
+	//
+	//----------------------------------------------------------------*/
+	template class Base4BitsCompressedDataIterator<uint8_t>;
+	template class Base4BitsCompressedDataIterator<uint16_t>;
+	template class Base4BitsCompressedDataIterator<uint32_t>;
 }

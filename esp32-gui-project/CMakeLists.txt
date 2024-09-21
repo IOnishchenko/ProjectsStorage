@@ -13,6 +13,7 @@ add_compile_definitions(GUI_USE_PICTUREGDATA)
 add_compile_definitions(GMT020_02_DISPLAY_IS_USED)
 
 include("${root_dir}/command/command.cmake")
+include("${root_dir}/common/common.cmake")
 include("${root_dir}/esp32-common/esp32-common.cmake")
 include("${root_dir}/lcd-drivers/st7789-driver.cmake")
 include("${root_dir}/lcd-drivers/sh1106-driver.cmake")
@@ -69,6 +70,8 @@ set(PROJET_SRCS
 	"../gui/DSPView/DSPView.cpp"
 
 	"../gui/MainView/MainView.cpp"
+	"../gui/MainView/SpectrumView/SpectrumView.cpp"
+	"../gui/MainView/SpectrumView/SpectrumViewSettings.cpp"
 
 	"../gui/RadioView/RadioView.cpp"
 	"../gui/RadioView/ReceiverView.cpp"

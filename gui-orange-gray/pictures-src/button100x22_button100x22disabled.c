@@ -49,7 +49,7 @@ static const PictureGDataExt gdata_button100x22disabled =
 #endif
 const PictureObject button100x22disabled =
 {
-    PICTYPE_COMPRESED_L4,
+    PICTYPE_COMPRESSED_L4,
     100,
     22,
     &gdata_button100x22disabled

@@ -48,7 +48,7 @@ static const PictureGDataExt gdata_checkbox18x18checked_ena =
 #endif
 const PictureObject checkbox18x18checked_ena =
 {
-    PICTYPE_COMPRESED_L8,
+    PICTYPE_COMPRESSED_L8,
     18,
     18,
     &gdata_checkbox18x18checked_ena

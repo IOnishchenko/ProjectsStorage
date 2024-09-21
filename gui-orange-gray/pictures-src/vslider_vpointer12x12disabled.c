@@ -38,7 +38,7 @@ static const PictureGDataExt gdata_vpointer12x12disabled =
 #endif
 const PictureObject vpointer12x12disabled =
 {
-    PICTYPE_COMPRESED_L8,
+    PICTYPE_COMPRESSED_L8,
     12,
     12,
     &gdata_vpointer12x12disabled

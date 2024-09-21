@@ -1,4 +1,4 @@
-#include "L8A8DataIterator.hpp"
+#include "A4DataIterator.hpp"
 
 /*----------------------------------------------------------------//
 //
@@ -10,14 +10,11 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L8A8DataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
-		const PictureObject * object)
+	void A4DataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0,
+		uint16_t slines1, const PictureObject * object, void * param)
 	{
-		_skipedLines = slines1;
-		const PictureGData * pic = (PictureGData *)object->gdata;
-		_lut = (TLut *)pic->lut;
-		_gdata = pic->data;
-		_gdata += slines0 + srow * object->height;
+		base::Initialize(srow, slines0, slines1, object, nullptr);
+		_foregroundColor = reinterpret_cast<uint32_t>(param);
 	}
 
 	// IDataIterator methods
@@ -25,26 +22,22 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	uint32_t L8A8DataIterator<TLut>::GetValue()
+	uint32_t A4DataIterator<TLut>::GetColor()
 	{
-		uint32_t res = _lut[*_gdata];
-		_gdata++;
-		return (uint32_t)res;
+		return _foregroundColor;
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L8A8DataIterator<TLut>::JumpToNextRow()
+	uint8_t A4DataIterator<TLut>::GetAlpha()
 	{
-		_gdata += _skipedLines;
+		return base::ReadDataFromLUT();
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	template class L8A8DataIterator<uint8_t>;
-	template class L8A8DataIterator<uint16_t>;
-	template class L8A8DataIterator<uint32_t>;
+	template class A4DataIterator<uint8_t>;
 }

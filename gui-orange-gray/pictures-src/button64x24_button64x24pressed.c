@@ -46,7 +46,7 @@ static const PictureGDataExt gdata_button64x24pressed =
 #endif
 const PictureObject button64x24pressed =
 {
-    PICTYPE_COMPRESED_L4,
+    PICTYPE_COMPRESSED_L4,
     64,
     24,
     &gdata_button64x24pressed

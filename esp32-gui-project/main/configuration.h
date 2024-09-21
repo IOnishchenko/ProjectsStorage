@@ -82,6 +82,11 @@ extern "C" {
 #define ENC_B		GPIO_NUM_34
 #define ENC_BUTTON	GPIO_NUM_32
 
+/*-----------------------------------------------------------------//
+// types
+//-----------------------------------------------------------------*/
+typedef uint16_t color_t;
+
 #ifdef __cplusplus
 }
 #endif

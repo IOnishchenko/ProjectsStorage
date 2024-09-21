@@ -46,7 +46,7 @@ static const PictureGDataExt gdata_tab64x24focused =
 #endif
 const PictureObject tab64x24focused =
 {
-    PICTYPE_COMPRESED_L4,
+    PICTYPE_COMPRESSED_L4,
     64,
     24,
     &gdata_tab64x24focused

@@ -116,7 +116,7 @@ static const PictureGDataExt gdata_window240x176 =
 #endif
 const PictureObject window240x176 =
 {
-    PICTYPE_COMPRESED_L8,
+    PICTYPE_COMPRESSED_L8,
     240,
     176,
     &gdata_window240x176

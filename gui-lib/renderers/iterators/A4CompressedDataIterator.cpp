@@ -1,4 +1,4 @@
-#include "L4A4DataIterator.hpp"
+#include "A4CompressedDataIterator.hpp"
 
 /*----------------------------------------------------------------//
 //
@@ -10,43 +10,35 @@ namespace gui
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L4A4DataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0,
-		uint16_t slines1, const PictureObject * object)
+	void A4CompressedDataIterator<TLut>::Initialize(uint16_t srow, uint16_t slines0, uint16_t slines1,
+		const PictureObject * object, void * param)
 	{
-		_skipedLines = slines1;
-		_index = slines0 + srow * object->height;
-		const PictureGData * pic = (PictureGData *)object->gdata;
-		_lut = (TLut *)pic->lut;
-		_gdata = pic->data;
-	}
-
-	// IDataIterator methods
-	/*----------------------------------------------------------------//
-	//
-	//----------------------------------------------------------------*/
-	template<typename TLut>
-	uint32_t L4A4DataIterator<TLut>::GetValue()
-	{
-		uint8_t value = _gdata[_index >> 1];
-		value = (_index & 0x01) ? (value >> 4) : (value & 0x0f);
-		uint32_t res = _lut[value];
-		_index++;
-		return res;
+		base::Initialize(srow, slines0, slines1, object, nullptr);
+		_foregroundColor = reinterpret_cast<uint32_t>(param);
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
 	template<typename TLut>
-	void L4A4DataIterator<TLut>::JumpToNextRow()
+	uint32_t A4CompressedDataIterator<TLut>::GetColor()
 	{
-		_index += _skipedLines;
+		return _foregroundColor;
 	}
 
 	/*----------------------------------------------------------------//
 	//
 	//----------------------------------------------------------------*/
-	template class L4A4DataIterator<uint8_t>;
-	template class L4A4DataIterator<uint16_t>;
-	template class L4A4DataIterator<uint32_t>;
+	template<typename TLut>
+	uint8_t A4CompressedDataIterator<TLut>::GetAlpha()
+	{
+		return base::ReadDataFromLUT();
+	}
+
+	/*----------------------------------------------------------------//
+	//
+	//----------------------------------------------------------------*/
+	template class A4CompressedDataIterator<uint8_t>;
+	template class A4CompressedDataIterator<uint16_t>;
+	template class A4CompressedDataIterator<uint32_t>;
 }

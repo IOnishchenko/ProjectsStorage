@@ -36,7 +36,7 @@ static const PictureGDataExt gdata_background150x18 =
 #endif
 const PictureObject background150x18 =
 {
-    PICTYPE_COMPRESED_L8,
+    PICTYPE_COMPRESSED_L8,
     150,
     18,
     &gdata_background150x18

@@ -59,7 +59,7 @@ static const PictureGDataExt gdata_righttrack12x280enabled =
 #endif
 const PictureObject righttrack12x280enabled =
 {
-    PICTYPE_COMPRESED_L4,
+    PICTYPE_COMPRESSED_L4,
     280,
     12,
     &gdata_righttrack12x280enabled

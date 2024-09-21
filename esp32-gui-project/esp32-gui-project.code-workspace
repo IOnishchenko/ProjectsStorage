@@ -85,7 +85,8 @@
 			"gpio.h": "c",
 			"task.h": "c",
 			"configuration.h": "c",
-			"st7789-interface.h": "c"
+			"st7789-interface.h": "c",
+			"gui_resource_types.h": "c"
 		}
 	}
 }

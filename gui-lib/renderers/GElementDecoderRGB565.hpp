@@ -8,11 +8,16 @@
 #include "GEPictureMixedWithColor.hpp"
 #include "GEPictureMixedWithPicture.hpp"
 
-#include "BitDataIterrator.hpp"
-#include "L4A4CompresedDataIterator.hpp"
-#include "L4A4DataIterator.hpp"
-#include "L8A8CompresedDataIterator.hpp"
-#include "L8A8DataIterator.hpp"
+#include "A4CompressedDataIterator.hpp"
+#include "A4DataIterator.hpp"
+#include "A8CompressedDataIterator.hpp"
+#include "A8DataIterator.hpp"
+#include "AL44DataIterator.hpp"
+#include "BitDataIterator.hpp"
+#include "L4CompressedDataIterator.hpp"
+#include "L4DataIterator.hpp"
+#include "L8CompressedDataIterator.hpp"
+#include "L8DataIterator.hpp"
 
 namespace gui
 {
@@ -36,15 +41,16 @@ namespace gui
 		uint16_t CalculateColorWithAlpha(uint8_t alpha, uint16_t foreground, uint16_t background);
 
 		// fields
+		A4CompressedDataIterator<uint8_t> _a4CompressedIterator;
+		A4DataIterator<uint8_t> _a4Iterator;
+		A8CompressedDataIterator<uint8_t> _a8CompressedIterator;
+		A8DataIterator<uint8_t> _a8Iterator;
+		AL44DataIterator<uint16_t> _al4Iterator;
 		BitDataIterator _bitIterator;
-		L4A4CompresedDataIterator<uint16_t> _l4CompresedIterator;
-		L4A4CompresedDataIterator<uint8_t> _a4CompresedIterator;
-		L4A4DataIterator<uint16_t> _l4Iterator;
-		L4A4DataIterator<uint8_t> _a4Iterator;
-		L8A8CompresedDataIterator<uint16_t> _l8CompresedIterator;
-		L8A8CompresedDataIterator<uint8_t> _a8CompresedIterator;
-		L8A8DataIterator<uint16_t> _l8Iterator;
-		L8A8DataIterator<uint8_t> _alIterator;
+		L4CompressedDataIterator<uint16_t> _l4CompressedIterator;
+		L4DataIterator<uint16_t> _l4Iterator;
+		L8CompressedDataIterator<uint16_t> _l8CompressedIterator;
+		L8DataIterator<uint16_t> _l8Iterator;
 	};
 }
 
