@@ -108,6 +108,8 @@ set(INCLUDE_DIRS
 	"../gui/DSPView/DSPModulationView/"
 
 	"../gui/MainView/"
+	"../gui/MainView/SpectrumView/"
+	
 	"../gui/RadioView/"
 	"../gui/SettingsView/"
 )

@@ -42,7 +42,7 @@ public:
 		stepIndex_ = index;
 	}
 
-	uint32_t GetCurrentValueIndex() const override
+	uint32_t GetIndex() const override
 	{
 		return stepIndex_;
 	}

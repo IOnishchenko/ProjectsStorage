@@ -32,6 +32,18 @@ namespace gui
 	template<typename TColor>
 	struct SpectrumViewSettings
 	{
+		// type to save this settings to non-volatile memory
+		struct Storage
+		{
+			uint32_t SpectrumHeightIndex = 30u;
+			float SpectrumRangeToShow = 2.0f;
+			float SmoothingCoeff = 0.2;
+			int WaterfallDepth = 0;
+			gui::SpectrumColorSet<TColor> SpectrumColor;
+			gui::SpectrumColorSet<TColor> SpectrumSelectorColor;
+			TColor WaterfallColor;
+		};
+
 		// constructor
 		SpectrumViewSettings();
 
@@ -48,6 +60,31 @@ namespace gui
 		SpectrumColorSet<TColor> SelectorColors;
 		// waterfall collor
 		TColor WaterfallColor;
+
+		// methods
+		void Save(Storage & storage)
+		{
+			storage.SpectrumHeightIndex = SpectrumHeight.GetIndex();
+			storage.SpectrumRangeToShow = SpectrumRangeToShow;
+			storage.SmoothingCoeff = SmoothingCoeff;
+			storage.WaterfallDepth = WaterfallDepth;
+			storage.SpectrumColor = Colors;
+			storage.SpectrumSelectorColor = SelectorColors;
+			storage.WaterfallColor = WaterfallColor;
+		}
+
+		void Restore(const Storage & storage)
+		{
+			SpectrumHeight.SetValueByIndex(storage.SpectrumHeightIndex);
+			SpectrumRangeToShow = storage.SpectrumRangeToShow;
+			SmoothingCoeff = storage.SmoothingCoeff;
+			WaterfallDepth = storage.WaterfallDepth;
+			Colors = storage.SpectrumColor;
+			SelectorColors = storage.SpectrumSelectorColor;
+			WaterfallColor = storage.WaterfallColor;
+		}
+
+		
 	};
 }
 

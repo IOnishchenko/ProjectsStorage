@@ -35,45 +35,23 @@ namespace gui
 		{
 			case PICTYPE_L4:
 				iteratorSrc = &_l4Iterator;
-				_l4Iterator.Initialize(Picture.skippedRows + gel->Foreground.SkippedRows,
-					Picture.skippedLinesOnTop + gel->Foreground.SkippedLines,
-					Picture.skippedLinesOnBottom + gel->Foreground.Bitmap->height - gel->Height,
-					gel->Foreground.Bitmap, nullptr);
-				// iteratorSrc = std::make_unique<L4A4DataIterator<uint16_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_L8:
 				iteratorSrc = &_l8Iterator;
-				_l8Iterator.Initialize(Picture.skippedRows + gel->Foreground.SkippedRows,
-					Picture.skippedLinesOnTop + gel->Foreground.SkippedLines,
-					Picture.skippedLinesOnBottom + gel->Foreground.Bitmap->height - gel->Height,
-					gel->Foreground.Bitmap, nullptr);
-				// iteratorSrc = std::make_unique<L8A8DataIterator<uint16_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_COMPRESSED_L4:
 				iteratorSrc = &_l4CompressedIterator;
-				_l4CompressedIterator.Initialize(Picture.skippedRows + gel->Foreground.SkippedRows,
-					Picture.skippedLinesOnTop + gel->Foreground.SkippedLines,
-					Picture.skippedLinesOnBottom + gel->Foreground.Bitmap->height - gel->Height,
-					gel->Foreground.Bitmap, nullptr);
-				// iteratorSrc = std::make_unique<L4A4CompressedDataIterator<uint16_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_COMPRESSED_L8:
 				iteratorSrc = &_l8CompressedIterator;
-				_l8CompressedIterator.Initialize(Picture.skippedRows + gel->Foreground.SkippedRows,
-					Picture.skippedLinesOnTop + gel->Foreground.SkippedLines,
-					Picture.skippedLinesOnBottom + gel->Foreground.Bitmap->height - gel->Height,
-					gel->Foreground.Bitmap, nullptr);
-				// iteratorSrc = std::make_unique<L8A8CompressedDataIterator<uint16_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			default:
 				return;
 				// NOT IMPLEMENTED
 				// TODO
 		}
+
+		InitializeIterator(iteratorSrc, gel->Foreground, gel->Height, nullptr);
 
 		uint16_t * gdata = (uint16_t *)Frame.gdata;
 		for(uint16_t x = 0; x < Picture.width; ++x)
@@ -103,12 +81,9 @@ namespace gui
 				{
 					gel->Foreground.Color, gel->BackgroundColor
 				};
-				_bitIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, &colors);
-				// std::unique_ptr<BitDataIterator> bitIterator =
-				// 	std::make_unique<BitDataIterator>(Picture.skippedRows, Picture.skippedLinesOnTop,
-				// 	Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
+
+				InitializeIterator(&_bitIterator, gel->Foreground, gel->Height, &colors);
+
 				uint16_t * gdata = (uint16_t *)Frame.gdata;
 				for(uint16_t x = 0; x < Picture.width; ++x)
 				{
@@ -125,43 +100,27 @@ namespace gui
 			}
 			case PICTYPE_A4:
 				iteratorSrc = &_a4Iterator;
-				_a4Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
-				// iteratorSrc = std::make_unique<L4A4DataIterator<uint8_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_COMPRESSED_A4:
 				iteratorSrc = &_a4CompressedIterator;
-				_a4CompressedIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
-				// iteratorSrc = std::make_unique<L4A4CompressedDataIterator<uint8_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_AL44:
-				iteratorSrc = &_al4Iterator;
-				_al4Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
+				iteratorSrc = &_al44Iterator;
 				break;
 			case PICTYPE_A8:
 				iteratorSrc = &_a8Iterator;
-				_a8Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
 				break;
 			case PICTYPE_COMPRESSED_A8:
 				iteratorSrc = &_a8CompressedIterator;
-				_a8CompressedIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
 				break;
 			default:
 				return;
 				// NOT IMPLEMENTED
 				// TODO
 		}
+
+		InitializeIterator(iteratorSrc, gel->Foreground, gel->Height,
+			reinterpret_cast<void *>(gel->Foreground.Color));
 
 		uint16_t * gdata = (uint16_t *)Frame.gdata;
 		for(uint16_t x = 0; x < Picture.width; ++x)
@@ -185,45 +144,27 @@ namespace gui
 	void GElementDecoderRGB565::Decode(const GEPictureMixedWithPicture * gel)
 	{
 		IDataIterator * backgroundIterator;
-		switch(gel->Foreground.Bitmap->coding)
+		switch(gel->Background.Bitmap->coding)
 		{
 			case PICTYPE_L4:
 				backgroundIterator = &_l4Iterator;
-				_l4Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, nullptr);
-				// iteratorSrc = std::make_unique<L4A4DataIterator<uint16_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_L8:
 				backgroundIterator = &_l8Iterator;
-				_l8Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, nullptr);
-				// iteratorSrc = std::make_unique<L8A8DataIterator<uint16_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_COMPRESSED_L4:
 				backgroundIterator = &_l4CompressedIterator;
-				_l4CompressedIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, nullptr);
-				// iteratorSrc = std::make_unique<L4A4CompressedDataIterator<uint16_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_COMPRESSED_L8:
 				backgroundIterator = &_l8CompressedIterator;
-				_l8CompressedIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, nullptr);
-				// iteratorSrc = std::make_unique<L8A8CompressedDataIterator<uint16_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			default:
 				return;
 				// NOT IMPLEMENTED
 				// TODO
 		}
+
+		InitializeIterator(backgroundIterator, gel->Background, gel->Height, nullptr);
 
 		IDataIterator * foregroundIterator;
 		switch(gel->Foreground.Bitmap->coding)
@@ -235,12 +176,9 @@ namespace gui
 				{
 					0x00, 0x00
 				};
-				_bitIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, &colors);
-				// std::unique_ptr<BitDataIterator> bitIterator =
-				// 	std::make_unique<BitDataIterator>(Picture.skippedRows, Picture.skippedLinesOnTop,
-				// 	Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
+
+				InitializeIterator(&_bitIterator, gel->Foreground, gel->Height, &colors);
+
 				uint16_t * gdata = (uint16_t *)Frame.gdata;
 				for(uint16_t x = 0; x < Picture.width; ++x)
 				{
@@ -260,42 +198,26 @@ namespace gui
 			}
 			case PICTYPE_A4:
 				foregroundIterator = &_a4Iterator;
-				_a4Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
-				// iteratorSrc = std::make_unique<L4A4DataIterator<uint8_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_COMPRESSED_A4:
 				foregroundIterator = &_a4CompressedIterator;
-				_a4CompressedIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
-				// iteratorSrc = std::make_unique<L4A4CompressedDataIterator<uint8_t>>(Picture.skippedRows,
-				// 	Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom, gel->Foreground.Bitmap);
 				break;
 			case PICTYPE_AL44:
-				foregroundIterator = &_al4Iterator;
-				_al4Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
+				foregroundIterator = &_al44Iterator;
 				break;
 			case PICTYPE_A8:
 				foregroundIterator = &_a8Iterator;
-				_a8Iterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
 				break;
 			case PICTYPE_COMPRESSED_A8:
 				foregroundIterator = &_a8CompressedIterator;
-				_a8CompressedIterator.Initialize(Picture.skippedRows,
-					Picture.skippedLinesOnTop, Picture.skippedLinesOnBottom,
-					gel->Foreground.Bitmap, reinterpret_cast<void *>(gel->Foreground.Color));
 			default:
 				return;
 				// NOT IMPLEMENTED
 				// TODO
 		}
+
+		InitializeIterator(foregroundIterator, gel->Foreground, gel->Height,
+			reinterpret_cast<void *>(gel->Foreground.Color));
 
 		uint16_t * gdata = (uint16_t *)Frame.gdata;
 		for(uint16_t x = 0; x < Picture.width; ++x)
@@ -357,5 +279,17 @@ namespace gui
 #else
 		return rgb;
 #endif // GMT020_02_DISPLAY_IS_USED
+	}
+
+	/*----------------------------------------------------------------//
+	//
+	//----------------------------------------------------------------*/
+	inline void GElementDecoderRGB565::InitializeIterator(IDataIterator * iterator,
+		const GEPicture::PictureData & pic, uint16_t height, void * param)
+	{
+		iterator->Initialize(Picture.skippedRows + pic.SkippedRows,
+			Picture.skippedLinesOnTop + pic.SkippedLines,
+			Picture.skippedLinesOnBottom + pic.Bitmap->height - height,
+			pic.Bitmap, param);
 	}
 }

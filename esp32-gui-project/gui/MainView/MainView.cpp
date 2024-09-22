@@ -12,7 +12,13 @@
 #include "SetFiltersDialog.hpp"
 #include "IWindowManager.hpp"
 
+/*-----------------------------------------------------------------//
+// dummy
+//-----------------------------------------------------------------*/
 #include "dumy_picture.h"
+
+gui::SpectrumViewSettings<color_t> Settings;
+float InputFFTData[gui::SVIEW_FFT_RAW_DATA_SIZE];
 
 namespace gui
 {
@@ -23,7 +29,7 @@ MainView::MainView(const IUIContext & context)
 	:Group(0, 0, 320, 240-24, context,
 	{
 		&_button0, &_button1, &_button2, &_button3,
-		&_frequencyLabel
+		&_frequencyLabel, &_spectrum
 	}, &_background),
 
 	_onButton0ClickedCmd(this, &MainView::OnButton0Clicked),
@@ -39,6 +45,9 @@ MainView::MainView(const IUIContext & context)
 	_button3(6, 90, "VOL: 45", context, _onButton3ClickedCmd),
 
 	_frequencyLabel(117, 68, context, _onFrequencyChangedCmd),
+
+	_spectrum(114, context, Settings, &InputFFTData),
+
 	_background(0, 0, 320, 240-24, 0, 0, &gui320x240, nullptr)
 {
 	context.FocusManager->RegisterHandler(0, &_frequencyLabel);

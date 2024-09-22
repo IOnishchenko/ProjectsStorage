@@ -2,6 +2,10 @@
 #include "GUIThread.hpp"
 #include "AnimatedTimer.hpp"
 
+// debug init
+#include "SpectrumViewSettings.hpp"
+#include "OGCommon.hpp"
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
@@ -15,11 +19,25 @@ extern "C"
 //-----------------------------------------------------------------*/
 gui::GUIThread UIThread(st7789);
 
+
+// debug init
+extern gui::SpectrumViewSettings<color_t> Settings;
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
 extern "C" void gui_thread(void * args)
 {
+	// debug initialization
+	Settings.Colors.SpectrumTopColor = 0;
+	Settings.Colors.SpectrumTopAlpha = 0;
+	Settings.Colors.SpectrumCurveColor = gui::TEXT_COLOR;
+	Settings.Colors.SpectrumCurveAlpha = 0x0e;
+	Settings.Colors.SpectrumBottomColor = gui::BACKGROUND_LIGHT;
+	Settings.Colors.SpectrumBottomAlpha = 0x0e;
+	Settings.WaterfallColor = gui::TEXT_COLOR;
+	Settings.WaterfallDepth = 40;
+	
 	UIThread.Initialize();
 	UIThread.Run();
 }

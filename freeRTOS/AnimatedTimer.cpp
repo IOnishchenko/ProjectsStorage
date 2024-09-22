@@ -16,7 +16,7 @@ static void AnimationTimerCallback(TimerHandle_t xTimer);
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
-constexpr uint32_t ANIMATION_TIMER_TICK = 10;
+constexpr uint32_t ANIMATION_TIMER_TICK = 5;
 
 static TimerHandle_t _handler;
 

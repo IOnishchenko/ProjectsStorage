@@ -21,8 +21,9 @@ namespace gui
 		
 		:
 		IToggleFocusUIControl(x, y, w, h, context),
-		_textGelement(0, GEText::Center_Y(h, font) + 2, w, h,
-			"", enaForeground, enaBackground, font, nullptr),
+		_textGelement(0, GEText::Center_Y(h, font) + 2, w,
+			Font::GetCharacterHeightInPixels(font), "", enaForeground,
+			enaBackground, font, nullptr),
 		_valueChangedCmd{valueChanged}, _disabledGEl{disabledGEl},
 		_enabledGEl{enabledGEl}, _focusedGEl{focusedGEl},
 		_pressedGEl{pressedGEl}, _selectedGEl{selectedGEl},

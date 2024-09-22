@@ -1,4 +1,5 @@
 #include "SpectrumView.hpp"
+#include "IAnimatedControlManager.hpp"
 #include "grid320x100.h"
 #include "math.h"
 
@@ -43,19 +44,19 @@ SpectrumView<TColor>::SpectrumView(uint16_t y, const IUIContext & context,
 		&_spectrunGData
 	},
 	_spectrumPic(0, 0, SVIEW_WIDTH, _spectrumPicObject.height,
-		0, 0, &_spectrumPicObject, 0, 0, &grid320x100,
+		0, 0, &_spectrumPicObject, 0, 0, &grid320x100, 
 		_spectrumPicObject.height != SVIEW_HEIGHT ? &_waterfallTopPic : nullptr),
 #ifdef GUI_USE_PICTUREGDATA
 		_waterfallGData
 		{
 			nullptr,
-			&_gdata[_spectrumPicObject.height * FULL_SCREEN_WIDTH]
+			&_gdata[_spectrumPicObject.height * SVIEW_WIDTH]
 		},
 #else // GUI_USE_PICTUREGDATA
 		_waterfallGData
 		{
 			0, nullptr,
-			&_gdata[_spectrumPicObject.height * FULL_SCREEN_WIDTH]
+			&_gdata[_spectrumPicObject.height * SVIEW_WIDTH]
 		},
 #endif // GUI_USE_PICTUREGDAT
 	_waterfallPicObject
@@ -70,7 +71,10 @@ SpectrumView<TColor>::SpectrumView(uint16_t y, const IUIContext & context,
 	_waterfallBottomPic(0, _spectrumPicObject.height, SVIEW_WIDTH, _waterfallPicObject.height,
 		0, 0, &_waterfallPicObject, settings.WaterfallColor, BACKGROUND_DARK, nullptr),
 	
-	_gelement{_spectrumPicObject.height ? (IGElement*)&_spectrumPic : &_waterfallTopPic}
+	_gelement
+	{
+		_spectrumPicObject.height ? (IGElement*)&_spectrumPic : (IGElement*)&_waterfallTopPic
+	}
 {
 	//spectrum initialization
 	uint8_t * gdata = _gdata;
@@ -80,11 +84,22 @@ SpectrumView<TColor>::SpectrumView(uint16_t y, const IUIContext & context,
 	}
 
 	// waterfall initializetion
-	gdata = &_gdata[_spectrumPicObject.height * FULL_SCREEN_WIDTH];
+	gdata = &_gdata[_spectrumPicObject.height * SVIEW_WIDTH];
 	for(int i = 0; i < (_waterfallPicObject.height * SVIEW_WIDTH); ++i)
 	{
 		*gdata++ = SVIEW_WATERFALL_TRANSPARENT_COLOR;
 	}
+
+	context.AnimatedControlManager->RegisterAnimation(this);
+}
+
+/*-----------------------------------------------------------------//
+//
+//-----------------------------------------------------------------*/
+template<typename TColor>
+SpectrumView<TColor>::~SpectrumView()
+{
+	_context.AnimatedControlManager->UnregisterAnimation(this);
 }
 
 /*-----------------------------------------------------------------//
@@ -366,7 +381,7 @@ inline void SpectrumView<TColor>::DrawIntoInternalGBuffer()
 		// 	topColor, curveColor, bottomColor);
 	}
 
-	if(_waterfallTopPic.Height || _waterfallBottomPic.Height)
+	if(_waterfallTopPic.Height)
 	{
 #ifdef GUI_USE_PICTUREGDATA
 			const PictureGData * gdata = static_cast<const PictureGData *>(_waterfallPicObject.gdata);
@@ -393,7 +408,7 @@ inline void SpectrumView<TColor>::DrawIntoInternalGBuffer()
 		// update waterfall GEPicture Items
 		_waterfallTopPic.Foreground.SkippedLines = _waterfallLine;
 		_waterfallTopPic.Height = _waterfallPicObject.height - _waterfallLine;
-		if(!_waterfallLine)
+		if(_waterfallLine)
 		{
 			_waterfallTopPic.SetChild(&_waterfallBottomPic);
 			_waterfallBottomPic.Y = _waterfallTopPic.Y + _waterfallTopPic.Height;

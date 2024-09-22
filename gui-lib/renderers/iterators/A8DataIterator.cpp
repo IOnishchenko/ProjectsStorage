@@ -33,7 +33,7 @@ namespace gui
 	template<typename TLut>
 	uint8_t A8DataIterator<TLut>::GetAlpha()
 	{
-		return base::ReadDataFromLut();
+		return *base::_gdata;
 	}
 
 	/*----------------------------------------------------------------//

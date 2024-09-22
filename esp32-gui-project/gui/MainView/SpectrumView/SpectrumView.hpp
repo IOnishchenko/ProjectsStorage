@@ -41,7 +41,7 @@ namespace gui
 			SpectrumViewSettings<TColor> & settings, float (*fft)[SVIEW_FFT_RAW_DATA_SIZE]);
 
 		// destructor
-		~SpectrumView() override = default;
+		~SpectrumView() override;
 
 		// IUIControl methods
 		IGElement * GetGraphicElement() override;

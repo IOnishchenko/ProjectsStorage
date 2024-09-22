@@ -31,5 +31,5 @@ void app_main(void)
 	// vfs_initialize();
 
 	xTaskCreate(gui_thread, "guithread", 1024 * 4, (void *)0, 10, NULL);
-	// xTaskCreate(test_thread, "testthread", 1024 * 4, (void *)0, 10, NULL);
+	xTaskCreate(test_thread, "testthread", 1024 * 4, (void *)0, 10, NULL);
 }

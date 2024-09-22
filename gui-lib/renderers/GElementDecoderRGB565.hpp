@@ -39,13 +39,15 @@ namespace gui
 	private:
 		// methods
 		uint16_t CalculateColorWithAlpha(uint8_t alpha, uint16_t foreground, uint16_t background);
+		void InitializeIterator(IDataIterator * iterator ,const GEPicture::PictureData & pic,
+			uint16_t height, void * param);
 
 		// fields
 		A4CompressedDataIterator<uint8_t> _a4CompressedIterator;
 		A4DataIterator<uint8_t> _a4Iterator;
 		A8CompressedDataIterator<uint8_t> _a8CompressedIterator;
 		A8DataIterator<uint8_t> _a8Iterator;
-		AL44DataIterator<uint16_t> _al4Iterator;
+		AL44DataIterator<uint16_t> _al44Iterator;
 		BitDataIterator _bitIterator;
 		L4CompressedDataIterator<uint16_t> _l4CompressedIterator;
 		L4DataIterator<uint16_t> _l4Iterator;

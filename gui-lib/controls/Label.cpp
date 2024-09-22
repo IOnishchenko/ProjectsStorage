@@ -14,8 +14,9 @@ namespace gui
 		const Font & font, uint16_t textOffset)
 		:
 		IUIControl(x, y, w, h, context),
-		_textGelement(textOffset, (h - Font::GetCharacterHeightInPixels(font))/2, w, h,
-		"UNK", enaForeground, enaBackground, font, nullptr),
+		_textGelement(textOffset, (h - Font::GetCharacterHeightInPixels(font))/2, w,
+			Font::GetCharacterHeightInPixels(font), "UNK",
+			enaForeground, enaBackground, font, nullptr),
 		_defaultBackground{nullptr}, _disabledGEl{disabledGEl}, _enabledGEl{enabledGEl},
 		_disForeground{disForegroubd}, _disBackground{disBackground},
 		_enaForeground{enaForeground}, _enaBackground{enaBackground}
@@ -31,8 +32,9 @@ namespace gui
 		const Font & font, uint16_t textOffset)
 		:
 		IUIControl(x, y, w, h, context),
-		_textGelement(textOffset, (h - Font::GetCharacterHeightInPixels(font))/2, w, h,
-		"UNK", enaForeground, enaBackground, font, nullptr),
+		_textGelement(textOffset, (h - Font::GetCharacterHeightInPixels(font))/2, w,
+			Font::GetCharacterHeightInPixels(font), "UNK",
+			enaForeground, enaBackground, font, nullptr),
 		_defaultBackground{new GERectangle(0, 0, w, h, enaBackground, &_textGelement)},
 		_disabledGEl{*_defaultBackground.get()}, _enabledGEl{*_defaultBackground.get()},
 		_disForeground{disForegroubd}, _disBackground{disBackground},

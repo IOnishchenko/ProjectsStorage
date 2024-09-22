@@ -131,15 +131,41 @@ extern "C" void IRAM_ATTR external_gpio_interrup_cb(void * param)
 	}
 }
 
+#include <time.h>
+#include <stdlib.h>
+
+extern float InputFFTData[];
+
+float f[4]{7.0f,7.0f,7.0f,7.0f};
+
 /*-----------------------------------------------------------------//
 //
 //-----------------------------------------------------------------*/
 extern "C" void test_thread(void * args)
 {
+	srand(time(NULL));   // Initialization, should only be called once.
+
 	while(true)
 	{
-		vTaskDelay(100);
+		vTaskDelay(5);
 		//uint32_t time = xTaskGetTickCount();
 		//UIThread.OnTimerTikedAsync(time);
+		for(int i = 0; i < 128; i++)
+		{
+			float value = rand();
+			float fv = value/RAND_MAX;
+
+			if((i > 20)&&(i < 25))
+				fv *= 100;
+			else if((i > 100)&&(i < 110))
+				fv *= 80;
+			else
+				fv *= 60;
+				
+			f[i & 0x01] = fv;
+			float res = (-100.0F / ((f[0] + f[1]) / 2.0F));
+
+			InputFFTData[i] = res;
+		}
 	}
 }

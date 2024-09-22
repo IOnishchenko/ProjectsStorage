@@ -17,7 +17,7 @@ public:
 	virtual VType GetValue() const = 0;
 	virtual VType GetValueAt(uint32_t index) const = 0;
 	virtual void SetValueByIndex(uint32_t index) = 0;
-	virtual uint32_t GetCurrentValueIndex() const = 0;
+	virtual uint32_t GetIndex() const = 0;
 };
 
 #endif // VALUE_PROVIDER_H

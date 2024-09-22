@@ -9,6 +9,8 @@
 #include "IRadioButtonGroup.hpp"
 #include "OGButton100x22.hpp"
 #include "OGNumericUpDown.hpp"
+#include "SpectrumView.hpp"
+#include "configuration.h"
 
 namespace gui
 {
@@ -38,6 +40,8 @@ namespace gui
 		OGButton100x22 _button3;
 
 		OGNumericUpDown _frequencyLabel;
+
+		SpectrumView<color_t> _spectrum;
 
 		GEPicture _background;
 
