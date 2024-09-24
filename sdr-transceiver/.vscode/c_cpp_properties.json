@@ -6,7 +6,8 @@
             "includePath": [
                 "${userHome}/esp/v5.3/esp-idf/components/**",
                 "${userHome}/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/xtensa-esp-elf/include",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/../**"
             ],
             "defines": [
                 "GUI_USE_PICTUREGDATA",

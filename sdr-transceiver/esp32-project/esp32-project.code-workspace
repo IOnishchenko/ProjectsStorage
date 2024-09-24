@@ -5,7 +5,7 @@
 			"path": "."
 		},
 		{
-			"name": "sdt-transceiver",
+			"name": "sdr-transceiver",
 			"path": ".."
 		},
 		{
