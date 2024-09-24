@@ -9,7 +9,7 @@ set(GUI_ORANGE_GRAY_SRCS
 )
 
 set(GUI_ORANGE_GRAY_INCS
-	"${project_dir}/gui-orange-gray"
+	"${lib_source_files_dir}/gui-orange-gray"
 	"${GUI_ORANGE_GRAY_CONTROLS_INCS}"
 	"${GUI_ORANGE_GRAY_FONTS_INCS}"
 	"${GUI_ORANGE_GRAY_PICTURES_INCS}"

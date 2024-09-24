@@ -1,4 +1,4 @@
 set(
 	COMMAND_INCS
-	"${project_dir}/command"
+	"${lib_source_files_dir}/command"
 )

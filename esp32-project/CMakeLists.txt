@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 set(root_dir "./..")
-set(project_dir "./../..")
+set(lib_source_files_dir "./../..")
 
 include("${root_dir}/command/command.cmake")
 include("${root_dir}/common/common.cmake")

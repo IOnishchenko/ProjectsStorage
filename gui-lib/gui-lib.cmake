@@ -15,5 +15,5 @@ set(GUI_LIB_INCS
 	"${GUI_CONTROLS_INCS}"
 	"${GUI_RENDERERS_INCS}"
 	"${GUI_EVENTS_INCS}"
-	"${project_dir}/gui-lib"
+	"${lib_source_files_dir}/gui-lib"
 )

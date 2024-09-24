@@ -34,7 +34,7 @@ extern "C" void gui_thread(void * args)
 	Settings.Colors.SpectrumCurveColor = gui::TEXT_COLOR;
 	Settings.Colors.SpectrumCurveAlpha = 0x0e;
 	Settings.Colors.SpectrumBottomColor = gui::BACKGROUND_LIGHT;
-	Settings.Colors.SpectrumBottomAlpha = 0x0e;
+	Settings.Colors.SpectrumBottomAlpha = 0x07;
 	Settings.WaterfallColor = gui::TEXT_COLOR;
 	Settings.WaterfallDepth = 40;
 	

@@ -4,5 +4,5 @@
 # )
 
 set(COMMON_DEF_INCS
-	"${project_dir}/common"
+	"${lib_source_files_dir}/common"
 )
